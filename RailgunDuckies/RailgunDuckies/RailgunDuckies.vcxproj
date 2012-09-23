@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="balloon.cpp" />
     <ClCompile Include="ducky.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="railGun.cpp" />

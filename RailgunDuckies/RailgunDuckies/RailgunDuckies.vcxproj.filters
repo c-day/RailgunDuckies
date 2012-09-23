@@ -24,5 +24,8 @@
     <ClCompile Include="railGun.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="balloon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
