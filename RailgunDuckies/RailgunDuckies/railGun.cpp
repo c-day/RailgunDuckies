@@ -1,20 +1,5 @@
+#include <gl/freeglut.h>
+#include "railGun.h"
+#include <algorithm>
 
-
-class railGun {
-
-	private:
-		railGun(double pivotX, double pivotY, double pivotZ);
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
+		

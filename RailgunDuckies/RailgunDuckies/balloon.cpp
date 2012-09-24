@@ -1,14 +1,14 @@
+#include <gl/freeglut.h>
+#include "balloon.h"
+#include <algorithm>
 
 
-class balloon {
+balloon::balloon() {
+	x = 0;
+	y = 0;
+	z = 0;
+}
 
-private:
-
-	//constructor that takes initial position
-	balloon() {
-
-	}
-
-
+void balloon::drawBalloon() {
 
 }
