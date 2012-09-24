@@ -70,7 +70,11 @@ void DisplayFunc()
 		glTranslated(0,0,-5);
 		glRotated(elapsed_time * 60.0, 0, 1, 0);
 		std::unique_ptr<ducky> myDuck(new ducky());
+		std::unique_ptr<ducky> myDuck2(new ducky());
+		myDuck2->updatePos(2, 0, 0);
+		myDuck->updatePos(-2, 0, 0);
 		myDuck->drawDuck();
+		myDuck2->drawDuck();
 		break;
 		}
 	case 3:

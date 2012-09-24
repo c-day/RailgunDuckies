@@ -20,8 +20,8 @@
 	void ducky::drawDuck() {
 
 		//Store Modelview Matrix
-		//glMatrixMode(GL_MODELVIEW);
-		//glPushMatrix();
+		glPushMatrix();
+		//glLoadIdentity();
 		
 
 		//Move to Object's Current Position
@@ -78,8 +78,10 @@
 	}
 	
 	//Update duck position using GLM
-	void updatePos() {
-
+	void ducky::updatePos(double xn, double yn, double zn) {
+		x = xn;
+		y = yn;
+		z = zn;
 	}
 
 	/*Detects if this duck has collided with a
