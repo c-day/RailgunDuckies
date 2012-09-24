@@ -50,6 +50,10 @@ void DisplayFunc()
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glShadeModel (GL_SMOOTH);
+
 	// Set up Projection Matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -188,6 +192,8 @@ int main(int argc, char * argv[])
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow("Railgun Duckies");
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 	glutReshapeFunc(ReshapeFunc);
 	glutKeyboardFunc(KeyboardFunc);
 	glutSpecialFunc(SpecialKeyFunc);

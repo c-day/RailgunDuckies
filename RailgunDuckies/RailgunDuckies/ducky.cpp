@@ -19,6 +19,11 @@
 	//Draw duck based on current duck coords
 	void ducky::drawDuck() {
 
+		GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+		GLfloat mat_shininess[] = { 50.0 }; 
+		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
 		//Store Modelview Matrix
 		glPushMatrix();
 		//glLoadIdentity();
