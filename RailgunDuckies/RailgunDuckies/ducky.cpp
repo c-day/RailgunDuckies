@@ -26,9 +26,7 @@
 
 		//Store Modelview Matrix
 		glPushMatrix();
-		//glLoadIdentity();
 		
-
 		//Move to Object's Current Position
 		glTranslated(x, y, z);
 		glRotated(rx, 1, 0, 0);

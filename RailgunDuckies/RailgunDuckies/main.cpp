@@ -17,6 +17,7 @@
 
 #include <gl/freeglut.h>
 #include "ducky.h"
+#include "balloon.h"
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -89,6 +90,10 @@ void DisplayFunc()
 	case 4: 
 		{
 		//fancy balloon
+			glTranslated(0, 0, -5);
+			glRotated(elapsed_time * 60.0, 0, 1, 0);
+			std::unique_ptr<balloon> myBalloon(new balloon());
+			myBalloon->topHalf();
 		break;
 		}
 	case 5:
