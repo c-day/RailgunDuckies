@@ -44,6 +44,7 @@ void balloon::topHalf() {
 
 	for(int horCount=0; horCount<stacks; horCount++) {
 		glBegin(GL_QUAD_STRIP);
+		glColor3d(1, 0, 0);
 		for(int vertCount=0; vertCount<slices; vertCount++) {
 			glVertex3f(verticies[horCount][vertCount][0], verticies[horCount][vertCount][1], verticies[horCount][vertCount][2]);
 		}
