@@ -18,6 +18,7 @@
 #include <gl/freeglut.h>
 #include "ducky.h"
 #include "balloon.h"
+#include "railGun.h"
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -73,11 +74,11 @@ void DisplayFunc()
 		{
 		//fancy duck
 		glTranslated(0,0,-5);
-		glRotated(elapsed_time * 60.0, 0, 1, 0);
+		//glRotated(elapsed_time * 60.0, 0, 1, 0);
 		std::unique_ptr<ducky> myDuck(new ducky());
 		std::unique_ptr<ducky> myDuck2(new ducky());
-		myDuck2->updatePos(2, 0, 0);
-		myDuck->updatePos(-2, 0, 0);
+		myDuck2->updatePos(2, 0, 0, 0, 0);
+		myDuck->updatePos(-2, 0, 0, 0, 0);
 		myDuck->drawDuck();
 		myDuck2->drawDuck();
 		break;
@@ -85,6 +86,13 @@ void DisplayFunc()
 	case 3:
 		{
 		//fancy gun
+		glTranslated(0, 0, -10);
+		//glRotated(elapsed_time * 60.0, 0, 1, 0);
+		std::unique_ptr<ducky> myDuck3(new ducky());
+		std::unique_ptr<railGun> myGun(new railGun());
+		myDuck3->updatePos(0, 1, 2, 0, -90);
+		myDuck3->drawDuck();
+		myGun->drawGun();
 		break;
 		}
 	case 4: 
@@ -197,7 +205,7 @@ int main(int argc, char * argv[])
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow("Railgun Duckies");
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glutReshapeFunc(ReshapeFunc);
 	glutKeyboardFunc(KeyboardFunc);

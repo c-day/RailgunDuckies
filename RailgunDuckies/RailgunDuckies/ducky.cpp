@@ -81,10 +81,12 @@
 	}
 	
 	//Update duck position using GLM
-	void ducky::updatePos(double xn, double yn, double zn) {
+	void ducky::updatePos(double xn, double yn, double zn, double rx, double ry) {
 		x = xn;
 		y = yn;
 		z = zn;
+		rx = rx;
+		ry = ry;
 	}
 
 	/*Detects if this duck has collided with a

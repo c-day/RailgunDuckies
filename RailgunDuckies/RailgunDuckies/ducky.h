@@ -7,5 +7,5 @@ private:
 public:
 	ducky();
 	void drawDuck();
-	void updatePos(double x, double y, double z);
+	void updatePos(double x, double y, double z, double rx, double ry);
 };
