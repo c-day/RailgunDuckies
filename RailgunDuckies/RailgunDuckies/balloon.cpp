@@ -30,26 +30,7 @@ void balloon::drawBalloon() {
 }
 
 void balloon::topHalf() {
-	for(int horCount=0; horCount<stacks; horCount++) {
-		for(int vertCount=0; vertCount<slices; vertCount++) {
-			cx = horCount;
-			cy = sqrt((1-pow(x, 2)));
-			cz = sqrt((1-pow(x, 2)));
 
-			verticies[horCount][vertCount][0] = cx;
-			verticies[horCount][vertCount][1] = cy;
-			verticies[horCount][vertCount][2] = cz;
-		}
-	}
-
-	for(int horCount=0; horCount<stacks; horCount++) {
-		glBegin(GL_QUAD_STRIP);
-		glColor3d(1, 0, 0);
-		for(int vertCount=0; vertCount<slices; vertCount++) {
-			glVertex3f(verticies[horCount][vertCount][0], verticies[horCount][vertCount][1], verticies[horCount][vertCount][2]);
-		}
-		glEnd();
-	}
 }
 
 void balloon::bottomHalf() {
