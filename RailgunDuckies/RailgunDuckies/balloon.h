@@ -5,7 +5,15 @@ class balloon {
 		double x, y, z, r;
 		float cx, cy, cz;
 		double slices, stacks;
-		float verticies[50][50][3];
+		///double vertices[50];
+		struct profile {
+			double x; 
+			double y;
+			double z;
+		};
+
+		struct profile vertices[36000];
+
 		
 	public:
 		balloon();
