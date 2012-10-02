@@ -53,27 +53,36 @@ void balloon::topHalf() {
 	 }
 	*/
 	int index = 0;
-	for (double cx = 0; cx <= 1; cx = cx + 0.1) {
-		slice1[index].x = cx;
-		slice1[index].y = sqrt(1 - pow(cx, 2));
+	
+	for (double cy = -1.0; cy <= 1.0; cy = cy + 0.05) {
+		if (cy >= 0) {
+			r = sqrt(1 - pow(cy, 2));
+		} else {
+			r = cos(cy);
+		}
+		slice1[index].x = r; 
+		slice1[index].y = cy;
 		slice1[index].z = 0;
-		slice2[index].x = cx * 0.9;
-		slice2[index].y = sqrt(1 - pow(cx, 2));
-		slice2[index].z = sqrt(1 - pow(cx, 2));
+		slice2[index].x = r*cos(0.1745);
+		slice2[index].y = cy;
+		slice2[index].z = r*sin(0.1745);
 		++index;
 	}
 
-	glBegin(GL_QUAD_STRIP);
-	for (int i = 0; i < 100; ++i) {
-		glVertex3d(slice1[i].x, slice1[i].y, slice1[i].z);
-		glVertex3d(slice2[i].x, slice2[i].y, slice2[i].z);
+	for (int r = 0; r < 37; ++r) {
+		glColor3d(1, 0, 0);
+		glBegin(GL_TRIANGLE_STRIP);
+		glVertex3d(slice1[0].x, slice1[0].y, slice1[0].z);
+		for (int i = 0; i < 41; ++i) {
+			glVertex3d(slice1[i].x, slice1[i].y, slice1[i].z);
+			glVertex3d(slice2[i].x, slice2[i].y, slice2[i].z);
+		}
+		glEnd();
+		glRotated(10, 0, 1, 0);
 	}
-	glEnd();
-	
-	
 
 }
-
+	
 void balloon::bottomHalf() {
 
 }

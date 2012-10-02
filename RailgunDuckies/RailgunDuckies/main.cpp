@@ -74,7 +74,7 @@ void DisplayFunc()
 		{
 		//fancy duck
 		glTranslated(0,0,-5);
-		//glRotated(elapsed_time * 60.0, 0, 1, 0);
+		glRotated(elapsed_time * 60.0, 0, 1, 0);
 		std::unique_ptr<ducky> myDuck(new ducky());
 		std::unique_ptr<ducky> myDuck2(new ducky());
 		myDuck2->updatePos(2, 0, 0, 0, 0);
@@ -87,7 +87,7 @@ void DisplayFunc()
 		{
 		//fancy gun
 		glTranslated(0, 0, -10);
-		//glRotated(elapsed_time * 60.0, 0, 1, 0);
+		glRotated(elapsed_time * 60.0, 0, 1, 0);
 		std::unique_ptr<ducky> myDuck3(new ducky());
 		std::unique_ptr<railGun> myGun(new railGun());
 		myDuck3->updatePos(0, 1, 2, 0, -90);
@@ -99,7 +99,7 @@ void DisplayFunc()
 		{
 		//fancy balloon
 			glTranslated(0, 0, -5);
-			//glRotated(elapsed_time * 60.0, 0, 1, 0);
+			glRotated(elapsed_time * 30.0, 0.2, 1, 0);
 			std::unique_ptr<balloon> myBalloon(new balloon());
 			myBalloon->topHalf();
 		break;

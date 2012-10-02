@@ -3,9 +3,6 @@
 class balloon {
 	private:
 		double x, y, z, r;
-		float cx, cy, cz;
-		double slices, stacks;
-		///double vertices[50];
 		struct slice1 {
 			double x; 
 			double y;
@@ -16,8 +13,8 @@ class balloon {
 			double y;
 			double z;
 		};
-		struct slice2 slice2[11];
-		struct slice1 slice1[11];
+		struct slice2 slice2[41];
+		struct slice1 slice1[41];
 
 		
 	public:
