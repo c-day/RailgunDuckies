@@ -16,7 +16,6 @@ void balloon::drawBalloon() {
 	glTranslated(x, y, z);
 
 	glPushMatrix();
-	glTranslated(0, 0.5, 0);
 	balloon::topHalf();
 	balloon::bottomHalf();
 	glPopMatrix();
@@ -25,7 +24,7 @@ void balloon::drawBalloon() {
 }
 
 void balloon::topHalf() {
-	
+	/*
 	float vertices[10][16][3];
 	int Latitudes =10;
 	int Longitudes = 16;
@@ -52,29 +51,25 @@ void balloon::topHalf() {
 
 		glEnd();
 	 }
-	/*int index = 0;
-	for(double cy = 0; cy <= 1; cy=cy+.1) {
-		double bound = 1 - pow(cy, 2);
-		for(double cx = -bound; cy <=bound; cx=cx+.1) {
-			double cz = sqrt(1-pow(cx, 2)-pow(cy, 2));
-			vertices[index].x = cx;
-			vertices[index+1].x = cx;
-			vertices[index].y = cy;
-			vertices[index+1].x = cy;
-			vertices[index].z = cz;
-			vertices[index+1].x = -cz;
-			index=index+2;
-		}		
+	*/
+	int index = 0;
+	for (double cx = 0; cx <= 1; cx = cx + 0.1) {
+		slice1[index].x = cx;
+		slice1[index].y = sqrt(1 - pow(cx, 2));
+		slice1[index].z = 0;
+		slice2[index].x = cx * 0.9;
+		slice2[index].y = sqrt(1 - pow(cx, 2));
+		slice2[index].z = sqrt(1 - pow(cx, 2));
+		++index;
 	}
 
-	for(int i = 0; i < sizeof(vertices); ++i) {
-		glBegin(GL_QUADS);
-		glVertex3d(vertices[i].x, vertices[i].y, vertices[i].z);
-		glVertex3d(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z);
-		glVertex3d(vertices[i+2].x, vertices[i+2].y, vertices[i+2].z);
-		glVertex3d(vertices[i+3].x, vertices[i+3].y, vertices[i+3].z);
+	glBegin(GL_QUAD_STRIP);
+	for (int i = 0; i < 100; ++i) {
+		glVertex3d(slice1[i].x, slice1[i].y, slice1[i].z);
+		glVertex3d(slice2[i].x, slice2[i].y, slice2[i].z);
 	}
-	*/
+	glEnd();
+	
 	
 
 }

@@ -6,13 +6,18 @@ class balloon {
 		float cx, cy, cz;
 		double slices, stacks;
 		///double vertices[50];
-		struct profile {
+		struct slice1 {
 			double x; 
 			double y;
 			double z;
 		};
-
-		struct profile vertices[36000];
+		struct slice2 {
+			double x;
+			double y;
+			double z;
+		};
+		struct slice2 slice2[11];
+		struct slice1 slice1[11];
 
 		
 	public:
