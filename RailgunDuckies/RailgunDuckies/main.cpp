@@ -29,12 +29,13 @@ bool wireframe = false;
 int window_width = 1024;
 int window_height = 768;
 bool paused = false;
-bool pauseSet = false;
+double pausedTime = 0;
+double lastFrameTime;
 double aspect = double(window_width) / double(window_height);
 const int period = 1000 / 60;
 double pause_time = 0.0;
-double elapsed_time = 0.0;
-double game_time = 0;
+double now = 0.0;
+double gameTime = 0;
 
 
 /* Set up game modes
@@ -51,17 +52,16 @@ int gameMode = 2;
 void DisplayFunc()
 {
 	//keep track of time 
-	elapsed_time = double(glutGet(GLUT_ELAPSED_TIME)) / 1000.0;
+	now = double(glutGet(GLUT_ELAPSED_TIME)) / 1000.0;
 
-	if(!pauseSet) { 
-		game_time = elapsed_time; 
+	if(!paused) {
+		gameTime = now - pausedTime; 
 	} 
 
-	if(!paused && pauseSet) {
-		game_time = elapsed_time - (pause_time);
+	if(paused) {
+		pausedTime += now - lastFrameTime;
 	}
-	
-	
+	lastFrameTime = now;
 	
 	
 	glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
@@ -91,7 +91,7 @@ void DisplayFunc()
 		//fancy duck
 		glTranslated(0,0,-3);
 		glPushMatrix();
-		glRotated(game_time * 30.0, 0.1, 1, 0);
+		glRotated(gameTime * 30.0, 0.1, 1, 0);
 		std::unique_ptr<ducky> myDuck(new ducky());
 		myDuck->drawDuck();
 		glPopMatrix();
@@ -101,7 +101,7 @@ void DisplayFunc()
 		{
 		//fancy gun
 		glTranslated(0, 0, -10);
-		glRotated(elapsed_time * 30.0, 0, 1, 0);
+		glRotated(gameTime * 30.0, 0, 1, 0);
 		glPushMatrix();
 		glRotated(10, 0, 0, 1);
 		std::unique_ptr<ducky> myDuck3(new ducky());
@@ -117,7 +117,7 @@ void DisplayFunc()
 		//fancy balloon
 		glPushMatrix();
 		glTranslated(0, 0, -5);
-		glRotated(elapsed_time * 45.0, 0, 1, 0);
+		glRotated(gameTime * 45.0, 0, 1, 0);
 		glPushMatrix();
 		glRotated(20, 0, 0, 1);
 		std::unique_ptr<balloon> myBalloon(new balloon());
@@ -154,14 +154,7 @@ void KeyboardFunc(unsigned char c, int x, int y)
 		//switch camera modes
 		break;
 	case 'p':
-		if(!paused){
-			pause_time = game_time;
-			paused = true;
-			pauseSet = true;
-		} else {
-			game_time = elapsed_time - pause_time;
-			paused = false;
-		}
+		paused = !paused;
 		break;
 	case 'w':
 		wireframe = !wireframe;
@@ -211,6 +204,7 @@ void SpecialKeyFunc(int key, int x, int y) {
 
 void TimerFunc(int value)
 {
+
 	glutTimerFunc(period, TimerFunc, value);
 	glutPostRedisplay();
 }
