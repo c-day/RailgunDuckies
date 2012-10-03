@@ -46,42 +46,54 @@ void railGun::drawGun() {
 	glPopMatrix();*/
 
 	//Draw barrell
+	glPushMatrix();
+	glRotated(90, 0, 1, 0);
+	glTranslated(0, 0, -.25);
+	glutSolidCylinder(0.125, 0.5, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(0, 0.125, 0);
+	glScaled(2, 1, 1);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
 	glTranslated(0, .5, 0);
 
 	glPushMatrix();
 	glTranslated(.375, .375, -1);
 	glScaled(.25, .25, 6);
-	glutSolidCube(1);
+	glutSolidCube(0.9167);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(.375, -.375, -1);
 	glScaled(.25, .25, 6);
-	glutSolidCube(1);
+	glutSolidCube(0.9167);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(-.375, -.375, -1);
 	glScaled(.25, .25, 6);
-	glutSolidCube(1);
+	glutSolidCube(0.9167);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(-.375, .375, -1);
 	glScaled(.25, .25, 6);
-	glutSolidCube(1);
+	glutSolidCube(0.9167);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(0, 0, 1.875);
 	glScaled(1, 1,.25);
-	glutSolidCube(0.999);
+	glutSolidCube(1);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(0, 0, -3.875);
 	glScaled(1, 1, .25);
-	glutSolidCube(0.999);
+	glutSolidCube(1);
 	glPopMatrix();
 
 

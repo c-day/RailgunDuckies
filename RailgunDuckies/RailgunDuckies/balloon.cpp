@@ -40,7 +40,7 @@ void balloon::drawBalloon() {
 	
 	for (int r = 0; r < 361; ++r) {
 		glColor3d(1, 0, 0);
-		glBegin(GL_QUAD_STRIP);
+		glBegin(GL_TRIANGLE_STRIP);
 		for (int i = 0; i < 80; ++i) {
 			glVertex3d(slice1[i].x, slice1[i].y, slice1[i].z);
 			glVertex3d(slice2[i].x, slice2[i].y, slice2[i].z);

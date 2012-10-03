@@ -87,12 +87,15 @@ void DisplayFunc()
 		{
 		//fancy gun
 		glTranslated(0, 0, -10);
-		glRotated(elapsed_time * 30.0, 0.2, 1, 0.2);
+		glRotated(elapsed_time * 30.0, 0, 1, 0);
+		glPushMatrix();
+		glRotated(10, 0, 0, 1);
 		std::unique_ptr<ducky> myDuck3(new ducky());
 		std::unique_ptr<railGun> myGun(new railGun());
 		myDuck3->updatePos(0, 1, 1.35, 0, 90);
 		myDuck3->drawDuck();
 		myGun->drawGun();
+		glPopMatrix();
 		break;
 		}
 	case 4: 
