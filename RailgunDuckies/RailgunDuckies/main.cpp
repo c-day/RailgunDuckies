@@ -29,8 +29,12 @@ bool wireframe = false;
 int window_width = 1024;
 int window_height = 768;
 bool paused = false;
+bool pauseSet = false;
 double aspect = double(window_width) / double(window_height);
 const int period = 1000 / 60;
+double pause_time = 0.0;
+double elapsed_time = 0.0;
+double game_time = 0;
 
 
 /* Set up game modes
@@ -47,7 +51,17 @@ int gameMode = 2;
 void DisplayFunc()
 {
 	//keep track of time 
-	double elapsed_time = double(glutGet(GLUT_ELAPSED_TIME)) / 1000.0;
+	elapsed_time = double(glutGet(GLUT_ELAPSED_TIME)) / 1000.0;
+
+	if(!pauseSet) { 
+		game_time = elapsed_time; 
+	} 
+
+	if(!paused && pauseSet) {
+		game_time = elapsed_time - (pause_time);
+	}
+	
+	
 	
 	
 	glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
@@ -77,7 +91,7 @@ void DisplayFunc()
 		//fancy duck
 		glTranslated(0,0,-3);
 		glPushMatrix();
-		glRotated(elapsed_time * 30.0, 0.1, 1, 0);
+		glRotated(game_time * 30.0, 0.1, 1, 0);
 		std::unique_ptr<ducky> myDuck(new ducky());
 		myDuck->drawDuck();
 		glPopMatrix();
@@ -140,7 +154,14 @@ void KeyboardFunc(unsigned char c, int x, int y)
 		//switch camera modes
 		break;
 	case 'p':
-		paused = !paused;
+		if(!paused){
+			pause_time = game_time;
+			paused = true;
+			pauseSet = true;
+		} else {
+			game_time = elapsed_time - pause_time;
+			paused = false;
+		}
 		break;
 	case 'w':
 		wireframe = !wireframe;
