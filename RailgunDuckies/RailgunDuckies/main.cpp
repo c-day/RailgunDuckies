@@ -28,6 +28,7 @@
 bool wireframe = false;
 int window_width = 1024;
 int window_height = 768;
+bool paused = false;
 double aspect = double(window_width) / double(window_height);
 const int period = 1000 / 60;
 
@@ -47,12 +48,13 @@ void DisplayFunc()
 {
 	//keep track of time 
 	double elapsed_time = double(glutGet(GLUT_ELAPSED_TIME)) / 1000.0;
-
+	
+	
 	glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+	GLfloat light_position[] = { 0.5, 1.0, 1.0, 0.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glShadeModel (GL_SMOOTH);
 
@@ -63,7 +65,7 @@ void DisplayFunc()
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
+	
 	switch (gameMode) {
 	case 1:
 		{
@@ -73,24 +75,22 @@ void DisplayFunc()
 	case 2:
 		{
 		//fancy duck
-		glTranslated(0,0,-5);
-		glRotated(elapsed_time * 60.0, 0, 1, 0);
+		glTranslated(0,0,-3);
+		glPushMatrix();
+		glRotated(elapsed_time * 30.0, 0.1, 1, 0);
 		std::unique_ptr<ducky> myDuck(new ducky());
-		std::unique_ptr<ducky> myDuck2(new ducky());
-		myDuck2->updatePos(2, 0, 0, 0, 0);
-		myDuck->updatePos(-2, 0, 0, 0, 0);
 		myDuck->drawDuck();
-		myDuck2->drawDuck();
+		glPopMatrix();
 		break;
 		}
 	case 3:
 		{
 		//fancy gun
 		glTranslated(0, 0, -10);
-		glRotated(elapsed_time * 60.0, 0, 1, 0);
+		glRotated(elapsed_time * 30.0, 0.2, 1, 0.2);
 		std::unique_ptr<ducky> myDuck3(new ducky());
 		std::unique_ptr<railGun> myGun(new railGun());
-		myDuck3->updatePos(0, 1, 2, 0, -90);
+		myDuck3->updatePos(0, 1, 1.35, 0, 90);
 		myDuck3->drawDuck();
 		myGun->drawGun();
 		break;
@@ -98,10 +98,15 @@ void DisplayFunc()
 	case 4: 
 		{
 		//fancy balloon
-			glTranslated(0, 0, -5);
-			glRotated(elapsed_time * 30.0, 0.2, 1, 0);
-			std::unique_ptr<balloon> myBalloon(new balloon());
-			myBalloon->topHalf();
+		glPushMatrix();
+		glTranslated(0, 0, -5);
+		glRotated(elapsed_time * 45.0, 0, 1, 0);
+		glPushMatrix();
+		glRotated(20, 0, 0, 1);
+		std::unique_ptr<balloon> myBalloon(new balloon());
+		myBalloon->drawBalloon();
+		glPopMatrix();
+		glPopMatrix();
 		break;
 		}
 	case 5:
@@ -111,10 +116,6 @@ void DisplayFunc()
 		}
 	}
 	
-	
-	// A call to glFlush()  should  NOT  be  needed  with  a single
-	// buffered program  such  as this.  However,  AMD  drivers  in
-	// particular do not draw properly without this.
 	glFlush();
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -134,6 +135,9 @@ void KeyboardFunc(unsigned char c, int x, int y)
 	{
 	case 'c':
 		//switch camera modes
+		break;
+	case 'p':
+		paused = !paused;
 		break;
 	case 'w':
 		wireframe = !wireframe;
@@ -205,7 +209,8 @@ int main(int argc, char * argv[])
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow("Railgun Duckies");
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHT0);
 	glutReshapeFunc(ReshapeFunc);
 	glutKeyboardFunc(KeyboardFunc);

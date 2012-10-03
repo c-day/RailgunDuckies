@@ -15,10 +15,14 @@ railGun::railGun() {
 //Draw duck based on current duck coords
 void railGun::drawGun() {
 
-	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat mat_shininess[] = { 50.0 }; 
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	GLfloat mat_ambient[] = { 0.5, 0.5, 0.5, 1.0 };
+	GLfloat mat_diffuse[] = { 0.5, 0.5, 0.5, 1.0 };
+	//GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 0 };
+	//GLfloat mat_shininess[] = { 100 }; 
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
 	glPushMatrix();
 	glTranslated(x, y, z);
@@ -71,13 +75,13 @@ void railGun::drawGun() {
 	glPushMatrix();
 	glTranslated(0, 0, 1.875);
 	glScaled(1, 1,.25);
-	glutSolidCube(1);
+	glutSolidCube(0.999);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(0, 0, -3.875);
 	glScaled(1, 1, .25);
-	glutSolidCube(1);
+	glutSolidCube(0.999);
 	glPopMatrix();
 
 

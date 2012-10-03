@@ -18,11 +18,14 @@
 
 	//Draw duck based on current duck coords
 	void ducky::drawDuck() {
-
-		GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat mat_shininess[] = { 50.0 }; 
-		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+		GLfloat mat_ambient[] = { 1.0, 1.0, 0, 1.0 };
+		GLfloat mat_diffuse[] = { 1.0, 1.0, 0, 1.0 };
+		//GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 0 };
+		//GLfloat mat_shininess[] = { 100 }; 
+		glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+		//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+		//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
 		//Store Modelview Matrix
 		glPushMatrix();
@@ -36,16 +39,14 @@
 		glPushMatrix();
 		glScaled(1, 0.7, 0.7);
 		glColor3d(1, 1, 0);
-		glutSolidSphere(0.4, 30, 30);
-		//gluSphere(q, 0.4, 30, 30);
+		glutSolidSphere(0.4, 50, 50);
 		glPopMatrix();
 
 		//Draw Head
 		glPushMatrix();
 		glTranslated(0.3, 0.7*0.4, 0);
 		glScaled(1, 0.9, 0.9);
-		//gluSphere(q, 0.15, 10, 10);
-		glutSolidSphere(0.15, 10, 10);
+		glutSolidSphere(0.15, 20, 20);
 		glPopMatrix();
 
 		//Draw Left Wing
@@ -53,8 +54,7 @@
 		glTranslated(0, 0, 0.4*0.7);
 		glScaled(1, 0.4, 0.15);
 		glColor3d(.8, .8, 0);
-		//gluSphere(q, 0.25, 20, 20);
-		glutSolidSphere(0.25, 20, 20);
+		glutSolidSphere(0.25, 30, 30);
 		glPopMatrix();
 
 		//Draw Right Wing
@@ -62,18 +62,24 @@
 		glTranslated(0, 0, -0.4*0.7);
 		glScaled(1, 0.4, 0.15);
 		glColor3d(.8, .8, 0);
-		//gluSphere(q, 0.25, 20, 20);
-		glutSolidSphere(0.25, 20, 20);
+		glutSolidSphere(0.25, 30, 30);
 		glPopMatrix();
 
 		//Draw beak
+		/*GLfloat mat_ambient2[] = { 1.0, 0.5, 0, 1.0 };
+		GLfloat mat_diffuse2[] = { 1.0, 0.5, 0, 1.0 };
+		//GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 0 };
+		//GLfloat mat_shininess[] = { 100 }; 
+		glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient2);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse2);*/
+		//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+		//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 		glPushMatrix();
 		glTranslated(0.4, 0.7*0.4, 0);
 		glRotated(90, 0, 1, 0);
 		glScaled(1, 0.5, 1);
 		glColor3d(1, 0.2, 0);
-		//gluCylinder(q, 0.1, 0, .15, 10, 10);
-		glutSolidCone(0.1, 0.15, 10, 10);
+		glutSolidCone(0.1, 0.15, 20, 20);
 		glPopMatrix();
 
 		glPopMatrix();
@@ -81,12 +87,12 @@
 	}
 	
 	//Update duck position using GLM
-	void ducky::updatePos(double xn, double yn, double zn, double rx, double ry) {
-		x = xn;
-		y = yn;
-		z = zn;
-		rx = rx;
-		ry = ry;
+	void ducky::updatePos(double xn, double yn, double zn, double rxn, double ryn) {
+		this->x = xn;
+		this->y = yn;
+		this->z = zn;
+		this->rx = rxn;
+		this->ry = ryn;
 	}
 
 	/*Detects if this duck has collided with a

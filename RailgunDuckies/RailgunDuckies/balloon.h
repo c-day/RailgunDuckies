@@ -13,13 +13,12 @@ class balloon {
 			double y;
 			double z;
 		};
-		struct slice2 slice2[41];
-		struct slice1 slice1[41];
+		struct slice2 slice2[80];
+		struct slice1 slice1[80];
 
 		
 	public:
 		balloon();
 		void drawBalloon();
-		void topHalf();
-		void bottomHalf();
+		
 };
