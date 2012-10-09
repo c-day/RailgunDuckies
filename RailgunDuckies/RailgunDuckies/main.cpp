@@ -47,6 +47,24 @@ gameMode = 5 --> automated play
 */
 int gameMode = 2;
 
+/* 
+Set up function to draw text on screen
+*/
+void DisplayMode(char * s)
+{
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, window_width, 0, window_height, 1, 10);
+	glViewport(0, 0, window_width, window_height);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(10, 10, -5.5f);
+	glScalef(0.25f, 0.25f, 1.0f);
+	glColor3f(1, 1, 1);
+	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) s);
+}
+
 //Set up world and viewport
 
 void DisplayFunc()
@@ -89,27 +107,28 @@ void DisplayFunc()
 	case 2:
 		{
 		//fancy duck
-		glTranslated(0,0,-3);
 		glPushMatrix();
+		glTranslated(0,0,-2);
 		glRotated(gameTime * 30.0, 0.1, 1, 0);
 		std::unique_ptr<ducky> myDuck(new ducky());
 		myDuck->drawDuck();
 		glPopMatrix();
+		DisplayMode("Duckie Beauty Mode");
 		break;
 		}
 	case 3:
 		{
 		//fancy gun
-		glTranslated(0, 0, -10);
-		glRotated(gameTime * 30.0, 0, 1, 0);
 		glPushMatrix();
-		glRotated(10, 0, 0, 1);
+		glTranslated(0, 0, -8);
+		glRotated(gameTime * 30.0, 0.1, 1, 0.1);
 		std::unique_ptr<ducky> myDuck3(new ducky());
 		std::unique_ptr<railGun> myGun(new railGun());
 		myDuck3->updatePos(0, 1, 1.35, 0, 90);
 		myDuck3->drawDuck();
 		myGun->drawGun();
 		glPopMatrix();
+		DisplayMode("Rail Gun Beauty Mode");
 		break;
 		}
 	case 4: 
@@ -117,13 +136,11 @@ void DisplayFunc()
 		//fancy balloon
 		glPushMatrix();
 		glTranslated(0, 0, -5);
-		glRotated(gameTime * 45.0, 0, 1, 0);
-		glPushMatrix();
-		glRotated(20, 0, 0, 1);
+		glRotated(gameTime * 45.0, 0.1, 1, 0.1);
 		std::unique_ptr<balloon> myBalloon(new balloon());
 		myBalloon->drawBalloon();
 		glPopMatrix();
-		glPopMatrix();
+		DisplayMode("Balloon Beauty Mode");
 		break;
 		}
 	case 5:
@@ -209,6 +226,8 @@ void TimerFunc(int value)
 	glutPostRedisplay();
 }
 
+
+
 /*/ MAIN METHOD   //////////////////////////
 //
 //  -Initialize the skybox
@@ -225,7 +244,7 @@ int main(int argc, char * argv[])
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(window_width, window_height);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-	glutCreateWindow("Railgun Duckies");
+	glutCreateWindow("Rail Gun Duckies");
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);

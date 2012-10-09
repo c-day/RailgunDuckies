@@ -25,6 +25,8 @@ void railGun::drawGun() {
 	//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
 	glPushMatrix();
+
+
 	glTranslated(x, y, z);
 	glColor3d(0.5, 0.5, 0.5);
 
@@ -38,12 +40,6 @@ void railGun::drawGun() {
 	//Rotate Gun
 	glRotated(rx, 1, 0, 0);
 	glRotated(ry, 0, 1, 0);
-
-	/*Draw gun body
-	glPushMatrix();
-	glTranslated(0, 0.5, 0);
-	glutSolidCube(1);
-	glPopMatrix();*/
 
 	//Draw barrell
 	glPushMatrix();

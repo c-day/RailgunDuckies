@@ -82,12 +82,14 @@
   <ItemGroup>
     <ClCompile Include="balloon.cpp" />
     <ClCompile Include="ducky.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="railGun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="balloon.h" />
     <ClInclude Include="ducky.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="railGun.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

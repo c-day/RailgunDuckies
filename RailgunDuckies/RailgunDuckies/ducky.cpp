@@ -3,11 +3,7 @@
 #include <algorithm>
 
 		
-
-
-	
-	// std::unique_ptr<GLUquadric> q(gluNewQuadric());
-	//Constructor, pass location of duck
+//Constructor, pass location of duck
 	ducky::ducky() {
 		x = 0;
 		y = 0;
@@ -66,14 +62,6 @@
 		glPopMatrix();
 
 		//Draw beak
-		/*GLfloat mat_ambient2[] = { 1.0, 0.5, 0, 1.0 };
-		GLfloat mat_diffuse2[] = { 1.0, 0.5, 0, 1.0 };
-		//GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 0 };
-		//GLfloat mat_shininess[] = { 100 }; 
-		glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient2);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse2);*/
-		//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-		//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 		glPushMatrix();
 		glTranslated(0.4, 0.7*0.4, 0);
 		glRotated(90, 0, 1, 0);
