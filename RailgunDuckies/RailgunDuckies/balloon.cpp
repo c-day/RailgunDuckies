@@ -3,13 +3,16 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <vector>
 
+
+using namespace std;
 
 balloon::balloon() {
 
 }
 
-
+/*
 void balloon::drawBalloon() {
 	GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -57,4 +60,26 @@ void balloon::drawBalloon() {
 
 }
 	
+//*/
 
+
+
+void balloon::drawBalloon() {
+	GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+	GLfloat mat_shininess[] = { 100 }; 
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
+	for (double cy = 1.0; cy >= -1.65; cy = cy - 0.1) {
+		if (cy >= 0) {
+			r = sqrt(1 - pow(cy, 2));
+		} else {
+			r = cos(cy);
+		}
+
+	}
+}
