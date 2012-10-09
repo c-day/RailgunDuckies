@@ -38,7 +38,6 @@ double now = 0.0;
 double gameTime = 0;
 
 
-
 /* Set up game modes
 gameMode = 1 --> play game
 gameMode = 2 --> duckie beauty mode
