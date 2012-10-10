@@ -20,8 +20,38 @@ void balloon::drawBalloon() {
 	//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	glPushMatrix();
-	int index = 0;
+	long index = 0;
 	
+	GLfloat varray[4940];
+
+	for (double cy = 1.0; cy >= -1.65; cy = cy - 0.1) {
+		if (cy >= 0) {
+			r = sqrt(1 - pow(cy, 2));
+		} else {
+			r = cos(cy);
+		}
+		for (double ang = 0; ang <= 360; ang = ang + 6) {
+			double rads = 3.14159265/180*ang;
+
+			varray[index] = r*cos(rads);
+			++index;
+			varray[index] = cy;
+			++index;
+			varray[index] = r*sin(rads);
+			++index;
+		}
+
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 180, varray);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4940);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+
+	//WORKING CODE
+
+	/*
 	for (double cy = 1.0; cy >= -1.65; cy = cy - 0.1) {
 		if (cy >= 0) {
 			r = sqrt(1 - pow(cy, 2));
@@ -54,7 +84,7 @@ void balloon::drawBalloon() {
 	glRotated(90, 1, 0, 0);
 	glutSolidTorus(0.05, 0.09, 20, 20);
 	glPopMatrix();
-
+	*/
 }
 	
 
