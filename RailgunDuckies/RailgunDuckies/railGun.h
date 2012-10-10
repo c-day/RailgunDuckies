@@ -1,3 +1,4 @@
+#ifndef RAILGUN_H
 #define RAILGUN_H
 
 class railGun {
@@ -11,3 +12,5 @@ public:
 	void updateGun();
 
 };
+
+#endif

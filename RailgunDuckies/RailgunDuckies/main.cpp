@@ -19,6 +19,7 @@
 #include "ducky.h"
 #include "balloon.h"
 #include "railGun.h"
+#include "game.h"
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -102,6 +103,8 @@ void DisplayFunc()
 	case 1:
 		{
 		//Play game
+		std::unique_ptr<game> myGame(new game());
+		myGame->playGame();
 		break;
 		}
 	case 2:

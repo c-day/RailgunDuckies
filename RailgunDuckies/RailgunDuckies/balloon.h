@@ -1,3 +1,4 @@
+#ifndef BALLOON_H
 #define BALLOON_H
 
 class balloon {
@@ -22,3 +23,5 @@ class balloon {
 		void drawBalloon();
 		
 };
+
+#endif
