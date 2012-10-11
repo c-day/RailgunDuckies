@@ -1,7 +1,5 @@
-#include <gl/freeglut.h>
 #include "railGun.h"
-#include "ducky.h"
-#include <algorithm>
+
 
 		
 //Constructor
@@ -18,12 +16,8 @@ void railGun::drawGun() {
 
 	GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 0.0f };
-	GLfloat mat_shininess[] = { 100 }; 
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
 	glPushMatrix();
 

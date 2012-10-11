@@ -1,5 +1,7 @@
-#ifndef BALLOON_H
-#define BALLOON_H
+#pragma once
+
+#include <gl/freeglut.h>
+#include <cmath>
 
 class balloon {
 	private:
@@ -25,4 +27,3 @@ class balloon {
 		
 };
 
-#endif

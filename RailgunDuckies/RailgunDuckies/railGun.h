@@ -1,5 +1,6 @@
-#ifndef RAILGUN_H
-#define RAILGUN_H
+#pragma once
+
+#include <gl/freeglut.h>
 
 class railGun {
 
@@ -14,4 +15,3 @@ public:
 
 };
 
-#endif

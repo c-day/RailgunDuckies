@@ -1,14 +1,9 @@
-#include <GL/freeglut.h>
-#include <vector>
-#include <iostream>
-
 #include "game.h"
-#include "ducky.h"
-#include "balloon.h"
-#include "railGun.h"
+
 
 using namespace std;
 bool done;
+
 
 game::game() {
 	won = false;
@@ -43,21 +38,4 @@ void game::drawScene() {
 }
 
 
-void game::playGame() {
 
-
-	//Main Game Loop
-	while (!won) {
-		if(done) {return;}
-
-		ducky * myDuck = new ducky();
-		ducks.push_back(myDuck);
-
-		glutSpecialFunc(KeyboardInput);
-		glutDisplayFunc(GameDisplay);
-		glutMainLoop();
-
-	}
-
-
-}

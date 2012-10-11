@@ -1,9 +1,12 @@
-#ifndef GAME_H
-#define GAME_H
-#include <vector>
-#include "balloon.h"
-#include "ducky.h"
+#pragma once
 
+#include <GL/freeglut.h>
+#include <vector>
+#include <iostream>
+
+#include "ducky.h"
+#include "balloon.h"
+#include "railGun.h"
 
 class game {
 private:
@@ -14,12 +17,6 @@ private:
 
 public:
 	game();
-	void playGame();
-	void d();
-	void updatePos(double x, double y, double z, double rx, double ry);
+	void updateGame(double time);
 	void drawScene();
 };
-
-
-
-#endif

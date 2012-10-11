@@ -1,5 +1,6 @@
-#ifndef DUCKY_H
-#define DUCKY_H
+#pragma once
+
+#include <gl/freeglut.h>
 
 
 class ducky {
@@ -14,4 +15,3 @@ public:
 };
 
 
-#endif
