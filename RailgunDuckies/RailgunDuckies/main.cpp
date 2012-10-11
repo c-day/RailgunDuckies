@@ -37,6 +37,9 @@ const int period = 1000 / 60;
 double pause_time = 0.0;
 double now = 0.0;
 double gameTime = 0;
+std::unique_ptr<ducky> myDuck(new ducky());
+std::unique_ptr<railGun> myGun(new railGun());
+std::unique_ptr<balloon> myBalloon(new balloon());
 
 
 /* Set up game modes
@@ -62,27 +65,16 @@ void DisplayMode(char * s)
 	glLoadIdentity();
 	glTranslatef(10, 10, -5.5f);
 	glScalef(0.25f, 0.25f, 1.0f);
+	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
 	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) s);
+	glEnable(GL_LIGHTING);
 }
 
 //Set up world and viewport
 
 void DisplayFunc()
-{
-	//keep track of time 
-	now = double(glutGet(GLUT_ELAPSED_TIME)) / 1000.0;
-
-	if(!paused) {
-		gameTime = now - pausedTime; 
-	} 
-
-	if(paused) {
-		pausedTime += now - lastFrameTime;
-	}
-	lastFrameTime = now;
-	
-	
+{	
 	glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -102,47 +94,28 @@ void DisplayFunc()
 	switch (gameMode) {
 	case 1:
 		{
-		//Play game
-		std::unique_ptr<game> myGame(new game());
-		myGame->playGame();
+		//Draw Game
+		//myGame->drawScene();
 		break;
 		}
 	case 2:
 		{
 		//fancy duck
-		glPushMatrix();
-		glTranslated(0,0,-2);
-		glRotated(gameTime * 30.0, 0.1, 1, 0);
-		std::unique_ptr<ducky> myDuck(new ducky());
-		myDuck->drawDuck();
-		glPopMatrix();
+		myDuck->drawBDuck(gameTime);
 		DisplayMode("Duckie Beauty Mode");
 		break;
 		}
 	case 3:
 		{
 		//fancy gun
-		glPushMatrix();
-		glTranslated(0, 0, -8);
-		glRotated(gameTime * 30.0, 0.1, 1, 0.1);
-		std::unique_ptr<ducky> myDuck3(new ducky());
-		std::unique_ptr<railGun> myGun(new railGun());
-		myDuck3->updatePos(0, 1, 1.35, 0, 90);
-		myDuck3->drawDuck();
-		myGun->drawGun();
-		glPopMatrix();
+		myGun->drawBGun(gameTime);
 		DisplayMode("Rail Gun Beauty Mode");
 		break;
 		}
 	case 4: 
 		{
 		//fancy balloon
-		glPushMatrix();
-		glTranslated(0, 0, -5);
-		glRotated(gameTime * 45.0, 0.1, 1, 0.1);
-		std::unique_ptr<balloon> myBalloon(new balloon());
-		myBalloon->drawBalloon();
-		glPopMatrix();
+		myBalloon->drawBBalloon(gameTime);
 		DisplayMode("Balloon Beauty Mode");
 		break;
 		}
@@ -224,6 +197,18 @@ void SpecialKeyFunc(int key, int x, int y) {
 
 void TimerFunc(int value)
 {
+	now += period;
+
+	if(!paused) {
+		gameTime = now - pausedTime; 
+	} 
+
+	if(paused) {
+		pausedTime += now - lastFrameTime;
+	}
+	lastFrameTime = now;
+
+	//myGame->updateGame();
 
 	glutTimerFunc(period, TimerFunc, value);
 	glutPostRedisplay();
@@ -252,9 +237,14 @@ int main(int argc, char * argv[])
 	glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHT0);
+
+	
+
+
 	glutReshapeFunc(ReshapeFunc);
 	glutKeyboardFunc(KeyboardFunc);
 	glutSpecialFunc(SpecialKeyFunc);
+	glutTimerFunc(period, TimerFunc, 0);
 	glutDisplayFunc(DisplayFunc);
 	glutMainLoop();
 }

@@ -10,6 +10,7 @@ public:
 	railGun();
 	void drawGun();
 	void updateGun();
+	void drawBGun(double time);
 
 };
 

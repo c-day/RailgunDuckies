@@ -21,6 +21,7 @@ class balloon {
 	public:
 		balloon();
 		void drawBalloon();
+		void drawBBalloon(double time);
 		
 };
 

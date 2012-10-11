@@ -1,5 +1,6 @@
 #include <gl/freeglut.h>
 #include "railGun.h"
+#include "ducky.h"
 #include <algorithm>
 
 		
@@ -15,10 +16,10 @@ railGun::railGun() {
 //Draw duck based on current duck coords
 void railGun::drawGun() {
 
-	GLfloat mat_ambient[] = { 0.5, 0.5, 0.5, 1.0 };
-	GLfloat mat_diffuse[] = { 0.5, 0.5, 0.5, 1.0 };
-	//GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 0 };
-	//GLfloat mat_shininess[] = { 100 }; 
+	GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+	GLfloat mat_shininess[] = { 100 }; 
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -95,6 +96,14 @@ void railGun::drawGun() {
 
 
 
+	glPopMatrix();
+}
+
+void railGun::drawBGun(double time) {
+	glPushMatrix();
+	glTranslated(0, 0, -8);
+	glRotated((time/1000) * 30.0, 0.1, 1, 0.1);
+	this->drawGun();
 	glPopMatrix();
 }
 

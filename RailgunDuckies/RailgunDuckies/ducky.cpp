@@ -14,14 +14,14 @@
 
 	//Draw duck based on current duck coords
 	void ducky::drawDuck() {
-		GLfloat mat_ambient[] = { 1.0, 1.0, 0, 1.0 };
-		GLfloat mat_diffuse[] = { 1.0, 1.0, 0, 1.0 };
-		//GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 0 };
-		//GLfloat mat_shininess[] = { 100 }; 
-		glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-		//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-		//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+	GLfloat mat_shininess[] = { 100 }; 
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
 		//Store Modelview Matrix
 		glPushMatrix();
@@ -83,6 +83,14 @@
 		this->ry = ryn;
 	}
 
+	void ducky::drawBDuck(double time) {
+
+		glPushMatrix();
+		glTranslated(0,0,-2);
+		glRotated((time/1000) * 30.0, 0.1, 1, 0);
+		this->drawDuck();
+		glPopMatrix();
+	}
 	/*Detects if this duck has collided with a
 	  balloon, will destroy duck and balloon
 	  on a yes.*/

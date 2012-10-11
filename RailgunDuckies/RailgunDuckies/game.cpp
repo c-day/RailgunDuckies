@@ -15,7 +15,7 @@ game::game() {
 	done = false;
 }
 
-void KeyboardInput(unsigned char c, int x, int y)
+void KeyboardInput(int c, int x, int y)
 {
 	switch (c) {
 		case GLUT_KEY_F1:
@@ -32,7 +32,7 @@ void GameDisplay() {
 }
 
 void game::drawScene() {
-
+	glTranslated(0, 0, 5);
 	for (int i = 0;  i <= ducks.size(); ++i) {
 		ducks[i]->drawDuck();
 	}
@@ -42,6 +42,7 @@ void game::drawScene() {
 
 }
 
+
 void game::playGame() {
 
 
@@ -49,10 +50,10 @@ void game::playGame() {
 	while (!won) {
 		if(done) {return;}
 
-		unique_ptr<ducky> myDuck(new ducky());
+		ducky * myDuck = new ducky();
 		ducks.push_back(myDuck);
 
-		glutKeyboardFunc(KeyboardInput);
+		glutSpecialFunc(KeyboardInput);
 		glutDisplayFunc(GameDisplay);
 		glutMainLoop();
 

@@ -4,12 +4,13 @@
 #include "balloon.h"
 #include "ducky.h"
 
+
 class game {
 private:
 	bool won;
 	bool done;
-	std::vector<std::unique_ptr<ducky>> ducks;
-	std::vector<std::unique_ptr<balloon>> balloons;
+	std::vector<ducky*> ducks;
+	std::vector<balloon*> balloons;
 
 public:
 	game();
@@ -18,5 +19,7 @@ public:
 	void updatePos(double x, double y, double z, double rx, double ry);
 	void drawScene();
 };
+
+
 
 #endif

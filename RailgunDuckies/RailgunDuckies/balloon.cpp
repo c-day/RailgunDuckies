@@ -86,5 +86,13 @@ void balloon::drawBalloon() {
 	glPopMatrix();
 	
 }
+
+void balloon::drawBBalloon(double time) {
+	glPushMatrix();
+	glTranslated(0, 0, -5);
+	glRotated((time/1000) * 45.0, 0.1, 1, 0.1);
+	this->drawBalloon();
+	glPopMatrix();
+}
 	
 
