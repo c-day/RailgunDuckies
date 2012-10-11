@@ -14,6 +14,24 @@ void balloon::drawBalloon() {
 
 	glPushMatrix();
 	long index = 0;
+	
+	glm::vec4 vertices[1000];
+	
+	for (double cy = 1.0; cy >= -1.65; cy = cy - 0.1) {
+		if (cy >= 0) {
+			r = sqrt(1 - pow(cy, 2));
+		} else {
+			r = cos(cy);
+		}
+		vertices[index].x = r;
+		vertices[index].y = cy;
+		vertices[index].z = 0;
+		index++;
+		for (float ang = 0; ang <= 360; ang = ang + 10) {
+			vertices[index] = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0.0f, 1.0f, 0.0f)) * vertices[index-1];
+			index++;
+		}
+	}
 	/*
 	GLfloat varray[4940];
 
@@ -43,7 +61,7 @@ void balloon::drawBalloon() {
 
 	*/
 	//WORKING CODE
-
+	/*
 	
 	for (double cy = 1.0; cy >= -1.65; cy = cy - 0.1) {
 		if (cy >= 0) {
@@ -76,6 +94,9 @@ void balloon::drawBalloon() {
 	glTranslated(0, -0.07, 0);
 	glRotated(90, 1, 0, 0);
 	glutSolidTorus(0.05, 0.09, 20, 20);
+	glPopMatrix();
+
+	*/
 	glPopMatrix();
 	
 }
