@@ -5,6 +5,14 @@ balloon::balloon() {
 
 }
 
+static const GLsizei VertexCount = 6; 
+static const GLsizei VertexSize = 4;
+static const GLuint IndexData[] = { 0, 1, 2, 3, 0, 2 };
+
+float radians(float deg) {
+	return 3.14159f/180.0f*deg;
+}
+
 
 void balloon::drawBalloon() {
 	GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -13,25 +21,39 @@ void balloon::drawBalloon() {
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 
 	glPushMatrix();
-	long index = 0;
+
+	int index = 0;
 	
-	glm::vec4 vertices[1000];
-	
-	for (double cy = 1.0; cy >= -1.65; cy = cy - 0.1) {
-		if (cy >= 0) {
-			r = sqrt(1 - pow(cy, 2));
+	glm::vec3 PositionData[100000];
+
+	for (float curY = 1.0; curY >= -1.65; curY -= 0.1) {
+		if (curY >= 0) {
+			r = sqrt(1 - pow(curY, 2));
 		} else {
-			r = cos(cy);
+			r = cos(curY);
 		}
-		vertices[index].x = r;
-		vertices[index].y = cy;
-		vertices[index].z = 0;
+		PositionData[index].y = curY;
+		PositionData[index].x = r;
+		PositionData[index].z = 0;
 		index++;
-		for (float ang = 0; ang <= 360; ang = ang + 10) {
-			vertices[index] = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0.0f, 1.0f, 0.0f)) * vertices[index-1];
+		for (float rotAng = 0.0f; rotAng < 360.0f; rotAng += 10.0f) {
+			PositionData[index].x = PositionData[index-1].x * cos(radians(rotAng));
+			PositionData[index].y = curY;
+			PositionData[index].z = PositionData[index-1].z * sin(radians(rotAng));
+			
+			//glm::rotateY(PositionData[index-1], rotAng);
 			index++;
 		}
+
 	}
+
+	glColor3d(1, 0, 0);
+	glVertexPointer(3, GL_FLOAT, 0, PositionData);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glDrawElements(GL_TRIANGLES, VertexCount, GL_UNSIGNED_INT, IndexData);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+
 	/*
 	GLfloat varray[4940];
 
