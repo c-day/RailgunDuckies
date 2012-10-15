@@ -39,7 +39,9 @@ double now = 0.0;
 double gameTime = 0;
 std::unique_ptr<ducky> myDuck(new ducky());
 std::unique_ptr<railGun> myGun(new railGun());
-std::unique_ptr<balloon> myBalloon(new balloon());
+balloon myBalloon;
+
+//std::unique_ptr<balloon> myBalloon(new balloon());
 
 
 /* Set up game modes
@@ -115,7 +117,8 @@ void DisplayFunc()
 	case 4: 
 		{
 		//fancy balloon
-		myBalloon->drawBBalloon(gameTime);
+		myBalloon.drawBBalloon(gameTime);
+		//myBalloon->drawBBalloon(gameTime);
 		DisplayMode("Balloon Beauty Mode");
 		break;
 		}

@@ -1,8 +1,10 @@
 #include "balloon.h"
 
 
-balloon::balloon() {
+using namespace std;
 
+balloon::balloon() {
+	this->x = this->y = this->z = 0.0f;
 }
 
 static const GLsizei VertexCount = 6; 
@@ -23,25 +25,32 @@ void balloon::drawBalloon() {
 	glPushMatrix();
 
 	int index = 0;
-	
-	glm::vec3 PositionData[100000];
+	const int array_size = 1000;
+	float r = 0;
+	glm::vec3 PositionData[array_size];
 
 	for (float curY = 1.0; curY >= -1.65; curY -= 0.1) {
+		assert(index < array_size);
+		//Check Y position and determine function to control balloon radius
 		if (curY >= 0) {
 			r = sqrt(1 - pow(curY, 2));
 		} else {
 			r = cos(curY);
 		}
+		//store initial point at current y, radius, and z=0
 		PositionData[index].y = curY;
 		PositionData[index].x = r;
 		PositionData[index].z = 0;
 		index++;
 		for (float rotAng = 0.0f; rotAng < 360.0f; rotAng += 10.0f) {
-			PositionData[index].x = PositionData[index-1].x * cos(radians(rotAng));
+			//*
+			float deltaX = cos(radians(rotAng));
+			float deltaZ = sin(radians(rotAng));
+			PositionData[index].x = r * deltaX;
 			PositionData[index].y = curY;
-			PositionData[index].z = PositionData[index-1].z * sin(radians(rotAng));
-			
-			//glm::rotateY(PositionData[index-1], rotAng);
+			PositionData[index].z = r * deltaZ;
+			//*/
+			//PositionData[index] = glm::rotateY(PositionData[index-1], rotAng);
 			index++;
 		}
 

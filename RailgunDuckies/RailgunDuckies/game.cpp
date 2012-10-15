@@ -27,13 +27,7 @@ void GameDisplay() {
 }
 
 void game::drawScene() {
-	glTranslated(0, 0, 5);
-	for (int i = 0;  i <= ducks.size(); ++i) {
-		ducks[i]->drawDuck();
-	}
-	for (int i = 0; i <= balloons.size(); ++i) {
-		balloons[i]->drawBalloon();
-	}
+	
 
 }
 

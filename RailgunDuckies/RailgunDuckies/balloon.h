@@ -1,6 +1,8 @@
 #pragma once
 
 #include <gl/freeglut.h>
+#include <assert.h>
+#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -10,7 +12,7 @@
 
 class balloon {
 	private:
-		double x, y, z, r;
+		double x, y, z;
 		/*
 		struct slice1 {
 			double x; 
