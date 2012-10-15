@@ -9,7 +9,9 @@ balloon::balloon() {
 
 static const GLsizei VertexCount = 6; 
 static const GLsizei VertexSize = 4;
-static const GLuint IndexData[] = { 0, 1, 2, 3, 0, 2 };
+
+
+
 
 float radians(float deg) {
 	return 3.14159f/180.0f*deg;
@@ -25,11 +27,15 @@ void balloon::drawBalloon() {
 	glPushMatrix();
 
 	int index = 0;
+	const int stacks = 26;
 	const int array_size = 1000;
-	float r = 0;
 	glm::vec3 PositionData[array_size];
+	GLuint IndexData[3*array_size];
+	GLuint IndexData2[3*array_size];
+	float r = 0;
+	
 
-	for (float curY = 1.0; curY >= -1.65; curY -= 0.1) {
+	for (float curY = 1.0; curY >= -1.65; curY -= 2.65/stacks) {
 		assert(index < array_size);
 		//Check Y position and determine function to control balloon radius
 		if (curY >= 0) {
@@ -42,7 +48,7 @@ void balloon::drawBalloon() {
 		PositionData[index].x = r;
 		PositionData[index].z = 0;
 		index++;
-		for (float rotAng = 0.0f; rotAng < 360.0f; rotAng += 10.0f) {
+		for (float rotAng = 10.0f; rotAng < 360.0f; rotAng += 10.0f) {
 			//*
 			float deltaX = cos(radians(rotAng));
 			float deltaZ = sin(radians(rotAng));
@@ -56,10 +62,24 @@ void balloon::drawBalloon() {
 
 	}
 
+	//Calculate the index arrays
+	for (int i = 0; i < array_size; i++) {
+		IndexData[3*i] = i;
+		IndexData[(3*i)+1] = i+1;
+		IndexData[(3*i)+2] = i+36;
+
+		IndexData2[3*i] = i+1;
+		IndexData2[(3*i)+1] = i+36;
+		IndexData2[(3*i)+2] = i+37;
+	}
+
+
+
 	glColor3d(1, 0, 0);
 	glVertexPointer(3, GL_FLOAT, 0, PositionData);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glDrawElements(GL_TRIANGLES, VertexCount, GL_UNSIGNED_INT, IndexData);
+	glDrawElements(GL_TRIANGLES, 2808, GL_UNSIGNED_INT, IndexData);
+	glDrawElements(GL_TRIANGLES, 2807, GL_UNSIGNED_INT, IndexData2);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 
