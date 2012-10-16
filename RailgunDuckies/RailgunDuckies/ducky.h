@@ -1,16 +1,17 @@
 #pragma once
 
 #include <gl/freeglut.h>
-
+#include <glm/glm.hpp>
 
 class ducky {
 private:
-	double x, y, z, rx, ry, rz;
+	glm::vec3 pos;
+	glm::vec3 rot;
 public:
 	ducky();
 	void drawDuck();
-	void updatePos(double x, double y, double z, double rx, double ry);
-	void drawBDuck(double time);
+	void updatePos(float x, float y, float z, float rx, float ry);
+	void drawBDuck(float time);
 
 };
 

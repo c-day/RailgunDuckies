@@ -119,6 +119,13 @@ void balloon::drawBalloon() {
 	
 }
 
+void balloon::updateBalloon(float x, float y, float z) {
+	this->x = x;
+	this->y = y;
+	this->z = z;
+
+}
+
 void balloon::drawBBalloon(double time) {
 	glPushMatrix();
 	glTranslated(0, 0, -5);

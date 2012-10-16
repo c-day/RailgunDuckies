@@ -3,11 +3,6 @@
 		
 //Constructor, pass location of duck
 	ducky::ducky() {
-		x = 0;
-		y = 0;
-		z = 0;
-		rx = 0;
-		ry = 0;
 	}
 
 	//Draw duck based on current duck coords
@@ -22,9 +17,10 @@
 		glPushMatrix();
 		
 		//Move to Object's Current Position
-		glTranslated(x, y, z);
-		glRotated(rx, 1, 0, 0);
-		glRotated(ry, 0, 1, 0);
+		glTranslated(this->pos.x, this->pos.y, this->pos.z);
+		
+		glRotated(this->rot.x, 1, 0, 0);
+		glRotated(this->rot.y, 0, 1, 0);
 
 		//Draw Body
 		glPushMatrix();
@@ -70,15 +66,15 @@
 	}
 	
 	//Update duck position using GLM
-	void ducky::updatePos(double xn, double yn, double zn, double rxn, double ryn) {
-		this->x = xn;
-		this->y = yn;
-		this->z = zn;
-		this->rx = rxn;
-		this->ry = ryn;
+	void ducky::updatePos(float xn, float yn, float zn, float rxn, float ryn) {
+		this->pos.x = xn;
+		this->pos.y = yn;
+		this->pos.z = zn;
+		this->rot.x = rxn;
+		this->rot.y = ryn;
 	}
 
-	void ducky::drawBDuck(double time) {
+	void ducky::drawBDuck(float time) {
 
 		glPushMatrix();
 		glTranslated(0,0,-2);

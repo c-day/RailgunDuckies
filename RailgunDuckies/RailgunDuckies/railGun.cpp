@@ -4,11 +4,12 @@
 		
 //Constructor
 railGun::railGun() {
-	x = 0;
-	y = 0;
-	z = 0;
-	rx = 0;
-	ry = 0;
+	this->pos.x = 0;
+	this->pos.y = 0;
+	this->pos.z = 0;
+	this->rot.x = 0;
+	this->rot.y = 0;
+	this->rot.z = 0;
 }
 
 //Draw duck based on current duck coords
@@ -22,7 +23,7 @@ void railGun::drawGun() {
 	glPushMatrix();
 
 
-	glTranslated(x, y, z);
+	glTranslated(this->pos.x, this->pos.y, this->pos.z);
 	glColor3d(0.5, 0.5, 0.5);
 
 	//Draw Base
@@ -33,8 +34,9 @@ void railGun::drawGun() {
 	glPopMatrix();
 
 	//Rotate Gun
-	glRotated(rx, 1, 0, 0);
-	glRotated(ry, 0, 1, 0);
+	glRotatef(this->rot.x, 1, 0, 0);
+	glRotatef(this->rot.y, 0, 1, 0);
+	glRotatef(this->rot.z, 0, 0, 1);
 
 	//Draw barrell
 	glPushMatrix();
@@ -93,7 +95,7 @@ void railGun::drawGun() {
 	glPopMatrix();
 }
 
-void railGun::drawBGun(double time) {
+void railGun::drawBGun(float time) {
 	glPushMatrix();
 	glTranslated(0, 0, -8);
 	glRotated((time/1000) * 30.0, 0.1, 1, 0.1);
@@ -101,6 +103,6 @@ void railGun::drawBGun(double time) {
 	glPopMatrix();
 }
 
-void railGun::updateGun() {
+void railGun::updateGun(float rx, float ry, float rz) {
 
 }

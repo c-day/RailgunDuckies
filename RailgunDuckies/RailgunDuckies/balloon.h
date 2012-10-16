@@ -33,6 +33,7 @@ class balloon {
 	public:
 		balloon();
 		void drawBalloon();
+		void updateBalloon(float x, float y, float z);
 		void drawBBalloon(double time);
 		
 };
