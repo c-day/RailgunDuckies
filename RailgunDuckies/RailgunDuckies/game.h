@@ -17,6 +17,6 @@ private:
 
 public:
 	game();
-	void updateGame(double time);
+	void updateGame(float time);
 	void drawScene();
 };

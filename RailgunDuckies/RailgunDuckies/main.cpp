@@ -34,11 +34,12 @@ double pausedTime = 0;
 double lastFrameTime;
 double aspect = double(window_width) / double(window_height);
 const int period = 1000 / 60;
-double pause_time = 0.0;
-double now = 0.0;
-double gameTime = 0;
+float pause_time = 0.0;
+float now = 0.0;
+float gameTime = 0;
 std::unique_ptr<ducky> myDuck(new ducky());
 std::unique_ptr<railGun> myGun(new railGun());
+std::unique_ptr<game> myGame(new game());
 balloon myBalloon;
 
 //std::unique_ptr<balloon> myBalloon(new balloon());
@@ -51,7 +52,7 @@ gameMode = 3 --> rail gun beauty mode
 gameMode = 4 --> balloon beauty mode
 gameMode = 5 --> automated play
 */
-int gameMode = 2;
+int gameMode = 1;
 
 /* 
 Set up function to draw text on screen
@@ -97,7 +98,7 @@ void DisplayFunc()
 	case 1:
 		{
 		//Draw Game
-		//myGame->drawScene();
+		myGame->drawScene();
 		break;
 		}
 	case 2:
@@ -211,7 +212,7 @@ void TimerFunc(int value)
 	}
 	lastFrameTime = now;
 
-	//myGame->updateGame();
+	myGame->updateGame(gameTime);
 
 	glutTimerFunc(period, TimerFunc, value);
 	glutPostRedisplay();
