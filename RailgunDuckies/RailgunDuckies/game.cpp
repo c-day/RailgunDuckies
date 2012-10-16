@@ -7,7 +7,10 @@ bool done;
 
 game::game() {
 	won = false;
-	done = false;
+}
+
+bool game::hasWon() {
+	return won;
 }
 
 
@@ -15,14 +18,13 @@ void game::drawScene(int width, int height) {
 	//Draws Skybox
 	glPushMatrix();
 
-	glColor3d(0, 1, 0);
+	glColor3d(1, 1, 1);
 
-	glTranslated(0, 0, -20);
-	glutSolidCube(21);
+	glutSolidCube(50);
 
 	glPopMatrix();
 	
-	glTranslated(0, -5, -10);
+	glTranslated(0, 0, -10);
 	ducks.push_back(new ducky());
 	balloons.push_back(new balloon());
 

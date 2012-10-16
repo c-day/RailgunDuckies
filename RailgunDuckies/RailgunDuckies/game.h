@@ -11,7 +11,6 @@
 class game {
 private:
 	bool won;
-	bool done;
 	std::vector<ducky*> ducks;
 	std::vector<balloon*> balloons;
 
@@ -19,4 +18,5 @@ public:
 	game();
 	void updateGame(float time);
 	void drawScene(int width, int height);
+	bool hasWon();
 };
