@@ -12,9 +12,9 @@
 class game {
 private:
 	bool won;
-	std::vector<ducky*> ducks;
-	std::vector<balloon*> balloons;
-	std::vector<railGun*> myGun;
+	std::vector<ducky> ducks;
+	std::vector<balloon> balloons;
+	std::vector<railGun> myGun;
 
 public:
 	game();

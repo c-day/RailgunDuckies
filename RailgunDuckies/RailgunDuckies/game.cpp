@@ -7,7 +7,7 @@ bool done;
 
 game::game() {
 	won = false;
-	this->myGun.push_back(new railGun());
+	this->myGun.push_back(railGun());
 }
 
 bool game::hasWon() {
@@ -25,25 +25,25 @@ void game::drawScene(int width, int height) {
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 	
-	ducks.push_back(new ducky());
-	ducks[ducks.size()-1]->updatePos(0, -1, -2, 0, 90);
+	ducks.push_back(ducky());
+	ducks[ducks.size()-1].updatePos(0, -1, -2, 0, 90);
 	
 
 
 	//Draws All Ducks
 	for(int i = 0; i < ducks.size(); i++) {
-		ducks[i]->drawDuck();
+		ducks[i].drawDuck();
 	}
 //*
-	myGun[0]->updateGun(0, 0, 45);
+	myGun[0].updateGun(0, 0, 45);
 	glPushMatrix();
 	
 	glTranslatef(0, -2, -2);
-	myGun[0]->drawGun();
+	myGun[0].drawGun();
 	glPopMatrix();
 //*/
 	for (int i = 0; i < 10; i++){
-	balloons.push_back(new balloon());
+	balloons.push_back(balloon());
 	}
 	//Draws All Balloons
 	glPushMatrix();
@@ -51,8 +51,8 @@ void game::drawScene(int width, int height) {
 	int tempY =  5 + (rand() % 5);
 	int tempZ = (rand() % 30) - 50;
 	glTranslatef(tempX, tempY, tempZ);
-	for(int i = 0; i < balloons.size(); i++) {
-		balloons[i]->drawBalloon();
+	for(vector<balloon>::iterator iter = balloons.begin(); iter < balloons.end(); ++iter) {
+		iter->drawBalloon();
 	}
 	glPopMatrix();
 }
