@@ -25,7 +25,7 @@
 #include <string>
 
 //Define any global variables
-
+float globalRotate = 0;
 bool wireframe = false;
 int window_width = 1024;
 int window_height = 768;
@@ -94,11 +94,12 @@ void DisplayFunc()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
+	
 	switch (gameMode) {
 	case 1:
 		{
 		//Draw Game
-		myGame->drawScene();
+		myGame->drawScene(window_width, window_height);
 		break;
 		}
 	case 2:
@@ -195,7 +196,14 @@ void SpecialKeyFunc(int key, int x, int y) {
 			gameMode = 1;
 			break;
 		}
-
+	case GLUT_KEY_LEFT:
+		globalRotate++;
+		glRotatef(globalRotate, 0, 1, 0);
+		break;
+	case GLUT_KEY_RIGHT: 
+		globalRotate--;
+		glRotatef(globalRotate, 0, 1, 0);
+		break;
 	}
 }
 

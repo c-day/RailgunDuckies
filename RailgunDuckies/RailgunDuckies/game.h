@@ -18,5 +18,5 @@ private:
 public:
 	game();
 	void updateGame(float time);
-	void drawScene();
+	void drawScene(int width, int height);
 };
