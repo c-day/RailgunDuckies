@@ -28,8 +28,10 @@ void balloon::drawBalloon() {
 
 	int index = 0;
 	const int stacks = 26;
-	const int array_size = 1000;
+	const float slices = 36;
+	const int array_size = 972;
 	glm::vec3 PositionData[array_size];
+	glm::vec3 NormalArray[array_size];
 	GLuint IndexData[3*array_size];
 	GLuint IndexData2[3*array_size];
 	float r = 0;
@@ -48,7 +50,7 @@ void balloon::drawBalloon() {
 		PositionData[index].x = r;
 		PositionData[index].z = 0;
 		index++;
-		for (float rotAng = 10.0f; rotAng < 360.0f; rotAng += 10.0f) {
+		for (float rotAng = 10.0f; rotAng < 360.0f; rotAng += 360/slices) {
 			//*
 			float deltaX = cos(radians(rotAng));
 			float deltaZ = sin(radians(rotAng));
@@ -64,82 +66,47 @@ void balloon::drawBalloon() {
 
 	//Calculate the index arrays
 	for (int i = 0; i < array_size; i++) {
-		IndexData[3*i] = i;
-		IndexData[(3*i)+1] = i+1;
-		IndexData[(3*i)+2] = i+36;
+			
+			IndexData[3*i] = i;
+			IndexData[(3*i)+1] = i+1;
+			IndexData[(3*i)+2] = i+36;
+		
 
-		IndexData2[3*i] = i+1;
-		IndexData2[(3*i)+1] = i+36;
-		IndexData2[(3*i)+2] = i+37;
+			IndexData2[3*i] = i+1;
+			IndexData2[(3*i)+1] = i+36;
+			IndexData2[(3*i)+2] = i+37;
+		
+		
+		if(i > 36) {
+
+			glm::vec3 temp1 = glm::cross(PositionData[i-1], PositionData[i-37]);
+			glm::vec3 temp2 = glm::cross(PositionData[i-37], PositionData[i-36]);
+			glm::vec3 temp3 = glm::cross(PositionData[i-36], PositionData[i+1]);
+			glm::vec3 temp4 = glm::cross(PositionData[i+1], PositionData[i+37]);
+			glm::vec3 temp5 = glm::cross(PositionData[i+37], PositionData[i+36]);
+			glm::vec3 temp6 = glm::cross(PositionData[i+36], PositionData[i-1]);
+
+			NormalArray[i] = glm::normalize((temp1+temp2+temp3+temp4+temp5+temp6));
+
+		}
+
 	}
 
 
 
 	glColor3d(1, 0, 0);
 	glVertexPointer(3, GL_FLOAT, 0, PositionData);
-	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glEnableClientState(GL_VERTEX_ARRAY);	
+	glEnableClientState(GL_NORMAL_ARRAY);	
+
+	glNormalPointer(GL_FLOAT, 0, NormalArray);
 	glDrawElements(GL_TRIANGLES, 2808, GL_UNSIGNED_INT, IndexData);
 	glDrawElements(GL_TRIANGLES, 2807, GL_UNSIGNED_INT, IndexData2);
+
+	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
-
-	/*
-	GLfloat varray[4940];
-
-	for (double cy = 1.0; cy >= -1.65; cy = cy - 0.1) {
-		if (cy >= 0) {
-			r = sqrt(1 - pow(cy, 2));
-		} else {
-			r = cos(cy);
-		}
-		for (double ang = 0; ang <= 360; ang = ang + 6) {
-			double rads = 3.14159265/180*ang;
-
-			varray[index] = r*cos(rads);
-			++index;
-			varray[index] = cy;
-			++index;
-			varray[index] = r*sin(rads);
-			++index;
-		}
-
-	}
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 180, varray);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4940);
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	*/
-	//WORKING CODE
-	/*
-	
-	for (double cy = 1.0; cy >= -1.65; cy = cy - 0.1) {
-		if (cy >= 0) {
-			r = sqrt(1 - pow(cy, 2));
-		} else {
-			r = cos(cy);
-		}
-
-		slice1[index].x = r; 
-		slice1[index].y = cy;
-		slice1[index].z = 0;
-		slice2[index].x = r*cos(0.01745);
-		slice2[index].y = cy;
-		slice2[index].z = r*sin(0.01745);
-		++index;
-	}
-	
-	for (int r = 0; r < 361; ++r) {
-		glColor3d(1, 0, 0);
-		glBegin(GL_TRIANGLE_STRIP);
-		for (int i = 0; i < 80; ++i) {
-			glVertex3d(slice1[i].x, slice1[i].y, slice1[i].z);
-			glVertex3d(slice2[i].x, slice2[i].y, slice2[i].z);
-		}
-		glEnd();
-		glRotated(1, 0, 1, 0);
-	}
 	glTranslated(0, -1.6, 0);
 	glutSolidSphere(0.06, 10, 10);
 	glTranslated(0, -0.07, 0);
@@ -147,7 +114,7 @@ void balloon::drawBalloon() {
 	glutSolidTorus(0.05, 0.09, 20, 20);
 	glPopMatrix();
 
-	*/
+
 	glPopMatrix();
 	
 }
