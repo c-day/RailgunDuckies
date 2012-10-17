@@ -21,4 +21,5 @@ public:
 	void updateGame(float time);
 	void drawScene(int width, int height);
 	bool hasWon();
+	railGun getGun();
 };

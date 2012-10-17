@@ -12,8 +12,9 @@ private:
 public:
 	railGun();
 	void drawGun();
-	void updateGun(float rx, float ry, float rz);
+	void updateGunX(float rx);
+	void updateGunY(float ry);
 	void drawBGun(float time);
-
+	glm::vec3 getRot();
 };
 

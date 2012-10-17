@@ -103,6 +103,13 @@ void railGun::drawBGun(float time) {
 	glPopMatrix();
 }
 
-void railGun::updateGun(float rx, float ry, float rz) {
+void railGun::updateGunX(float rx) {
+	this->rot.x = rx;
+}
+void railGun::updateGunY(float ry) {
+	this->rot.y = ry;
+}
 
+glm::vec3 railGun::getRot() {
+	return this->rot;
 }

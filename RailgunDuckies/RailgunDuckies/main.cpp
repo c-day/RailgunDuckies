@@ -41,6 +41,7 @@ std::unique_ptr<ducky> myDuck(new ducky());
 std::unique_ptr<railGun> myGun(new railGun());
 std::unique_ptr<game> myGame(new game());
 balloon myBalloon;
+glm::vec3 camera;
 
 //std::unique_ptr<balloon> myBalloon(new balloon());
 
@@ -57,6 +58,13 @@ int gameMode = 1;
 /* 
 Set up function to draw text on screen
 */
+
+void updateCamera() {
+	camera = glm::rotateX(glm::vec3(0, 2, 8), myGame->getGun().getRot().x);
+	camera = glm::rotateY(camera, myGame->getGun().getRot().y);
+	camera = glm::rotateZ(camera, myGame->getGun().getRot().z);
+}
+
 void DisplayMode(char * s)
 {
 	
@@ -99,6 +107,8 @@ void DisplayFunc()
 	case 1:
 		{
 		//Draw Game
+		updateCamera();
+		gluLookAt(camera.x, camera.y, camera.z, 0, 2, 0, 0, 1, 0);
 		myGame->drawScene(window_width, window_height);
 		break;
 		}
@@ -120,7 +130,6 @@ void DisplayFunc()
 		{
 		//fancy balloon
 		myBalloon.drawBBalloon(gameTime);
-		//myBalloon->drawBBalloon(gameTime);
 		DisplayMode("Balloon Beauty Mode");
 		break;
 		}
@@ -207,6 +216,24 @@ void SpecialKeyFunc(int key, int x, int y) {
 	}
 }
 
+void MouseFunc(int x, int y) {
+	float ycenter = ((float)window_height)/2;
+	float xcenter = ((float)window_width)/2;
+	float ydegp = ycenter/75;
+	float ydegn = ycenter/20;
+	float xdeg = xcenter/180;
+	if(y > ycenter) {
+		myGame->getGun().updateGunY(((y-ycenter)*ydegp));
+	} else {
+		myGame->getGun().updateGunY(-((ycenter-y)*ydegn));
+	}
+	if(x < xcenter) {
+		myGame->getGun().updateGunX(((x-xcenter)*xdeg));
+	} else {
+		myGame->getGun().updateGunX(-((x-xcenter)*xdeg));
+	}
+}
+
 void TimerFunc(int value)
 {
 	now += period;
@@ -225,6 +252,8 @@ void TimerFunc(int value)
 	glutTimerFunc(period, TimerFunc, value);
 	glutPostRedisplay();
 }
+
+
 
 
 
@@ -256,6 +285,7 @@ int main(int argc, char * argv[])
 	glutReshapeFunc(ReshapeFunc);
 	glutKeyboardFunc(KeyboardFunc);
 	glutSpecialFunc(SpecialKeyFunc);
+	glutMotionFunc(MouseFunc);
 	glutTimerFunc(period, TimerFunc, 0);
 	glutDisplayFunc(DisplayFunc);
 	glutMainLoop();

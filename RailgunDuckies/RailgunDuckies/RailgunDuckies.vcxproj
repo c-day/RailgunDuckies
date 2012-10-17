@@ -90,6 +90,7 @@
     <ClInclude Include="balloon.h" />
     <ClInclude Include="ducky.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="railGun.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
