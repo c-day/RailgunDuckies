@@ -247,15 +247,16 @@ void SpecialKeyFunc(int key, int x, int y) {
 void MouseFunc(int x, int y) {
 	float ycenter = ((float)window_height)/2;
 	float xcenter = ((float)window_width)/2;
-	float ydegp = ycenter/50;
+	float ydegp = ycenter/25;
 	float ydegn = ycenter/25;
 	float xdeg = xcenter/55;
 	float yr, xr;
 	if(y < ycenter) {
 		yr = ((ycenter-y)/ydegp);
-		myGame->getGun()->updateGunY(yr);
+		myGame->getGun()->updateGunY(yr+25);
 	} else {
-		myGame->getGun()->updateGunY(0);
+		yr = ((y-ycenter)/ydegn);
+		myGame->getGun()->updateGunY(25-yr);
 	}
 	if(x < xcenter) {
 		xr = ((xcenter-x)/xdeg);

@@ -51,7 +51,7 @@ void game::updateGame(float inTime) {
 	while (balloons.size() < 5) {
 		float x, y, z;
 		z = (float) (this->zclose + (rand()%(this->zfar-this->zclose)));
-		x = rand()%((int)(tan(.479966)*z));
+		x = rand()%((int)(tan(.479966)*z)*2) - (int)(tan(.479966)*z);
 		y = rand()%((int)(tan(.479966)*z));
 		balloons.push_back(balloon(x, y, z));
 	}
