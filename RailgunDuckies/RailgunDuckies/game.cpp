@@ -8,6 +8,8 @@ bool done;
 game::game() {
 	won = false;
 	myGun = new railGun();
+	zclose = 25;
+	zfar = 100;
 }
 
 bool game::hasWon() {
@@ -21,9 +23,15 @@ void game::drawScene(int width, int height) {
 	glDisable(GL_LIGHTING);
 	glColor3d(0.2, 0.6, 1.0);
 
-	glutSolidCube(50);
+	glPushMatrix();
+	glTranslatef(0, 0, -40);
+	glutSolidCube(100);
+	glPopMatrix();
 	glEnable(GL_LIGHTING);
-
+	//Draws All Balloons
+	for(vector<balloon>::iterator iter = balloons.begin(); iter < balloons.end(); ++iter) {
+		iter->drawBalloon();
+	}
 
 	//Draws All Ducks
 	for(vector<ducky>::iterator iter = ducks.begin(); iter < ducks.end(); ++iter) {
@@ -33,14 +41,19 @@ void game::drawScene(int width, int height) {
 	//Draws Gun
 	myGun->drawGun();
 
-	//Draws All Balloons
-	for(vector<balloon>::iterator iter = balloons.begin(); iter < balloons.end(); ++iter) {
-		iter->drawBalloon();
-	}
+
 }
 
 void game::updateGame(float time) {
-
+	//Create Balloons
+	while (balloons.size() < 5) {
+		float x, y, z;
+		z = (float) (this->zclose + (rand()%(this->zfar-this->zclose)));
+		x = rand()%((int)(tan(.479966)*z));
+		y = rand()%((int)(tan(.479966)*z));
+		balloons.push_back(balloon(x, y, z));
+	}
+	
 }
 
 railGun* game::getGun() {

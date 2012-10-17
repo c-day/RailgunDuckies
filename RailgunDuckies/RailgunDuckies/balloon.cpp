@@ -4,7 +4,13 @@
 using namespace std;
 
 balloon::balloon() {
-	this->x = this->y = this->z = 0.0f;
+	this->x = this->y = this->z = 0.0;
+}
+
+balloon::balloon(float x, float y, float z) {
+	this->x = x;
+	this->y = y;
+	this->z = z;;
 }
 
 static const GLsizei VertexCount = 6; 
@@ -25,6 +31,8 @@ void balloon::drawBalloon() {
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 
 	glPushMatrix();
+
+	glTranslatef(this->x, this->y, -this->z);
 
 	int index = 0;
 	const int stacks = 26;
@@ -66,6 +74,7 @@ void balloon::drawBalloon() {
 
 	//Calculate the index arrays
 	for (int i = 0; i < array_size; i++) {
+
 			
 			IndexData[3*i] = i;
 			IndexData[(3*i)+1] = i+1;
@@ -78,7 +87,6 @@ void balloon::drawBalloon() {
 		
 		
 		if(i > 36) {
-
 			glm::vec3 temp1 = glm::cross(PositionData[i-1], PositionData[i-37]);
 			glm::vec3 temp2 = glm::cross(PositionData[i-37], PositionData[i-36]);
 			glm::vec3 temp3 = glm::cross(PositionData[i-36], PositionData[i+1]);
@@ -87,7 +95,6 @@ void balloon::drawBalloon() {
 			glm::vec3 temp6 = glm::cross(PositionData[i+36], PositionData[i-1]);
 
 			NormalArray[i] = glm::normalize((temp1+temp2+temp3+temp4+temp5+temp6));
-
 		}
 
 	}

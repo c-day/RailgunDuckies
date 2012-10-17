@@ -15,6 +15,7 @@ private:
 	std::vector<ducky> ducks;
 	std::vector<balloon> balloons;
 	railGun * myGun;
+	int zclose, zfar;
 
 public:
 	game();
