@@ -59,11 +59,12 @@ int gameMode = 1;
 Set up function to draw text on screen
 */
 
+/*
 void updateCamera() {
-	camera = glm::rotateX(glm::vec3(0, 2, 8), myGame->getGun().getRot().x);
-	camera = glm::rotateY(camera, myGame->getGun().getRot().y);
-	camera = glm::rotateZ(camera, myGame->getGun().getRot().z);
+	camera = glm::rotateX(glm::vec3(0, 2, 8), myGame->getGun()->rx);
+	camera = glm::rotateY(camera, myGame->getGun()->ry);
 }
+*/
 
 void DisplayMode(char * s)
 {
@@ -107,8 +108,8 @@ void DisplayFunc()
 	case 1:
 		{
 		//Draw Game
-		updateCamera();
-		gluLookAt(camera.x, camera.y, camera.z, 0, 2, 0, 0, 1, 0);
+		//updateCamera();
+		gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
 		myGame->drawScene(window_width, window_height);
 		break;
 		}
@@ -219,18 +220,22 @@ void SpecialKeyFunc(int key, int x, int y) {
 void MouseFunc(int x, int y) {
 	float ycenter = ((float)window_height)/2;
 	float xcenter = ((float)window_width)/2;
-	float ydegp = ycenter/75;
-	float ydegn = ycenter/20;
-	float xdeg = xcenter/180;
-	if(y > ycenter) {
-		myGame->getGun().updateGunY(((y-ycenter)*ydegp));
+	float ydegp = ycenter/50;
+	float ydegn = ycenter/25;
+	float xdeg = xcenter/55;
+	float yr, xr;
+	if(y < ycenter) {
+		yr = ((ycenter-y)/ydegp);
+		myGame->getGun()->updateGunY(yr);
 	} else {
-		myGame->getGun().updateGunY(-((ycenter-y)*ydegn));
+		myGame->getGun()->updateGunY(0);
 	}
 	if(x < xcenter) {
-		myGame->getGun().updateGunX(((x-xcenter)*xdeg));
+		xr = ((xcenter-x)/xdeg);
+		myGame->getGun()->updateGunX(xr);
 	} else {
-		myGame->getGun().updateGunX(-((x-xcenter)*xdeg));
+		xr = -((x-xcenter)/xdeg);
+		myGame->getGun()->updateGunX(xr);
 	}
 }
 
@@ -285,7 +290,7 @@ int main(int argc, char * argv[])
 	glutReshapeFunc(ReshapeFunc);
 	glutKeyboardFunc(KeyboardFunc);
 	glutSpecialFunc(SpecialKeyFunc);
-	glutMotionFunc(MouseFunc);
+	glutPassiveMotionFunc(MouseFunc);
 	glutTimerFunc(period, TimerFunc, 0);
 	glutDisplayFunc(DisplayFunc);
 	glutMainLoop();

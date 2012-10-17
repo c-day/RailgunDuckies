@@ -12,7 +12,7 @@ railGun::railGun() {
 	this->rot.z = 0;
 }
 
-//Draw duck based on current duck coords
+//Draw gun based on current gun coords
 void railGun::drawGun() {
 
 	GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -34,9 +34,8 @@ void railGun::drawGun() {
 	glPopMatrix();
 
 	//Rotate Gun
-	glRotatef(this->rot.x, 1, 0, 0);
-	glRotatef(this->rot.y, 0, 1, 0);
-	glRotatef(this->rot.z, 0, 0, 1);
+	glRotatef(this->rot.y, 1, 0, 0);
+	glRotatef(this->rot.x, 0, 1, 0);
 
 	//Draw barrell
 	glPushMatrix();
@@ -109,6 +108,7 @@ void railGun::updateGunX(float rx) {
 void railGun::updateGunY(float ry) {
 	this->rot.y = ry;
 }
+
 
 glm::vec3 railGun::getRot() {
 	return this->rot;

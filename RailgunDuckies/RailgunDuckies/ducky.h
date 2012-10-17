@@ -5,8 +5,8 @@
 
 class ducky {
 private:
-	glm::vec3 pos;
-	glm::vec3 rot;
+	glm::vec3 duckPos;
+	glm::vec3 duckRot;
 public:
 	ducky();
 	void drawDuck();

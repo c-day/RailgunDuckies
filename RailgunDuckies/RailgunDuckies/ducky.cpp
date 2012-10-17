@@ -17,10 +17,10 @@
 		glPushMatrix();
 		
 		//Move to Object's Current Position
-		glTranslated(this->pos.x, this->pos.y, this->pos.z);
+		glTranslated(this->duckPos.x, this->duckPos.y, this->duckPos.z);
 		
-		glRotated(this->rot.x, 1, 0, 0);
-		glRotated(this->rot.y, 0, 1, 0);
+		glRotated(this->duckRot.x, 1, 0, 0);
+		glRotated(this->duckRot.y, 0, 1, 0);
 
 		//Draw Body
 		glPushMatrix();
@@ -67,11 +67,11 @@
 	
 	//Update duck position using GLM
 	void ducky::updatePos(float xn, float yn, float zn, float rxn, float ryn) {
-		this->pos.x = xn;
-		this->pos.y = yn;
-		this->pos.z = zn;
-		this->rot.x = rxn;
-		this->rot.y = ryn;
+		this->duckPos.x = xn;
+		this->duckPos.y = yn;
+		this->duckPos.z = zn;
+		this->duckRot.x = rxn;
+		this->duckRot.y = ryn;
 	}
 
 	void ducky::drawBDuck(float time) {

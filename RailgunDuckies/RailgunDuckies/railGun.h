@@ -2,7 +2,6 @@
 
 #include <gl/freeglut.h>
 #include <glm/glm.hpp>
-
 class railGun {
 
 private:

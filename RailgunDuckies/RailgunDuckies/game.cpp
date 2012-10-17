@@ -7,7 +7,7 @@ bool done;
 
 game::game() {
 	won = false;
-	this->myGun.push_back(railGun());
+	myGun = new railGun();
 }
 
 bool game::hasWon() {
@@ -31,8 +31,7 @@ void game::drawScene(int width, int height) {
 	}
 
 	//Draws Gun
-	myGun[0].drawGun();
-
+	myGun->drawGun();
 
 	//Draws All Balloons
 	for(vector<balloon>::iterator iter = balloons.begin(); iter < balloons.end(); ++iter) {
@@ -44,8 +43,8 @@ void game::updateGame(float time) {
 
 }
 
-railGun game::getGun() {
-	return myGun[0];
+railGun* game::getGun() {
+	return myGun;
 }
 
 

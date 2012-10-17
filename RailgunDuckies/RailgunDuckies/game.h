@@ -14,12 +14,12 @@ private:
 	bool won;
 	std::vector<ducky> ducks;
 	std::vector<balloon> balloons;
-	std::vector<railGun> myGun;
+	railGun * myGun;
 
 public:
 	game();
 	void updateGame(float time);
 	void drawScene(int width, int height);
 	bool hasWon();
-	railGun getGun();
+	railGun* getGun();
 };
