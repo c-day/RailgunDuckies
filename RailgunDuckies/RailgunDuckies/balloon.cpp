@@ -73,9 +73,7 @@ void balloon::drawBalloon() {
 	}
 
 	//Calculate the index arrays
-	for (int i = 0; i < array_size; i++) {
-
-			
+	for (int i = 0; i < array_size; i++) {			
 			IndexData[3*i] = i;
 			IndexData[(3*i)+1] = i+1;
 			IndexData[(3*i)+2] = i+36;
@@ -96,7 +94,6 @@ void balloon::drawBalloon() {
 
 			NormalArray[i] = glm::normalize((temp1+temp2+temp3+temp4+temp5+temp6));
 		}
-
 	}
 
 

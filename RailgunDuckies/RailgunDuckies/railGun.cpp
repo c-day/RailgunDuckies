@@ -33,9 +33,9 @@ void railGun::drawGun() {
 	glutSolidCone(1.5, 2, 50, 50);
 	glPopMatrix();
 
-	//Rotate Gun
-	glRotatef(this->rot.y, 1, 0, 0);
+	//Rotate Gun	
 	glRotatef(this->rot.x, 0, 1, 0);
+	glRotatef(this->rot.y, 1, 0, 0);
 
 	//Draw barrell
 	glPushMatrix();
@@ -47,7 +47,7 @@ void railGun::drawGun() {
 	glPushMatrix();
 	glTranslated(0, 0.125, 0);
 	glScaled(2, 1, 1);
-	glutSolidCube(0.25);
+	drawCube(0.25);
 	glPopMatrix();
 
 	glTranslated(0, .5, 0);
@@ -55,37 +55,37 @@ void railGun::drawGun() {
 	glPushMatrix();
 	glTranslated(.375, .375, -1);
 	glScaled(.25, .25, 6);
-	glutSolidCube(0.9167);
+	drawCube(0.9167);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(.375, -.375, -1);
 	glScaled(.25, .25, 6);
-	glutSolidCube(0.9167);
+	drawCube(0.9167);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(-.375, -.375, -1);
 	glScaled(.25, .25, 6);
-	glutSolidCube(0.9167);
+	drawCube(0.9167);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(-.375, .375, -1);
 	glScaled(.25, .25, 6);
-	glutSolidCube(0.9167);
+	drawCube(0.9167);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(0, 0, 1.875);
 	glScaled(1, 1,.25);
-	glutSolidCube(1);
+	drawCube(1);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(0, 0, -3.875);
 	glScaled(1, 1, .25);
-	glutSolidCube(1);
+	drawCube(1);
 	glPopMatrix();
 
 
@@ -112,4 +112,44 @@ void railGun::updateGunY(float ry) {
 
 glm::vec3 railGun::getRot() {
 	return this->rot;
+}
+
+void railGun::drawCube(float d) {
+	float r = d/2;
+	glm::vec3 points[8];
+	points[0] = (glm::vec3(-r, r, r));
+	points[1] = (glm::vec3(r, r, r));
+	points[2] = (glm::vec3(r, r, -r));
+	points[3] = (glm::vec3(-r, r, -r));
+
+	points[4] = (glm::vec3(-r, -r, r));
+	points[5] = (glm::vec3(r, -r, r));
+	points[6] = (glm::vec3(r, -r, -r));
+	points[7] = (glm::vec3(-r, -r, -r));
+
+	GLuint IndexData [24] = {0, 1, 2, 3, 3, 2, 6, 7, 7, 3, 0, 4, 4, 0, 1, 5, 5, 1, 2, 6, 6, 7, 4, 5};
+
+	glVertexPointer(3, GL_FLOAT, 0, points);
+
+	glEnableClientState(GL_VERTEX_ARRAY);	
+	//glEnableClientState(GL_NORMAL_ARRAY);	
+
+	//glNormalPointer(GL_FLOAT, 0, NormalArray);
+	glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, IndexData);
+
+	//glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+
+}
+
+void railGun::drawFace(float d) {
+	float r = d/2;
+
+	glBegin(GL_POLYGON);
+	glVertex3f(-r, r, -r);
+	glVertex3f(r, r, -r);
+	glVertex3f(r, -r, -r);
+	glVertex3f(-r, -r, -r);
+	glEnd();
 }

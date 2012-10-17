@@ -88,12 +88,11 @@ void DisplayTime(char * s)
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	//glOrtho(0, window_width, 0, window_height, 1, 10);
-	glOrtho(window_width, 0, 0, window_height, 1, 10);
+	glOrtho(0, window_width, 0, window_height, 1, 10);
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(10, 10, -5.5f);
+	glTranslatef(10, 40, -5.5f);
 	glScalef(0.25f, 0.25f, 1.0f);
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
@@ -135,7 +134,7 @@ void DisplayFunc()
 		strcat(disp_string, int_string);
 		char float_string[32];
 		char disp_time[64] = "Time: ";
-		sprintf(float_string, "%g", gameTime);
+		sprintf(float_string, "%g", (gameTime/1000));
 		strcat(disp_time, float_string);
 		DisplayMode(disp_string);
 		DisplayTime(disp_time);
