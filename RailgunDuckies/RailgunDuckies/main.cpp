@@ -83,6 +83,24 @@ void DisplayMode(char * s)
 	glEnable(GL_LIGHTING);
 }
 
+void DisplayTime(char * s)
+{
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	//glOrtho(0, window_width, 0, window_height, 1, 10);
+	glOrtho(window_width, 0, 0, window_height, 1, 10);
+	glViewport(0, 0, window_width, window_height);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(10, 10, -5.5f);
+	glScalef(0.25f, 0.25f, 1.0f);
+	glDisable(GL_LIGHTING);
+	glColor3f(1, 1, 1);
+	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) s);
+	glEnable(GL_LIGHTING);
+}
+
 //Set up world and viewport
 
 void DisplayFunc()
@@ -111,6 +129,16 @@ void DisplayFunc()
 		//updateCamera();
 		gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
 		myGame->drawScene(window_width, window_height);
+		char int_string[32];
+		char disp_string[64] = "Score: ";
+		sprintf(int_string, "%d", myGame->getScore());
+		strcat(disp_string, int_string);
+		char float_string[32];
+		char disp_time[64] = "Time: ";
+		sprintf(float_string, "%g", gameTime);
+		strcat(disp_time, float_string);
+		DisplayMode(disp_string);
+		DisplayTime(disp_time);
 		break;
 		}
 	case 2:

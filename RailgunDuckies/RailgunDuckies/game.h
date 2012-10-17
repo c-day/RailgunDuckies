@@ -2,11 +2,14 @@
 
 #include <GL/freeglut.h>
 #include <vector>
+#include <time.h>
 #include <iostream>
+
 
 #include "railGun.h"
 #include "ducky.h"
 #include "balloon.h"
+
 
 
 class game {
@@ -16,6 +19,8 @@ private:
 	std::vector<balloon> balloons;
 	railGun * myGun;
 	int zclose, zfar;
+	int playerScore;
+	
 
 public:
 	game();
@@ -23,4 +28,5 @@ public:
 	void drawScene(int width, int height);
 	bool hasWon();
 	railGun* getGun();
+	int getScore();
 };

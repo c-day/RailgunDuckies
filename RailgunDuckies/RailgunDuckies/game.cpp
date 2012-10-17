@@ -10,6 +10,7 @@ game::game() {
 	myGun = new railGun();
 	zclose = 25;
 	zfar = 100;
+	playerScore = 0;
 }
 
 bool game::hasWon() {
@@ -44,8 +45,9 @@ void game::drawScene(int width, int height) {
 
 }
 
-void game::updateGame(float time) {
+void game::updateGame(float inTime) {
 	//Create Balloons
+	srand(time(NULL));
 	while (balloons.size() < 5) {
 		float x, y, z;
 		z = (float) (this->zclose + (rand()%(this->zfar-this->zclose)));
@@ -58,6 +60,10 @@ void game::updateGame(float time) {
 
 railGun* game::getGun() {
 	return myGun;
+}
+
+int game::getScore() {
+	return playerScore;
 }
 
 
