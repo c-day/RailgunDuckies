@@ -44,6 +44,7 @@ std::unique_ptr<railGun> myGun(new railGun());
 std::unique_ptr<game> myGame(new game());
 balloon myBalloon;
 glm::vec3 camera;
+float launchVelocity = 0;
 
 //std::unique_ptr<balloon> myBalloon(new balloon());
 
@@ -118,6 +119,22 @@ void DisplayMissed(char * s)
 	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) s);
 	glEnable(GL_LIGHTING);
 }
+void DisplayVel(char * s)
+{
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, window_width, 0, window_height, 1, 10);
+	glViewport(0, 0, window_width, window_height);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(window_width/2 - 90, 10, -5.5f);
+	glScalef(0.25f, 0.25f, 1.0f);
+	glDisable(GL_LIGHTING);
+	glColor3f(1, 1, 1);
+	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) s);
+	glEnable(GL_LIGHTING);
+}
 
 //Set up world and viewport
 
@@ -144,42 +161,49 @@ void DisplayFunc()
 	case 4:
 		{
 		//Game
-		updateCamera();
-		myGame(new game());
+		//updateCamera();
+		//myGame(new game());
 		gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
+		//gluLookAt(camera.x, camera.y + 2, camera.z + 8, 0, 2, 0, 0, 1, 0);
 		myGame->drawScene(window_width, window_height);
-		char score_string[32];
-		char time_string[32];
-		char miss_string[32];
-		char disp_score[64] = "Score: ";
-		char disp_miss[64] = "Missed: ";
-		char disp_time[64] = "Time: ";
+		char score_string[16];
+		char time_string[16];
+		char miss_string[16];
+		char vel_string[16];
+		char disp_score[16] = "Score: ";
+		char disp_miss[16] = "Missed: ";
+		char disp_time[16] = "Time: ";
+		char disp_vel[16] = "Velocity: ";
 		sprintf(score_string, "%d", myGame->getScore());
 		sprintf(time_string, "%.1f", (gameTime/1000));
 		sprintf(miss_string, "%d", myGame->missed);
+		sprintf(vel_string, "%.1f", launchVelocity);
 		strcat(disp_score, score_string);
 		strcat(disp_time, time_string);
 		strcat(disp_miss, miss_string);
+		strcat(disp_vel, vel_string);
+		strcat(disp_vel, "%");
 		DisplayMode(disp_score);
 		DisplayTime(disp_time);
 		DisplayMissed(disp_miss);
+		DisplayVel(disp_vel);
 		break;
 		}
-	case 2:
+	case 1:
 		{
 		//fancy duck
 		myDuck->drawBDuck(gameTime);
 		DisplayMode("Duckie Beauty Mode");
 		break;
 		}
-	case 3:
+	case 2:
 		{
 		//fancy gun
 		myGun->drawBGun(gameTime);
 		DisplayMode("Rail Gun Beauty Mode");
 		break;
 		}
-	case 1: 
+	case 3: 
 		{
 		//fancy balloon
 		myBalloon.drawBBalloon(gameTime);
@@ -220,8 +244,7 @@ void KeyboardFunc(unsigned char c, int x, int y)
 		wireframe = !wireframe;
 		break;
 	case 32:
-		//FIRE DUCK!!!!!!!!!
-		
+		launchVelocity += 0.5f; 
 		break;
 	// Hitting lower case x or the escape key will  exit the
 	// glut event loop.
@@ -259,7 +282,7 @@ void KeyUpFunc(unsigned char c, int x, int y)
 {
 	switch(c) {
 	case 32: 
-		myGame->shootDuck(1.0f);
+		myGame->shootDuck(launchVelocity);
 		break;
 	}
 }

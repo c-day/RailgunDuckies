@@ -81,23 +81,6 @@ int game::getScore() {
 
 
 void game::shootDuck(float launchVelocity) {
-	glm::vec3 currentPos = myDuck->getDuckPos();
-	glm::vec3 currentRot = myDuck->getDuckRot();
-
-	float v0x = launchVelocity*cos(currentRot.x);
-	float v0y = launchVelocity*sin(currentRot.y);
-	float newY = currentPos.y + v0y + 0.5f*(-9.81);
-	float newZ = -(currentPos.z + v0x);
 	shot = true;
-	float moveY = 0;
-	float moveZ = 0;
-	while(!hit && shot) {
-		moveY = moveY + 0.000001f;
-		moveZ = moveZ + 0.00001f;
-		myDuck->updatePos(0, moveY, -moveZ, 0, 0);
-		if(moveZ > 10) {
-			hit = true;
-		}
-	}
-
+	this->myDuck->updatePos(0, 0, -launchVelocity, 0, 0);
 }
