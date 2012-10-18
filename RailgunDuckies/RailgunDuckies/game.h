@@ -20,6 +20,7 @@ private:
 	railGun * myGun;
 	int zclose, zfar;
 	int playerScore;
+	
 	ducky * myDuck;
 	
 
@@ -30,4 +31,6 @@ public:
 	bool hasWon();
 	railGun* getGun();
 	int getScore();
+	void shootDuck();
+	int missed;
 };

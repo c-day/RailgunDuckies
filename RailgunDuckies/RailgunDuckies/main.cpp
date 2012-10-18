@@ -75,7 +75,7 @@ void DisplayMode(char * s)
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(10, 10, -5.5f);
+	glTranslatef(10, 45, -5.5f);
 	glScalef(0.25f, 0.25f, 1.0f);
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
@@ -92,7 +92,24 @@ void DisplayTime(char * s)
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(10, 40, -5.5f);
+	glTranslatef(10, 10, -5.5f);
+	glScalef(0.25f, 0.25f, 1.0f);
+	glDisable(GL_LIGHTING);
+	glColor3f(1, 1, 1);
+	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) s);
+	glEnable(GL_LIGHTING);
+}
+
+void DisplayMissed(char * s)
+{
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, window_width, 0, window_height, 1, 10);
+	glViewport(0, 0, window_width, window_height);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(10, 80, -5.5f);
 	glScalef(0.25f, 0.25f, 1.0f);
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
@@ -128,16 +145,21 @@ void DisplayFunc()
 		//updateCamera();
 		gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
 		myGame->drawScene(window_width, window_height);
-		char int_string[32];
-		char disp_string[64] = "Score: ";
-		sprintf(int_string, "%d", myGame->getScore());
-		strcat(disp_string, int_string);
-		char float_string[32];
+		char score_string[32];
+		char time_string[32];
+		char miss_string[32];
+		char disp_score[64] = "Score: ";
+		char disp_miss[64] = "Missed: ";
 		char disp_time[64] = "Time: ";
-		sprintf(float_string, "%g", (gameTime/1000));
-		strcat(disp_time, float_string);
-		DisplayMode(disp_string);
+		sprintf(score_string, "%d", myGame->getScore());
+		sprintf(time_string, "%.1f", (gameTime/1000));
+		sprintf(miss_string, "%d", myGame->missed);
+		strcat(disp_score, score_string);
+		strcat(disp_time, time_string);
+		strcat(disp_miss, miss_string);
+		DisplayMode(disp_score);
 		DisplayTime(disp_time);
+		DisplayMissed(disp_miss);
 		break;
 		}
 	case 2:

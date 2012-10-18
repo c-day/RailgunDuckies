@@ -11,6 +11,7 @@ game::game() {
 	zclose = 25;
 	zfar = 100;
 	playerScore = 0;
+	missed = 0;
 	myDuck = new ducky();
 }
 
@@ -36,14 +37,16 @@ void game::drawScene(int width, int height) {
 	}
 
 	//Draws All Ducks
-	myDuck->updatePos(0, 1.5, 4, 0, 90);
 	
-
+	
+	glPushMatrix();
+	glLoadMatrixf(myGun->getMat());
+	myDuck->updatePos(0, 1.1, 1.35, 0, 90);
 	myDuck->drawDuck();
-
+	glPopMatrix();
 	//Draws Gun
 	myGun->drawGun();
-
+	
 
 }
 
@@ -70,4 +73,6 @@ int game::getScore() {
 }
 
 
-
+void game::shootDuck() {
+	 
+}

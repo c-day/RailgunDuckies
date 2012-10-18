@@ -37,6 +37,8 @@ void railGun::drawGun() {
 	glRotatef(this->rot.x, 0, 1, 0);
 	glRotatef(this->rot.y, 1, 0, 0);
 
+	glGetFloatv(GL_MODELVIEW_MATRIX, barrellMat);
+
 	//Draw barrell
 	glPushMatrix();
 	glRotated(90, 0, 1, 0);
@@ -112,6 +114,10 @@ void railGun::updateGunY(float ry) {
 
 glm::vec3 railGun::getRot() {
 	return this->rot;
+}
+
+GLfloat * railGun::getMat() {
+	return barrellMat;
 }
 
 void railGun::drawCube(float d) {
