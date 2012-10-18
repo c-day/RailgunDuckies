@@ -235,11 +235,11 @@ void SpecialKeyFunc(int key, int x, int y) {
 		}
 	case GLUT_KEY_LEFT:
 		globalRotate++;
-		glRotatef(globalRotate, 0, 1, 0);
+		//glRotatef(globalRotate, 0, 1, 0);
 		break;
 	case GLUT_KEY_RIGHT: 
 		globalRotate--;
-		glRotatef(globalRotate, 0, 1, 0);
+		//glRotatef(globalRotate, 0, 1, 0);
 		break;
 	}
 }

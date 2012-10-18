@@ -11,6 +11,7 @@ game::game() {
 	zclose = 25;
 	zfar = 100;
 	playerScore = 0;
+	myDuck = new ducky();
 }
 
 bool game::hasWon() {
@@ -23,21 +24,22 @@ void game::drawScene(int width, int height) {
 	//Draws Skybox
 	glDisable(GL_LIGHTING);
 	glColor3d(0.2, 0.6, 1.0);
-
 	glPushMatrix();
 	glTranslatef(0, 0, -40);
 	glutSolidCube(100);
 	glPopMatrix();
 	glEnable(GL_LIGHTING);
+
 	//Draws All Balloons
 	for(vector<balloon>::iterator iter = balloons.begin(); iter < balloons.end(); ++iter) {
 		iter->drawBalloon();
 	}
 
 	//Draws All Ducks
-	for(vector<ducky>::iterator iter = ducks.begin(); iter < ducks.end(); ++iter) {
-		iter->drawDuck();
-	}
+	myDuck->updatePos(0, 1.5, 4, 0, 90);
+	
+
+	myDuck->drawDuck();
 
 	//Draws Gun
 	myGun->drawGun();
@@ -55,6 +57,7 @@ void game::updateGame(float inTime) {
 		y = rand()%((int)(tan(.479966)*z));
 		balloons.push_back(balloon(x, y, z));
 	}
+	
 	
 }
 

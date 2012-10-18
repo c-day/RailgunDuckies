@@ -18,5 +18,6 @@ public:
 	void updateGunY(float ry);
 	void drawBGun(float time);
 	glm::vec3 getRot();
+	
 };
 

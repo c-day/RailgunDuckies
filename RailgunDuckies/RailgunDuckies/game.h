@@ -20,6 +20,7 @@ private:
 	railGun * myGun;
 	int zclose, zfar;
 	int playerScore;
+	ducky * myDuck;
 	
 
 public:
