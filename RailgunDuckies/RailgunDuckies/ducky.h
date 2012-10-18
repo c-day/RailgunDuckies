@@ -12,6 +12,8 @@ public:
 	void drawDuck();
 	void updatePos(float x, float y, float z, float rx, float ry);
 	void drawBDuck(float time);
+	glm::vec3 getDuckPos();
+	glm::vec3 getDuckRot();
 
 };
 

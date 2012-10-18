@@ -23,9 +23,11 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#include <glm/glm.hpp>
 
 //Define any global variables
-float globalRotate = 0;
+float globalRotateX = 0;
+float globalRotateY = 0;
 bool wireframe = false;
 int window_width = 1024;
 int window_height = 768;
@@ -47,10 +49,10 @@ glm::vec3 camera;
 
 
 /* Set up game modes
-gameMode = 1 --> play game
+gameMode = 1 --> balloon beauty mode
 gameMode = 2 --> duckie beauty mode
 gameMode = 3 --> rail gun beauty mode
-gameMode = 4 --> balloon beauty mode
+gameMode = 4 --> play game
 gameMode = 5 --> automated play
 */
 int gameMode = 1;
@@ -59,12 +61,12 @@ int gameMode = 1;
 Set up function to draw text on screen
 */
 
-/*
+
 void updateCamera() {
-	camera = glm::rotateX(glm::vec3(0, 2, 8), myGame->getGun()->rx);
-	camera = glm::rotateY(camera, myGame->getGun()->ry);
+	camera = glm::rotateX(camera, globalRotateX);
+	camera = glm::rotateY(camera, globalRotateY);
 }
-*/
+
 
 void DisplayMode(char * s)
 {
@@ -139,10 +141,11 @@ void DisplayFunc()
 	
 	
 	switch (gameMode) {
-	case 1:
+	case 4:
 		{
-		//Draw Game
-		//updateCamera();
+		//Game
+		updateCamera();
+		myGame(new game());
 		gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
 		myGame->drawScene(window_width, window_height);
 		char score_string[32];
@@ -176,7 +179,7 @@ void DisplayFunc()
 		DisplayMode("Rail Gun Beauty Mode");
 		break;
 		}
-	case 4: 
+	case 1: 
 		{
 		//fancy balloon
 		myBalloon.drawBBalloon(gameTime);
@@ -218,6 +221,7 @@ void KeyboardFunc(unsigned char c, int x, int y)
 		break;
 	case 32:
 		//FIRE DUCK!!!!!!!!!
+		
 		break;
 	// Hitting lower case x or the escape key will  exit the
 	// glut event loop.
@@ -225,8 +229,39 @@ void KeyboardFunc(unsigned char c, int x, int y)
 	case 27:
 		glutLeaveMainLoop();
 		return;
+	case 49:
+		switch (gameMode)
+		{
+		case 1: 
+			gameMode = 2;
+			break;
+		case 2:
+			gameMode = 3;
+			break;
+		case 3:
+			gameMode = 4;
+			break;
+		case 4:
+			gameMode = 5;
+			break;
+		case 5:
+			gameMode = 1;
+			break;
+		default:
+			gameMode = 1;
+			break;
+		}
 	}
 	glutPostRedisplay();
+}
+
+void KeyUpFunc(unsigned char c, int x, int y)
+{
+	switch(c) {
+	case 32: 
+		myGame->shootDuck(1.0f);
+		break;
+	}
 }
 
 void SpecialKeyFunc(int key, int x, int y) {
@@ -256,12 +291,18 @@ void SpecialKeyFunc(int key, int x, int y) {
 			break;
 		}
 	case GLUT_KEY_LEFT:
-		globalRotate++;
+		globalRotateX++;
 		//glRotatef(globalRotate, 0, 1, 0);
 		break;
 	case GLUT_KEY_RIGHT: 
-		globalRotate--;
+		globalRotateX--;
 		//glRotatef(globalRotate, 0, 1, 0);
+		break;
+	case GLUT_KEY_UP: 
+		globalRotateY++;
+		break;
+	case GLUT_KEY_DOWN:
+		globalRotateY--;
 		break;
 	}
 }
@@ -339,6 +380,7 @@ int main(int argc, char * argv[])
 
 	glutReshapeFunc(ReshapeFunc);
 	glutKeyboardFunc(KeyboardFunc);
+	glutKeyboardUpFunc(KeyUpFunc);
 	glutSpecialFunc(SpecialKeyFunc);
 	glutPassiveMotionFunc(MouseFunc);
 	glutTimerFunc(period, TimerFunc, 0);

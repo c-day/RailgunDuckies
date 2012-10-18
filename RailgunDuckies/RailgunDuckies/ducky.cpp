@@ -74,6 +74,14 @@
 		this->duckRot.y = ryn;
 	}
 
+	glm::vec3 ducky::getDuckPos() {
+		return this->duckPos;
+	}
+
+	glm::vec3 ducky::getDuckRot() {
+		return this->duckRot;
+	}
+
 	void ducky::drawBDuck(float time) {
 
 		glPushMatrix();
