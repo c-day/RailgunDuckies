@@ -47,7 +47,7 @@ void game::drawScene(int width, int height) {
 		myDuck->updatePos(0, 1.1, 1.35, 0, 90);
 		myDuck->drawDuck();
 	} else {
-		glLoadMatrixf(this->currentMat);
+		glLoadMatrixf(myGun->getMat());
 		myDuck->drawDuck();
 	}
 	glPopMatrix();
