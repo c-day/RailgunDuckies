@@ -244,7 +244,9 @@ void KeyboardFunc(unsigned char c, int x, int y)
 		wireframe = !wireframe;
 		break;
 	case 32:
-		launchVelocity += 0.5f; 
+		if(!paused) {
+			launchVelocity += 0.5f;
+		}
 		break;
 	// Hitting lower case x or the escape key will  exit the
 	// glut event loop.
@@ -281,8 +283,10 @@ void KeyboardFunc(unsigned char c, int x, int y)
 void KeyUpFunc(unsigned char c, int x, int y)
 {
 	switch(c) {
-	case 32: 
-		myGame->shootDuck(launchVelocity);
+	case 32:
+		if(!paused) {
+			myGame->shootDuck(launchVelocity);
+		}
 		break;
 	}
 }
@@ -331,25 +335,27 @@ void SpecialKeyFunc(int key, int x, int y) {
 }
 
 void MouseFunc(int x, int y) {
-	float ycenter = ((float)window_height)/2;
-	float xcenter = ((float)window_width)/2;
-	float ydegp = ycenter/25;
-	float ydegn = ycenter/25;
-	float xdeg = xcenter/55;
-	float yr, xr;
-	if(y < ycenter) {
-		yr = ((ycenter-y)/ydegp);
-		myGame->getGun()->updateGunY(yr+25);
-	} else {
-		yr = ((y-ycenter)/ydegn);
-		myGame->getGun()->updateGunY(25-yr);
-	}
-	if(x < xcenter) {
-		xr = ((xcenter-x)/xdeg);
-		myGame->getGun()->updateGunX(xr);
-	} else {
-		xr = -((x-xcenter)/xdeg);
-		myGame->getGun()->updateGunX(xr);
+	if(!paused){
+		float ycenter = ((float)window_height)/2;
+		float xcenter = ((float)window_width)/2;
+		float ydegp = ycenter/25;
+		float ydegn = ycenter/25;
+		float xdeg = xcenter/55;
+		float yr, xr;
+		if(y < ycenter) {
+			yr = ((ycenter-y)/ydegp);
+			myGame->getGun()->updateGunY(yr+25);
+		} else {
+			yr = ((y-ycenter)/ydegn);
+			myGame->getGun()->updateGunY(25-yr);
+		}
+		if(x < xcenter) {
+			xr = ((xcenter-x)/xdeg);
+			myGame->getGun()->updateGunX(xr);
+		} else {
+			xr = -((x-xcenter)/xdeg);
+			myGame->getGun()->updateGunX(xr);
+		}
 	}
 }
 

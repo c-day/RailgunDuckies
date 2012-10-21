@@ -33,21 +33,21 @@ void game::drawScene(int width, int height) {
 	glPopMatrix();
 	glEnable(GL_LIGHTING);
 	glGetFloatv(GL_MODELVIEW_MATRIX, this->currentMat);
+	
 	//Draws All Balloons
 	for(vector<balloon>::iterator iter = balloons.begin(); iter < balloons.end(); ++iter) {
 		iter->drawBalloon();
 	}
 
-	//Draws All Ducks
-	
-	
+	//Draws The Duck
 	glPushMatrix();
 	if(!shot){
-		glLoadMatrixf(myGun->getMat());
-		myDuck->updatePos(0, 1.1, 1.35, 0, 90);
-		myDuck->drawDuck();
+		this->myDuck->setTraj(this->myGun->getMat());
+		this->myDuck->updatePos(0, 1.1, 1.35, 0, 90);
+		this->myDuck->drawDuck();
 	} else {
-		glLoadMatrixf(myGun->getMat());
+		this->myDuck->setTraj(this->myDuck->getTraj());
+		this->myDuck->updatePos(0, 0, -(this->launchVel), 0, 0);
 		myDuck->drawDuck();
 	}
 	glPopMatrix();
@@ -81,6 +81,7 @@ int game::getScore() {
 
 
 void game::shootDuck(float launchVelocity) {
+	this->myDuck->setTraj(myGun->getMat());
 	shot = true;
-	this->myDuck->updatePos(0, 0, -launchVelocity, 0, 0);
+	this->launchVel = launchVelocity;
 }

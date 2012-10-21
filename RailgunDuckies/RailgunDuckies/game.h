@@ -24,6 +24,8 @@ private:
 	int zclose, zfar;
 	int playerScore;
 	GLfloat currentMat[16];
+	GLfloat trajectoryMat[16];
+	float launchVel;
 	
 	ducky * myDuck;
 	

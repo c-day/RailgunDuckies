@@ -3,6 +3,7 @@
 		
 //Constructor, pass location of duck
 	ducky::ducky() {
+		this->beauty = false;
 	}
 
 	//Draw duck based on current duck coords
@@ -15,12 +16,15 @@
 
 		//Store Modelview Matrix
 		glPushMatrix();
-		
+		if(!beauty) {
+			glLoadMatrixf(this->trajectory);
+		}
 		//Move to Object's Current Position
 		glTranslated(this->duckPos.x, this->duckPos.y, this->duckPos.z);
 		
 		glRotated(this->duckRot.x, 1, 0, 0);
 		glRotated(this->duckRot.y, 0, 1, 0);
+	
 
 		//Draw Body
 		glPushMatrix();
@@ -84,6 +88,7 @@
 
 	void ducky::drawBDuck(float time) {
 
+		this->beauty = true;
 		glPushMatrix();
 		glTranslated(0,0,-2);
 		glRotated((time/1000) * 30.0, 0.1, 1, 0);
@@ -105,3 +110,12 @@
 
 	}
 	
+	void ducky::setTraj(GLfloat traj[]) {
+		for(int i = 0; i < 16; ++i) {
+			trajectory[i] = traj[i];
+		}
+	}
+
+	GLfloat * ducky::getTraj() {
+		return this->trajectory;
+	}
