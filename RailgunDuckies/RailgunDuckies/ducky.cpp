@@ -78,6 +78,11 @@
 		this->duckRot.y = ryn;
 	}
 
+	void ducky::updatePos(glm::vec3 position, glm::vec3 rotation) {
+		this->duckPos = position;
+		this->duckRot = rotation;
+	}
+
 	glm::vec3 ducky::getDuckPos() {
 		return this->duckPos;
 	}
@@ -110,12 +115,10 @@
 
 	}
 	
-	void ducky::setTraj(GLfloat traj[]) {
-		for(int i = 0; i < 16; ++i) {
-			trajectory[i] = traj[i];
-		}
+	void ducky::setTraj(glm::vec3 in) {
+		this->launchVec = in;
 	}
 
-	GLfloat * ducky::getTraj() {
-		return this->trajectory;
+	glm::vec3 ducky::getTraj() {
+		return this->launchVec;
 	}

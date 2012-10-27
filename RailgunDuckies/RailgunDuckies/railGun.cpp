@@ -4,12 +4,10 @@
 		
 //Constructor
 railGun::railGun() {
-	this->pos.x = 0;
-	this->pos.y = 0;
-	this->pos.z = 0;
-	this->rot.x = 0;
-	this->rot.y = 0;
-	this->rot.z = 0;
+	this->pos = glm::vec3(0, 0, 0);
+	this->rot = glm::vec3(0, 0, 0);
+	this->chamber = glm::vec3(0, 1.1, 1.35);
+	this->barrellVec = glm::vec3(0, 0, -6);
 }
 
 //Draw gun based on current gun coords
@@ -34,8 +32,14 @@ void railGun::drawGun() {
 	glPopMatrix();
 
 	//Rotate Gun	
+
 	glRotatef(this->rot.x, 0, 1, 0);
 	glRotatef(this->rot.y, 1, 0, 0);
+
+	this->barrellVec = glm::rotate(glm::vec3(0, 0, -6), this->rot.x, glm::vec3(0, 1, 0));
+	this->barrellVec = glm::rotate(this->barrellVec, this->rot.y, glm::vec3(1, 0, 0));
+	this->chamber = glm::rotate(glm::vec3(0, 1.1, 1.35), this->rot.x, glm::vec3(0, 1, 0));
+	this->chamber = glm::rotate(this->chamber, this->rot.y, glm::vec3(1, 0, 0));
 
 	glGetFloatv(GL_MODELVIEW_MATRIX, barrellMat);
 
@@ -118,6 +122,14 @@ glm::vec3 railGun::getRot() {
 
 GLfloat * railGun::getMat() {
 	return barrellMat;
+}
+
+glm::vec3 railGun::getBvec() {
+	return this->barrellVec;
+}
+
+glm::vec3 railGun::getChamber() {
+	return this->chamber;
 }
 
 void railGun::drawCube(float d) {
