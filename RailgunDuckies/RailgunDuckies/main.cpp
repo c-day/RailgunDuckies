@@ -22,29 +22,39 @@
 #include "game.h"
 #include <algorithm>
 #include <iostream>
+#include <stdio.h>
 #include <string>
+#include <sstream>
 #include <glm/glm.hpp>
 
+using namespace std;
+
 //Define any global variables
-float globalRotateX = 0;
-float globalRotateY = 0;
-bool wireframe = false;
 int window_width = 1024;
 int window_height = 768;
-bool paused = false;
-double pausedTime = 0;
-double lastFrameTime;
-double aspect = double(window_width) / double(window_height);
-const int period = 1000 / 60;
+int camMode = 1;
+
+float globalRotateX = 0;
+float globalRotateY = 0;
 float pause_time = 0.0;
 float now = 0.0;
 float gameTime = 0;
+float pausedTime = 0;
+float lastFrameTime;
+float aspect = float(window_width) / float(window_height);
+float launchVelocity = 0;
+
+bool wireframe = false;
+bool paused = false;
+
+const int period = 1000 / 60;
+
 std::unique_ptr<ducky> myDuck(new ducky());
 std::unique_ptr<railGun> myGun(new railGun());
 std::unique_ptr<game> myGame(new game());
 balloon myBalloon;
 glm::vec3 camera;
-float launchVelocity = 0;
+
 
 //std::unique_ptr<balloon> myBalloon(new balloon());
 
@@ -138,8 +148,25 @@ void DisplayVel(char * s)
 
 //Set up world and viewport
 
+bool CheckGLErrors(string location) {
+	bool error_found = false;
+	GLenum  error;
+	const GLubyte *errorString;
+	while ((error = glGetError()) != GL_NO_ERROR) {
+		cout <<"\n";
+		cout <<location; 
+		error_found = true;
+		errorString = gluErrorString(error);
+		cout << errorString;
+	}
+
+	return error_found;
+}
+
 void DisplayFunc()
 {	
+	CheckGLErrors("Beginning of DisplayFunc");
+
 	glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -151,7 +178,7 @@ void DisplayFunc()
 	// Set up Projection Matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(55, aspect, 1, 100);
+	gluPerspective(55, aspect, 1, 150);
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -161,10 +188,24 @@ void DisplayFunc()
 	case 4:
 		{
 		//Game
-		//updateCamera();
 		//myGame(new game());
-		gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
-		//gluLookAt(camera.x, camera.y + 2, camera.z + 8, 0, 2, 0, 0, 1, 0);
+		switch (camMode) {
+			case 1:
+				gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
+				break;
+			case 2:
+				gluLookAt(0, 2, 8, myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y+1, myGame->getDuck()->getDuckPos().z, 0, 1, 0);				
+				break;
+			case 3:
+				if (!myGame->getShot()) {
+					gluLookAt(myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-1, 
+						myGame->getGun()->getChamber().x, myGame->getGun()->getChamber().y+1, myGame->getGun()->getChamber().z+5, 0, 1, 0);
+				} else {
+					gluLookAt(myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-1, 
+					myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-2, 0, 1, 0);
+				}
+				break;
+		}
 		myGame->drawScene(window_width, window_height);
 		char score_string[16];
 		char time_string[16];
@@ -172,8 +213,8 @@ void DisplayFunc()
 		char vel_string[16];
 		char disp_score[16] = "Score: ";
 		char disp_miss[16] = "Missed: ";
-		char disp_time[16] = "Time: ";
-		char disp_vel[16] = "Velocity: ";
+		char disp_time[32] = "Time: ";
+		char disp_vel[32] = "Velocity: ";
 		sprintf(score_string, "%d", myGame->getScore());
 		sprintf(time_string, "%.1f", (gameTime/1000));
 		sprintf(miss_string, "%d", myGame->missed);
@@ -220,13 +261,15 @@ void DisplayFunc()
 	glFlush();
 	glutSwapBuffers();
 	glutPostRedisplay();
+
+	CheckGLErrors("End of DisplayFunc");
 }
 
 void ReshapeFunc(int w, int h)
 {
 	window_height = h;
 	window_width = w;
-	aspect = double(w) / double(h);
+	aspect = float(w) / float(h);
 	glutPostRedisplay();
 }
 
@@ -236,6 +279,24 @@ void KeyboardFunc(unsigned char c, int x, int y)
 	{
 	case 'c':
 		//switch camera modes
+		if(gameMode == 4) {
+			switch (camMode)
+			{
+			case 1: 
+				camMode = 2;
+				break;
+			case 2:
+				camMode = 3;
+				break;
+			case 3:
+				camMode = 1;
+				break;
+			default:
+				camMode = 1;
+			}
+		} else {
+			camMode = 1;
+		}
 		break;
 	case 'p':
 		paused = !paused;
@@ -244,8 +305,12 @@ void KeyboardFunc(unsigned char c, int x, int y)
 		wireframe = !wireframe;
 		break;
 	case 32:
-		if(!paused) {
-			launchVelocity += 0.5f;
+		if(!paused && gameMode == 4) {
+			if (launchVelocity < 100) {
+				launchVelocity += 0.5f;
+			} else { 
+				launchVelocity = 100.0f;
+			}
 		}
 		break;
 	// Hitting lower case x or the escape key will  exit the
@@ -284,8 +349,9 @@ void KeyUpFunc(unsigned char c, int x, int y)
 {
 	switch(c) {
 	case 32:
-		if(!paused) {
-			myGame->shootDuck(launchVelocity);
+		if(!paused && gameMode == 4) {
+			myGame->shootDuck(50*(launchVelocity/100));
+			launchVelocity = 0.0f;
 		}
 		break;
 	}
@@ -335,7 +401,7 @@ void SpecialKeyFunc(int key, int x, int y) {
 }
 
 void MouseFunc(int x, int y) {
-	if(!paused){
+	if(!paused && myGame->getGun()->getMove()){
 		float ycenter = ((float)window_height)/2;
 		float xcenter = ((float)window_width)/2;
 		float ydegp = ycenter/25;

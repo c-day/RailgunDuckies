@@ -14,6 +14,7 @@ private:
 	void drawFace(float d);
 	glm::vec3 chamber;
 	glm::vec3 barrellVec;
+	bool moveable;
 
 public:
 	railGun();
@@ -25,6 +26,9 @@ public:
 	glm::vec3 getChamber();
 	glm::vec3 getRot();
 	GLfloat * getMat();
+	void setMove(bool in);
+	bool getMove();
+	
 	
 };
 

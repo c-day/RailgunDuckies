@@ -116,7 +116,7 @@ void balloon::drawBalloon() {
 	glTranslated(0, -0.07, 0);
 	glRotated(90, 1, 0, 0);
 	glutSolidTorus(0.05, 0.09, 20, 20);
-	glPopMatrix();
+	
 
 
 	glPopMatrix();

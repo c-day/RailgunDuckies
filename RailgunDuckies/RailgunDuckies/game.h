@@ -25,9 +25,8 @@ private:
 	int playerScore;
 	GLfloat currentMat[16];
 	GLfloat trajectoryMat[16];
-	float launchVel;
 	float shootTime;
-	
+	int scores[5];
 	ducky * myDuck;
 	
 
@@ -40,4 +39,6 @@ public:
 	int getScore();
 	void shootDuck(float launchVelocity);
 	int missed;
+	ducky * getDuck();
+	bool getShot();
 };

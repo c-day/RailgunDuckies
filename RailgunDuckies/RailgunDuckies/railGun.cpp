@@ -8,6 +8,7 @@ railGun::railGun() {
 	this->rot = glm::vec3(0, 0, 0);
 	this->chamber = glm::vec3(0, 1.1, 1.35);
 	this->barrellVec = glm::vec3(0, 0, -6);
+	moveable = true;
 }
 
 //Draw gun based on current gun coords
@@ -38,8 +39,8 @@ void railGun::drawGun() {
 
 	this->barrellVec = glm::rotate(glm::vec3(0, 0, -6), this->rot.x, glm::vec3(0, 1, 0));
 	this->barrellVec = glm::rotate(this->barrellVec, this->rot.y, glm::vec3(1, 0, 0));
-	this->chamber = glm::rotate(glm::vec3(0, 1.1, 1.35), this->rot.x, glm::vec3(0, 1, 0));
-	this->chamber = glm::rotate(this->chamber, this->rot.y, glm::vec3(1, 0, 0));
+	this->chamber = glm::rotateY(glm::vec3(0, 1.1, 1.35), this->rot.x);
+	this->chamber = glm::rotateX(this->chamber, this->rot.y);
 
 	glGetFloatv(GL_MODELVIEW_MATRIX, barrellMat);
 
@@ -170,4 +171,12 @@ void railGun::drawFace(float d) {
 	glVertex3f(r, -r, -r);
 	glVertex3f(-r, -r, -r);
 	glEnd();
+}
+
+void railGun::setMove(bool in) {
+	this->moveable = in;
+}
+
+bool railGun::getMove() {
+	return this->moveable;
 }

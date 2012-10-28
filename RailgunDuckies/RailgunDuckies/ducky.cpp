@@ -16,9 +16,10 @@
 
 		//Store Modelview Matrix
 		glPushMatrix();
-		if(!beauty) {
+		/*if(!beauty) {
 			glLoadMatrixf(this->trajectory);
 		}
+		*/
 		//Move to Object's Current Position
 		glTranslated(this->duckPos.x, this->duckPos.y, this->duckPos.z);
 		
@@ -121,4 +122,17 @@
 
 	glm::vec3 ducky::getTraj() {
 		return this->launchVec;
+	}
+
+	void ducky::fly() {
+		if (duckPos.z >= -6) {
+			this->duckPos.x += (this->launchVec.x*.02f);
+			this->duckPos.y += (this->launchVec.y*.02f);
+			this->duckPos.z += (this->launchVec.z*.02f);
+		} else {
+			this->duckPos.x += (this->launchVec.x*.02f);
+			this->launchVec.y -= .5f*32.2f*.0004f;
+			this->duckPos.y += (this->launchVec.y*.02f);
+			this->duckPos.z += (this->launchVec.z*.02f);
+		}
 	}

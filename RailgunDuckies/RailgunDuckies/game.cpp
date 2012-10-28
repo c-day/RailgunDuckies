@@ -42,8 +42,9 @@ void game::drawScene(int width, int height) {
 
 	//Draws The Duck
 	glPushMatrix();
-	//myDuck->drawDuck();
+	this->myDuck->drawDuck();
 	glPopMatrix();
+
 	//Draws Gun
 	myGun->drawGun();
 	
@@ -61,10 +62,10 @@ void game::updateGame(float inTime) {
 		balloons.push_back(balloon(x, y, z));
 	}
 	if(!shot) {
-		this->myDuck->updatePos(this->myGun->getChamber(), glm::vec3(0, 0, 0));
-		this->myDuck->drawDuck();
+		this->myDuck->updatePos(this->myGun->getChamber(), glm::vec3(this->myGun->getRot().y, this->myGun->getRot().x + 90, 0));
+	} else if(shot && !hit) {
+		this->myDuck->fly();
 	}
-	
 }
 
 railGun* game::getGun() {
@@ -78,6 +79,14 @@ int game::getScore() {
 
 void game::shootDuck(float launchVelocity) {
 	this->myDuck->setTraj(launchVelocity * glm::normalize(this->myGun->getBvec()));
-	shot = true;
-	this->launchVel = launchVelocity;
+	shot = !shot;
+	this->myGun->setMove(!this->myGun->getMove());
+}
+
+ducky* game::getDuck() {
+	return this->myDuck;
+}
+
+bool game::getShot() {
+	return this->shot;
 }
