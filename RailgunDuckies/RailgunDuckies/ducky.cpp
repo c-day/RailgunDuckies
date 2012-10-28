@@ -1,7 +1,5 @@
 #include "ducky.h"
 
-		
-//Constructor, pass location of duck
 ducky::ducky() {
 }
 
@@ -28,9 +26,8 @@ glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	//Move to Object's Current Position
 	glTranslated(this->duckPos.x, this->duckPos.y, this->duckPos.z);
 		
-	glRotated(this->duckRot.x, 1, 0, 0);
+	glRotated(this->duckRot.x, 1, 0, 0);	
 	glRotated(this->duckRot.y, 0, 1, 0);
-	
 
 	//Draw Body
 	glPushMatrix();

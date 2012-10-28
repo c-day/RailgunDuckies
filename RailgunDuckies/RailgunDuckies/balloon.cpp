@@ -1,12 +1,19 @@
 #include "balloon.h"
 
-
 using namespace std;
 
+static const GLsizei VertexCount = 6; 
+static const GLsizei VertexSize = 4;
+
+//Constuctor that puts the balloon at the origin. 
 balloon::balloon() {
 	this->x = this->y = this->z = 0.0;
 }
 
+/*
+Constructor that will place the balloon at a given point in space, and
+will assign the balloon a point value. 
+*/
 balloon::balloon(float x, float y, float z, int p) {
 	this->x = x;
 	this->y = y;
@@ -14,17 +21,15 @@ balloon::balloon(float x, float y, float z, int p) {
 	this->points = p;
 }
 
-static const GLsizei VertexCount = 6; 
-static const GLsizei VertexSize = 4;
-
-
-
-
+//Converts degrees to radians for trig functions. 
 float radians(float deg) {
 	return 3.14159f/180.0f*deg;
 }
 
-
+/*
+This function draws the balloon by computing vertices from mathematical 
+functions.  
+*/
 void balloon::drawBalloon() {
 	GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -60,26 +65,25 @@ void balloon::drawBalloon() {
 
 	for (float curY = 1.0; curY >= -1.65; curY -= float(2.65/stacks)) {
 		assert(index < array_size);
+		
 		//Check Y position and determine function to control balloon radius
 		if (curY >= 0) {
 			r = sqrt(1 - pow(curY, 2));
 		} else {
 			r = cos(curY);
 		}
+
 		//store initial point at current y, radius, and z=0
 		PositionData[index].y = curY;
 		PositionData[index].x = r;
 		PositionData[index].z = 0;
 		index++;
 		for (float rotAng = 10.0f; rotAng < 360.0f; rotAng += 360/slices) {
-			//*
 			float deltaX = cos(radians(rotAng));
 			float deltaZ = sin(radians(rotAng));
 			PositionData[index].x = r * deltaX;
 			PositionData[index].y = curY;
 			PositionData[index].z = r * deltaZ;
-			//*/
-			//PositionData[index] = glm::rotateY(PositionData[index-1], rotAng);
 			index++;
 		}
 

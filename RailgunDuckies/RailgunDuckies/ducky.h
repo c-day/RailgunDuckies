@@ -23,5 +23,3 @@ public:
 	glm::vec3 getDuckRot();
 	glm::vec3 getTraj();
 };
-
-

@@ -24,4 +24,3 @@ class balloon {
 		void setPoints(int p);
 		int getPoints();
 };
-
