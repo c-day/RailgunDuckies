@@ -12,15 +12,16 @@
 class balloon {
 	private:
 		float x, y, z;
-
+		int points;
 
 		
 	public:
 		balloon();
-		balloon(float x, float y, float z);
+		balloon(float x, float y, float z, int p);
 		void drawBalloon();
 		void updateBalloon(float x, float y, float z);
 		void drawBBalloon(double time);
-		
+		void setPoints(int p);
+		int getPoints();
 };
 

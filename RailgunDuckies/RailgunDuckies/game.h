@@ -26,8 +26,8 @@ private:
 	GLfloat currentMat[16];
 	GLfloat trajectoryMat[16];
 	float shootTime;
-	int scores[5];
 	ducky * myDuck;
+
 	
 
 public:

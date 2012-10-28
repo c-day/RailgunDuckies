@@ -7,10 +7,11 @@ balloon::balloon() {
 	this->x = this->y = this->z = 0.0;
 }
 
-balloon::balloon(float x, float y, float z) {
+balloon::balloon(float x, float y, float z, int p) {
 	this->x = x;
 	this->y = y;
-	this->z = z;;
+	this->z = z;
+	this->points = p;
 }
 
 static const GLsizei VertexCount = 6; 
@@ -34,6 +35,15 @@ void balloon::drawBalloon() {
 
 	glTranslatef(this->x, this->y, -this->z);
 
+	glPushMatrix();
+	glDisable(GL_LIGHTING);
+	glTranslatef(-0.75, 1.5, 0);
+	glScalef(0.01f, 0.01f, 1.0f);
+	glColor3f(0, 0, 0);
+	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) this->points);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
+
 	int index = 0;
 	const int stacks = 26;
 	const float slices = 36;
@@ -45,7 +55,7 @@ void balloon::drawBalloon() {
 	float r = 0;
 	
 
-	for (float curY = 1.0; curY >= -1.65; curY -= 2.65/stacks) {
+	for (float curY = 1.0; curY >= -1.65; curY -= float(2.65/stacks)) {
 		assert(index < array_size);
 		//Check Y position and determine function to control balloon radius
 		if (curY >= 0) {
@@ -137,5 +147,11 @@ void balloon::drawBBalloon(double time) {
 	this->drawBalloon();
 	glPopMatrix();
 }
-	
 
+void balloon::setPoints(int p) {
+	this->points = p;
+}
+
+int balloon::getPoints() {
+	return this->points;
+}

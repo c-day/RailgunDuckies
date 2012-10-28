@@ -60,27 +60,27 @@ void railGun::drawGun() {
 	glTranslated(0, .5, 0);
 
 	glPushMatrix();
-	glTranslated(.375, .375, -1);
-	glScaled(.25, .25, 6);
-	drawCube(0.9167);
+	glTranslatef(.375f, .375f, -1.0f);
+	glScalef(.25f, .25f, 6.0f);
+	drawCube(0.9167f);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(.375, -.375, -1);
 	glScaled(.25, .25, 6);
-	drawCube(0.9167);
+	drawCube(0.9167f);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(-.375, -.375, -1);
 	glScaled(.25, .25, 6);
-	drawCube(0.9167);
+	drawCube(0.9167f);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(-.375, .375, -1);
 	glScaled(.25, .25, 6);
-	drawCube(0.9167);
+	drawCube(0.9167f);
 	glPopMatrix();
 
 	glPushMatrix();

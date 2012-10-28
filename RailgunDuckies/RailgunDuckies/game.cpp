@@ -3,7 +3,7 @@
 
 using namespace std;
 bool done;
-
+int points[] = { 5, 10, 25, 50, 100 };
 
 game::game() {
 	won = false;
@@ -16,6 +16,7 @@ game::game() {
 	shot = false;
 	hit = false;
 	shootTime = 0; 
+	
 }
 
 bool game::hasWon() {
@@ -53,13 +54,15 @@ void game::drawScene(int width, int height) {
 
 void game::updateGame(float inTime) {
 	//Create Balloons
-	srand(time(NULL));
+	srand(unsigned int(time(NULL)));
 	while (balloons.size() < 5) {
 		float x, y, z;
+		int p;
 		z = (float) (this->zclose + (rand()%(this->zfar-this->zclose)));
-		x = rand()%((int)(tan(.479966)*z)*2) - (int)(tan(.479966)*z);
-		y = rand()%((int)(tan(.479966)*z));
-		balloons.push_back(balloon(x, y, z));
+		x = float(rand()%((int)(tan(.479966)*z)*2) - (int)(tan(.479966)*z));
+		y = float(rand()%((int)(tan(.479966)*z)));
+		p = rand()%5;
+		balloons.push_back(balloon(x, y, z, points[p]));
 	}
 	if(!shot) {
 		this->myDuck->updatePos(this->myGun->getChamber(), glm::vec3(this->myGun->getRot().y, this->myGun->getRot().x + 90, 0));

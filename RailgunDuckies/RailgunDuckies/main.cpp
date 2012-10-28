@@ -138,7 +138,7 @@ void DisplayVel(char * s)
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(window_width/2 - 90, 10, -5.5f);
+	glTranslatef(float(window_width/2) - 90, 10, -5.5f);
 	glScalef(0.25f, 0.25f, 1.0f);
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
@@ -215,15 +215,15 @@ void DisplayFunc()
 		char disp_miss[16] = "Missed: ";
 		char disp_time[32] = "Time: ";
 		char disp_vel[32] = "Velocity: ";
-		sprintf(score_string, "%d", myGame->getScore());
-		sprintf(time_string, "%.1f", (gameTime/1000));
-		sprintf(miss_string, "%d", myGame->missed);
-		sprintf(vel_string, "%.1f", launchVelocity);
-		strcat(disp_score, score_string);
-		strcat(disp_time, time_string);
-		strcat(disp_miss, miss_string);
-		strcat(disp_vel, vel_string);
-		strcat(disp_vel, "%");
+		sprintf_s(score_string, "%d", myGame->getScore());
+		sprintf_s(time_string, "%.1f", (gameTime/1000));
+		sprintf_s(miss_string, "%d", myGame->missed);
+		sprintf_s(vel_string, "%.1f", launchVelocity);
+		strcat_s(disp_score, score_string);
+		strcat_s(disp_time, time_string);
+		strcat_s(disp_miss, miss_string);
+		strcat_s(disp_vel, vel_string);
+		strcat_s(disp_vel, "%");
 		DisplayMode(disp_score);
 		DisplayTime(disp_time);
 		DisplayMissed(disp_miss);
@@ -350,7 +350,7 @@ void KeyUpFunc(unsigned char c, int x, int y)
 	switch(c) {
 	case 32:
 		if(!paused && gameMode == 4) {
-			myGame->shootDuck(50*(launchVelocity/100));
+			myGame->shootDuck(20*(launchVelocity/100));
 			launchVelocity = 0.0f;
 		}
 		break;
