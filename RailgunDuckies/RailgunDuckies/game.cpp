@@ -1,15 +1,15 @@
 #include "game.h"
 
-
 using namespace std;
+
 bool done;
-int points[] = { 5, 10, 25, 50, 100 };
+int points[] = { 10, 20, 30, 40, 50 };
 
 game::game() {
 	won = false;
 	myGun = new railGun();
 	zclose = 25;
-	zfar = 100;
+	zfar = 75;
 	playerScore = 0;
 	missed = 0;
 	myDuck = new ducky();

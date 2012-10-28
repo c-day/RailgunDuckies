@@ -16,9 +16,11 @@ public:
 	void ducky::updatePos(glm::vec3 position, glm::vec3 rotation);
 	void drawBDuck(float time);
 	void fly();
+	void setTraj(glm::vec3 in);
+	void collision();
+	
 	glm::vec3 getDuckPos();
 	glm::vec3 getDuckRot();
-	void setTraj(glm::vec3 in);
 	glm::vec3 getTraj();
 };
 

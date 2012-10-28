@@ -14,12 +14,12 @@ railGun::railGun() {
 //Draw gun based on current gun coords
 void railGun::drawGun() {
 
-	GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 
-	glPushMatrix();
+glPushMatrix();
 
 
 	glTranslated(this->pos.x, this->pos.y, this->pos.z);
@@ -37,12 +37,10 @@ void railGun::drawGun() {
 	glRotatef(this->rot.x, 0, 1, 0);
 	glRotatef(this->rot.y, 1, 0, 0);
 
-	this->barrellVec = glm::rotate(glm::vec3(0, 0, -6), this->rot.x, glm::vec3(0, 1, 0));
-	this->barrellVec = glm::rotate(this->barrellVec, this->rot.y, glm::vec3(1, 0, 0));
+	this->barrellVec = glm::rotateY(glm::vec3(0, 0, -6), this->rot.x);
+	this->barrellVec = glm::rotateX(this->barrellVec, this->rot.y);
 	this->chamber = glm::rotateY(glm::vec3(0, 1.1, 1.35), this->rot.x);
 	this->chamber = glm::rotateX(this->chamber, this->rot.y);
-
-	glGetFloatv(GL_MODELVIEW_MATRIX, barrellMat);
 
 	//Draw barrell
 	glPushMatrix();
@@ -95,10 +93,7 @@ void railGun::drawGun() {
 	drawCube(1);
 	glPopMatrix();
 
-
-
-
-	glPopMatrix();
+glPopMatrix();
 }
 
 void railGun::drawBGun(float time) {

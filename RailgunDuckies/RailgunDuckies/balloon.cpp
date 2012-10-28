@@ -36,11 +36,14 @@ void balloon::drawBalloon() {
 	glTranslatef(this->x, this->y, -this->z);
 
 	glPushMatrix();
+	char score_string[16];
+	sprintf_s(score_string, "%d", this->points);
+
 	glDisable(GL_LIGHTING);
 	glTranslatef(-0.75, 1.5, 0);
 	glScalef(0.01f, 0.01f, 1.0f);
 	glColor3f(0, 0, 0);
-	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) this->points);
+	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) score_string);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 
