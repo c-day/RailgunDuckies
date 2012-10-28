@@ -4,6 +4,11 @@ using namespace std;
 
 static const GLsizei VertexCount = 6; 
 static const GLsizei VertexSize = 4;
+const int stacks = 26;
+const float slices = 36;
+const int array_size = 972;
+
+
 
 //Constuctor that puts the balloon at the origin. 
 balloon::balloon() {
@@ -28,7 +33,12 @@ float radians(float deg) {
 
 /*
 This function draws the balloon by computing vertices from mathematical 
-functions.  
+functions.  The top half of the balloon is drawn and a hemisphere, and the 
+bottom half of the balloon is drawn from a cosine function.  There is also 
+few lines that will display the point value of each balloon hovering above
+the balloon.  The vertices are stored in a vertex array and then a normal 
+array is computed along side the vertex array.  This allows us to draw the
+balloons with a vertex buffer.  
 */
 void balloon::drawBalloon() {
 	GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -36,33 +46,39 @@ void balloon::drawBalloon() {
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 
+	//Store modelview matrix
 	glPushMatrix();
 
+	//Move to the specified coordinates to draw the balloon at
 	glTranslatef(this->x, this->y, -this->z);
 
+	//store the matrix before displaying the point value
 	glPushMatrix();
 	char score_string[16];
 	sprintf_s(score_string, "%d", this->points);
 
 	glDisable(GL_LIGHTING);
-	glTranslatef(-0.75, 1.5, 0);
+	glTranslatef(-0.75, 1.5, -0.5);
 	glScalef(0.01f, 0.01f, 1.0f);
 	glColor3f(0, 0, 0);
 	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) score_string);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 
+
 	int index = 0;
-	const int stacks = 26;
-	const float slices = 36;
-	const int array_size = 972;
+	float r = 0;
+
 	glm::vec3 PositionData[array_size];
 	glm::vec3 NormalArray[array_size];
 	GLuint IndexData[3*array_size];
 	GLuint IndexData2[3*array_size];
-	float r = 0;
-	
-
+	/*
+	To draw the balloon, navigate from the top to the bottom along the y-axis.  
+	at each height, compute the radius according to the proper function(either 
+	an arc or a cosine curve). After the proper radius is computed, rotate around
+	the y-axis and store each point in the vertex array. 
+	*/
 	for (float curY = 1.0; curY >= -1.65; curY -= float(2.65/stacks)) {
 		assert(index < array_size);
 		
@@ -89,7 +105,12 @@ void balloon::drawBalloon() {
 
 	}
 
-	//Calculate the index arrays
+	/*
+	To calculate the index arrays, choose the vertex at the index, move one to
+	the right (i+1) and then move one below that(i+36).  Then for the other 
+	triangle choose one to the right (i+1), one below (i+36), and one below and 
+	to the right (i+37).  
+	*/
 	for (int i = 0; i < array_size; i++) {			
 			IndexData[3*i] = i;
 			IndexData[(3*i)+1] = i+1;
@@ -140,6 +161,9 @@ void balloon::drawBalloon() {
 	
 }
 
+/*
+Allows for updating balloon position by specifying new coordinates. 
+*/
 void balloon::updateBalloon(float x, float y, float z) {
 	this->x = x;
 	this->y = y;
@@ -147,6 +171,11 @@ void balloon::updateBalloon(float x, float y, float z) {
 
 }
 
+/*
+Special Draw function for beauty mode.  Translates only in the z direction
+to keep the balloon centered on the screen.  The function takes in the game
+time which is used to control the rotation of the balloon. 
+*/
 void balloon::drawBBalloon(double time) {
 	glPushMatrix();
 	glTranslated(0, 0, -5);
@@ -155,10 +184,12 @@ void balloon::drawBBalloon(double time) {
 	glPopMatrix();
 }
 
+//Allow game class to set point value of balloon.
 void balloon::setPoints(int p) {
 	this->points = p;
 }
 
+//Allow game class to get the point value of a balloon. 
 int balloon::getPoints() {
 	return this->points;
 }

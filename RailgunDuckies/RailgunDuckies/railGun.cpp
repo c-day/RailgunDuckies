@@ -11,7 +11,8 @@ railGun::railGun() {
 	moveable = true;
 }
 
-//Draw gun based on current gun coords
+/*
+*/
 void railGun::drawGun() {
 
 GLfloat mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
