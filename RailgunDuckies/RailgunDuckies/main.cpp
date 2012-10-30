@@ -307,7 +307,7 @@ void KeyboardFunc(unsigned char c, int x, int y)
 	case 32:
 		if(!paused && gameMode == 4) {
 			if (launchVelocity < 100) {
-				launchVelocity += 0.5f;
+				launchVelocity += 1.0f;
 			} else { 
 				launchVelocity = 100.0f;
 			}
@@ -350,7 +350,7 @@ void KeyUpFunc(unsigned char c, int x, int y)
 	switch(c) {
 	case 32:
 		if(!paused && gameMode == 4) {
-			myGame->shootDuck(20*(launchVelocity/100));
+			myGame->shootDuck(100*(launchVelocity/100));
 			launchVelocity = 0.0f;
 		}
 		break;
@@ -430,7 +430,10 @@ void TimerFunc(int value)
 	now += period;
 
 	if(!paused) {
-		gameTime = now - pausedTime; 
+		gameTime = now - pausedTime;
+		if(gameMode == 4) {
+			myGame->updateGame(gameTime);
+		}
 	} 
 
 	if(paused) {
@@ -438,7 +441,7 @@ void TimerFunc(int value)
 	}
 	lastFrameTime = now;
 
-	myGame->updateGame(gameTime);
+	
 
 	glutTimerFunc(period, TimerFunc, value);
 	glutPostRedisplay();

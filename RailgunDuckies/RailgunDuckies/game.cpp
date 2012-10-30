@@ -55,19 +55,25 @@ void game::drawScene(int width, int height) {
 void game::updateGame(float inTime) {
 	//Create Balloons
 	srand(unsigned int(time(NULL)));
+
+	if(!shot) {
+		this->myDuck->updatePos(this->myGun->getChamber(), glm::vec3(this->myGun->getRot().y, this->myGun->getRot().x + 90, 0));
+	} else if (shot)   {
+		for(int i = balloons.size()-1; i <= 0; --i) {
+			if(glm::length(myDuck->getDuckPos() - balloons[i].getBalPos()) <= 50) {
+				balloons.erase(balloons.begin()+i);
+			}
+		}
+		this->myDuck->fly();
+	}
 	while (balloons.size() < 5) {
 		float x, y, z;
 		int p;
-		z = (float) (this->zclose + (rand()%(this->zfar-this->zclose)));
+ 		z = (float) (this->zclose + (rand()%(this->zfar-this->zclose)));
 		x = float(rand()%((int)(tan(.479966)*z)*2) - (int)(tan(.479966)*z));
 		y = float(rand()%((int)(tan(.479966)*z)));
 		p = rand()%5;
 		balloons.push_back(balloon(x, y, z, points[p]));
-	}
-	if(!shot) {
-		this->myDuck->updatePos(this->myGun->getChamber(), glm::vec3(this->myGun->getRot().y, this->myGun->getRot().x + 90, 0));
-	} else if(shot && !hit) {
-		this->myDuck->fly();
 	}
 }
 

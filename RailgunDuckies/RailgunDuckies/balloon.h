@@ -11,7 +11,7 @@
 
 class balloon {
 	private:
-		float x, y, z;
+		glm::vec3 position;
 		int points;
 
 		
@@ -23,4 +23,5 @@ class balloon {
 		void drawBBalloon(double time);
 		void setPoints(int p);
 		int getPoints();
+		glm::vec3 getBalPos();
 };

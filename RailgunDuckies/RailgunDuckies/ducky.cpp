@@ -164,7 +164,7 @@ void ducky::fly() {
 		this->duckPos.z += (this->launchVec.z*.02f);
 	} else {
 		this->duckPos.x += (this->launchVec.x*.02f);
-		this->launchVec.y -= .5f*32.2f*.0004f;
+		this->launchVec.y -= .5f*1000.0f*.0004f;
 		this->duckPos.y += (this->launchVec.y*.02f);
 		this->duckPos.z += (this->launchVec.z*.02f);
 	}

@@ -12,7 +12,7 @@ const int array_size = 972;
 
 //Constuctor that puts the balloon at the origin. 
 balloon::balloon() {
-	this->x = this->y = this->z = 0.0;
+	this->position.x = this->position.y = this->position.z = 0.0;
 }
 
 /*
@@ -20,9 +20,9 @@ Constructor that will place the balloon at a given point in space, and
 will assign the balloon a point value. 
 */
 balloon::balloon(float x, float y, float z, int p) {
-	this->x = x;
-	this->y = y;
-	this->z = z;
+	this->position.x = x;
+	this->position.y = y;
+	this->position.z = z;
 	this->points = p;
 }
 
@@ -50,7 +50,7 @@ void balloon::drawBalloon() {
 	glPushMatrix();
 
 	//Move to the specified coordinates to draw the balloon at
-	glTranslatef(this->x, this->y, -this->z);
+	glTranslatef(this->position.x, this->position.y, -this->position.z);
 
 	//store the matrix before displaying the point value
 	glPushMatrix();
@@ -165,9 +165,9 @@ void balloon::drawBalloon() {
 Allows for updating balloon position by specifying new coordinates. 
 */
 void balloon::updateBalloon(float x, float y, float z) {
-	this->x = x;
-	this->y = y;
-	this->z = z;
+	this->position.x = x;
+	this->position.y = y;
+	this->position.z = z;
 
 }
 
@@ -192,4 +192,8 @@ void balloon::setPoints(int p) {
 //Allow game class to get the point value of a balloon. 
 int balloon::getPoints() {
 	return this->points;
+}
+
+glm::vec3 balloon::getBalPos() {
+	return this->position;
 }
