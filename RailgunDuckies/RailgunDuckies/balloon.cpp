@@ -123,12 +123,12 @@ void balloon::drawBalloon() {
 		
 		
 		if(i > 36) {
-			glm::vec3 temp1 = glm::cross(PositionData[i-1], PositionData[i-37]);
-			glm::vec3 temp2 = glm::cross(PositionData[i-37], PositionData[i-36]);
-			glm::vec3 temp3 = glm::cross(PositionData[i-36], PositionData[i+1]);
-			glm::vec3 temp4 = glm::cross(PositionData[i+1], PositionData[i+37]);
-			glm::vec3 temp5 = glm::cross(PositionData[i+37], PositionData[i+36]);
-			glm::vec3 temp6 = glm::cross(PositionData[i+36], PositionData[i-1]);
+			glm::vec3 temp1 = glm::normalize(glm::cross(PositionData[i-1], PositionData[i-37]));
+			glm::vec3 temp2 = glm::normalize(glm::cross(PositionData[i-37], PositionData[i-36]));
+			glm::vec3 temp3 = glm::normalize(glm::cross(PositionData[i-36], PositionData[i+1]));
+			glm::vec3 temp4 = glm::normalize(glm::cross(PositionData[i+1], PositionData[i+37]));
+			glm::vec3 temp5 = glm::normalize(glm::cross(PositionData[i+37], PositionData[i+36]));
+			glm::vec3 temp6 = glm::normalize(glm::cross(PositionData[i+36], PositionData[i-1]));
 
 			NormalArray[i] = glm::normalize((temp1+temp2+temp3+temp4+temp5+temp6));
 		}
