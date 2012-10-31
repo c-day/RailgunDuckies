@@ -18,6 +18,8 @@ private:
 	bool shot;
 	bool hit;
 	bool fired;
+	bool stop;
+	bool ENDGAME;
 	std::vector<ducky> ducks;
 	std::vector<balloon> balloons;
 	railGun * myGun;
@@ -41,4 +43,5 @@ public:
 	int missed;
 	ducky * getDuck();
 	bool getShot();
+	void resetDuck();
 };

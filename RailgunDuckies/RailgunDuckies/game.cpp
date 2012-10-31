@@ -16,6 +16,8 @@ game::game() {
 	shot = false;
 	hit = false;
 	shootTime = 0; 
+	stop = false;
+	ENDGAME = false;
 	
 }
 
@@ -53,19 +55,34 @@ void game::drawScene(int width, int height) {
 }
 
 void game::updateGame(float inTime) {
-	//Create Balloons
-	srand(unsigned int(time(NULL)));
+//Create Balloons
+srand(unsigned int(time(NULL)));
 
+if(missed >= 3) {
+	this->ENDGAME = true;
+} else {
 	if(!shot) {
 		this->myDuck->updatePos(this->myGun->getChamber(), glm::vec3(this->myGun->getRot().y, this->myGun->getRot().x + 90, 0));
 	} else if (shot)   {
-		for(int i = balloons.size()-1; i <= 0; --i) {
-			if(glm::length(myDuck->getDuckPos() - balloons[i].getBalPos()) <= 50) {
-				balloons.erase(balloons.begin()+i);
-			}
+		int start = balloons.size();
+		for(int i = 0; i < start; ++i) {
+			float tempDist = glm::length(this->myDuck->getDuckPos() - this->balloons[i].getBalPos());
+			if(tempDist <= 1.25) {
+				this->playerScore += this->balloons[i].getPoints();
+				this->balloons[i].destroy();
+				this->shot = false;
+			} 
 		}
-		this->myDuck->fly();
+		if(-this->myDuck->getDuckPos().z < this->zfar && this->myDuck->getDuckPos().y > -5){
+			this->myDuck->fly();
+		} else {
+			this->shot = false;
+			this->myGun->setMove(true);
+			this->missed++;
+		}
 	}
+
+}
 	while (balloons.size() < 5) {
 		float x, y, z;
 		int p;
@@ -75,6 +92,8 @@ void game::updateGame(float inTime) {
 		p = rand()%5;
 		balloons.push_back(balloon(x, y, z, points[p]));
 	}
+
+
 }
 
 railGun* game::getGun() {
@@ -88,8 +107,9 @@ int game::getScore() {
 
 void game::shootDuck(float launchVelocity) {
 	this->myDuck->setTraj(launchVelocity * glm::normalize(this->myGun->getBvec()));
-	shot = !shot;
-	this->myGun->setMove(!this->myGun->getMove());
+	this->stop == false;
+	shot = true;
+	this->myGun->setMove(false);
 }
 
 ducky* game::getDuck() {
@@ -98,4 +118,9 @@ ducky* game::getDuck() {
 
 bool game::getShot() {
 	return this->shot;
+}
+
+void game::resetDuck() {
+	this->shot = false;
+	this->myGun->setMove(true);
 }

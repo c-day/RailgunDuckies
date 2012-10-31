@@ -43,6 +43,7 @@ float pausedTime = 0;
 float lastFrameTime;
 float aspect = float(window_width) / float(window_height);
 float launchVelocity = 0;
+float lastVel = 0;
 
 bool wireframe = false;
 bool paused = false;
@@ -146,6 +147,23 @@ void DisplayVel(char * s)
 	glEnable(GL_LIGHTING);
 }
 
+void DisplayLast(char * s)
+{
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, window_width, 0, window_height, 1, 10);
+	glViewport(0, 0, window_width, window_height);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(float(window_width) - 320, 10, -5.5f);
+	glScalef(0.25f, 0.25f, 1.0f);
+	glDisable(GL_LIGHTING);
+	glColor3f(1, 1, 1);
+	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) s);
+	glEnable(GL_LIGHTING);
+}
+
 //Set up world and viewport
 
 bool CheckGLErrors(string location) {
@@ -211,23 +229,29 @@ void DisplayFunc()
 		char time_string[16];
 		char miss_string[16];
 		char vel_string[16];
+		char last_vel[16];
 		char disp_score[16] = "Score: ";
 		char disp_miss[16] = "Missed: ";
 		char disp_time[32] = "Time: ";
 		char disp_vel[32] = "Velocity: ";
+		char disp_last[32] = "Last Velocity: ";
 		sprintf_s(score_string, "%d", myGame->getScore());
 		sprintf_s(time_string, "%.1f", (gameTime/1000));
 		sprintf_s(miss_string, "%d", myGame->missed);
 		sprintf_s(vel_string, "%.1f", launchVelocity);
+		sprintf_s(last_vel, "%.1f", lastVel);
 		strcat_s(disp_score, score_string);
 		strcat_s(disp_time, time_string);
 		strcat_s(disp_miss, miss_string);
 		strcat_s(disp_vel, vel_string);
 		strcat_s(disp_vel, "%");
+		strcat_s(disp_last, last_vel);
+		strcat_s(disp_last, "%");
 		DisplayMode(disp_score);
 		DisplayTime(disp_time);
 		DisplayMissed(disp_miss);
 		DisplayVel(disp_vel);
+		DisplayLast(disp_last);
 		break;
 		}
 	case 1:
@@ -306,10 +330,14 @@ void KeyboardFunc(unsigned char c, int x, int y)
 		break;
 	case 32:
 		if(!paused && gameMode == 4) {
-			if (launchVelocity < 100) {
-				launchVelocity += 1.0f;
-			} else { 
-				launchVelocity = 100.0f;
+			if(!myGame->getShot()){
+				if (launchVelocity < 100) {
+					launchVelocity += 1.0f;
+				} else { 
+					launchVelocity = 100.0f;
+				}
+			} else {
+				launchVelocity = 0;
 			}
 		}
 		break;
@@ -350,8 +378,13 @@ void KeyUpFunc(unsigned char c, int x, int y)
 	switch(c) {
 	case 32:
 		if(!paused && gameMode == 4) {
-			myGame->shootDuck(100*(launchVelocity/100));
-			launchVelocity = 0.0f;
+			if(!myGame->getShot()) {
+				myGame->shootDuck(100*(launchVelocity/100));
+				lastVel = launchVelocity;
+				launchVelocity = 0.0f;
+			} else {
+				myGame->resetDuck();
+			}
 		}
 		break;
 	}

@@ -197,3 +197,7 @@ int balloon::getPoints() {
 glm::vec3 balloon::getBalPos() {
 	return this->position;
 }
+
+void balloon::destroy() {
+	this->position.z = 100;
+}

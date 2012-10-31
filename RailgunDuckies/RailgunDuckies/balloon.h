@@ -24,4 +24,5 @@ class balloon {
 		void setPoints(int p);
 		int getPoints();
 		glm::vec3 getBalPos();
+		void destroy();
 };
