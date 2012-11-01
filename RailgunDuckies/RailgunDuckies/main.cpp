@@ -33,6 +33,7 @@ using namespace std;
 int window_width = 1024;
 int window_height = 768;
 int camMode = 1;
+int displayTimer = 0;
 
 float globalRotateX = 0;
 float globalRotateY = 0;
@@ -472,12 +473,14 @@ void TimerFunc(int value)
 	if(paused) {
 		pausedTime += now - lastFrameTime;
 	}
-	lastFrameTime = now;
-
-	
+	lastFrameTime = now;	
 
 	glutTimerFunc(period, TimerFunc, value);
-	glutPostRedisplay();
+
+	//if(displayTimer % 10 == 0) {
+		glutPostRedisplay();
+	//	++displayTimer;
+	//}
 }
 
 

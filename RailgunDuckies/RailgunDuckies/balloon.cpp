@@ -6,7 +6,7 @@ static const GLsizei VertexCount = 6;
 static const GLsizei VertexSize = 4;
 const int stacks = 26;
 const float slices = 36;
-const int array_size = 972;
+const int array_size = 936;
 
 
 
@@ -111,15 +111,27 @@ void balloon::drawBalloon() {
 	triangle choose one to the right (i+1), one below (i+36), and one below and 
 	to the right (i+37).  
 	*/
-	for (int i = 0; i < array_size; i++) {			
-			IndexData[3*i] = i;
-			IndexData[(3*i)+1] = i+1;
-			IndexData[(3*i)+2] = i+36;
-		
+	for (int i = 0; i < array_size; i++) {
 
-			IndexData2[3*i] = i+1;
+		//if(i % 35 != 0 || i == 0) {
+			IndexData[3*i] = i+1;
+			IndexData[(3*i)+1] = i+37;
+			IndexData[(3*i)+2] = i+36;
+
+			IndexData2[3*i] = i;
+			IndexData2[(3*i)+1] = i+1;
+			IndexData2[(3*i)+2] = i+36;
+		/*} else {
+			IndexData[3*i] = i;
+			IndexData[(3*i)+1] = i-36;
+			IndexData[(3*i)+2] = i+36;
+
+			IndexData2[3*i] = i-36;
 			IndexData2[(3*i)+1] = i+36;
 			IndexData2[(3*i)+2] = i+37;
+		}*/
+
+
 		
 		
 		if(i > 36) {
@@ -144,7 +156,7 @@ void balloon::drawBalloon() {
 
 	glNormalPointer(GL_FLOAT, 0, NormalArray);
 	glDrawElements(GL_TRIANGLES, 2808, GL_UNSIGNED_INT, IndexData);
-	glDrawElements(GL_TRIANGLES, 2807, GL_UNSIGNED_INT, IndexData2);
+	glDrawElements(GL_TRIANGLES, 2808, GL_UNSIGNED_INT, IndexData2);
 
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);

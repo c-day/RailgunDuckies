@@ -129,4 +129,5 @@ bool game::getShot() {
 void game::resetDuck() {
 	this->shot = false;
 	this->myGun->setMove(true);
+	this->missed++;
 }
