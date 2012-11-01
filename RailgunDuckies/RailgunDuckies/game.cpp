@@ -71,13 +71,13 @@ if(missed >= 3) {
 										+ pow(this->myDuck->getDuckPos().z - this->balloons[i].getBalPos().z, 2)
 										));
 			std::cout << tempDist << endl;
-			if(tempDist <= 5) {
+			if(tempDist <= 1.25) {
 				this->playerScore += this->balloons[i].getPoints();
 				this->balloons[i].destroy();
+				this->myGun->setMove(true);
 				this->shot = false;
-			} 
-			std::cout << endl;
-			std::cout << "LOOP" << endl;
+				break;
+			} 			
 		}
 		if(-this->myDuck->getDuckPos().z < this->zfar && this->myDuck->getDuckPos().y > -5){
 			this->myDuck->fly();
@@ -87,16 +87,16 @@ if(missed >= 3) {
 			this->missed++;
 		}
 	}
-
+	
 }
-	while (balloons.size() < 1) {
+	while (balloons.size() < 8) {
 		float x, y, z;
 		int p;
  		z = (float) (this->zclose + (rand()%(this->zfar-this->zclose)));
 		x = float(rand()%((int)(tan(.479966)*z)*2) - (int)(tan(.479966)*z));
 		y = float(rand()%((int)(tan(.479966)*z)));
 		p = rand()%5;
-		balloons.push_back(balloon(x, y, z, points[p]));
+		balloons.push_back(balloon(x, y, -z, points[p]));
 	}
 
 

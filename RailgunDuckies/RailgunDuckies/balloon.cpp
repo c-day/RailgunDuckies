@@ -50,7 +50,7 @@ void balloon::drawBalloon() {
 	glPushMatrix();
 
 	//Move to the specified coordinates to draw the balloon at
-	glTranslatef(this->position.x, this->position.y, -this->position.z);
+	glTranslatef(this->position.x, this->position.y, this->position.z);
 
 	//store the matrix before displaying the point value
 	glPushMatrix();
@@ -168,7 +168,6 @@ void balloon::updateBalloon(float x, float y, float z) {
 	this->position.x = x;
 	this->position.y = y;
 	this->position.z = z;
-
 }
 
 /*
