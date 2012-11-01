@@ -59,19 +59,25 @@ void game::updateGame(float inTime) {
 srand(unsigned int(time(NULL)));
 
 if(missed >= 3) {
-	this->ENDGAME = true;
+	this->ENDGAME = true; 
 } else {
 	if(!shot) {
 		this->myDuck->updatePos(this->myGun->getChamber(), glm::vec3(this->myGun->getRot().y, this->myGun->getRot().x + 90, 0));
 	} else if (shot)   {
 		int start = balloons.size();
 		for(int i = 0; i < start; ++i) {
-			float tempDist = glm::length(this->myDuck->getDuckPos() - this->balloons[i].getBalPos());
-			if(tempDist <= 1.25) {
+			float tempDist = float(sqrt(  pow(this->myDuck->getDuckPos().x - this->balloons[i].getBalPos().x, 2)
+										+ pow(this->myDuck->getDuckPos().y - this->balloons[i].getBalPos().y, 2)
+										+ pow(this->myDuck->getDuckPos().z - this->balloons[i].getBalPos().z, 2)
+										));
+			std::cout << tempDist << endl;
+			if(tempDist <= 5) {
 				this->playerScore += this->balloons[i].getPoints();
 				this->balloons[i].destroy();
 				this->shot = false;
 			} 
+			std::cout << endl;
+			std::cout << "LOOP" << endl;
 		}
 		if(-this->myDuck->getDuckPos().z < this->zfar && this->myDuck->getDuckPos().y > -5){
 			this->myDuck->fly();
@@ -83,7 +89,7 @@ if(missed >= 3) {
 	}
 
 }
-	while (balloons.size() < 5) {
+	while (balloons.size() < 1) {
 		float x, y, z;
 		int p;
  		z = (float) (this->zclose + (rand()%(this->zfar-this->zclose)));
