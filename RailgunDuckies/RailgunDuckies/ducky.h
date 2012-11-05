@@ -9,6 +9,7 @@ private:
 	glm::vec3 duckRot;
 	bool beauty;
 	glm::vec3 launchVec;
+	static GLuint display_list_handle;
 public:
 	ducky();
 	void drawDuck();
@@ -23,3 +24,4 @@ public:
 	glm::vec3 getDuckRot();
 	glm::vec3 getTraj();
 };
+

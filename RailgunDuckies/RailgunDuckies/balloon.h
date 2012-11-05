@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gl/freeglut.h>
+#include <vector>
 #include <assert.h>
 #include <iostream>
 #include <glm/glm.hpp>
@@ -13,6 +14,9 @@ class balloon {
 	private:
 		glm::vec3 position;
 		int points;
+		static std::vector<glm::vec3> balVert;
+		static std::vector<GLuint> balIndex;
+		static std::vector<GLuint> balIndex2;
 
 		
 	public:

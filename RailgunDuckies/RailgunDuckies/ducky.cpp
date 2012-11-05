@@ -3,6 +3,8 @@
 ducky::ducky() {
 }
 
+GLuint ducky::display_list_handle = -1;
+
 /*
 Ducky draw function.  
 This function will draw the duck using predefined GLUT shapes.  
@@ -28,6 +30,11 @@ glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 		
 	glRotated(this->duckRot.x, 1, 0, 0);	
 	glRotated(this->duckRot.y, 0, 1, 0);
+
+	if (this->display_list_handle == (GLuint) -1) {
+	
+		this->display_list_handle = glGenLists(1);
+		glNewList(this->display_list_handle, GL_COMPILE);
 
 	//Draw Body
 	glPushMatrix();
@@ -68,6 +75,10 @@ glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glutSolidCone(0.1, 0.15, 20, 20);
 	glPopMatrix();
 
+	glEndList();
+
+	}
+	glCallList(this->display_list_handle);
 	//Go back to the modelview matrix
 	glPopMatrix();
 }

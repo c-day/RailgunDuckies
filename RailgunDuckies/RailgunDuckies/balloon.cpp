@@ -2,10 +2,13 @@
 
 using namespace std;
 
+std::vector<glm::vec3> balloon::balVert;
+std::vector<GLuint> balloon::balIndex;
+std::vector<GLuint> balloon::balIndex2;
 static const GLsizei VertexCount = 6; 
 static const GLsizei VertexSize = 4;
 const int stacks = 26;
-const float slices = 36;
+const int slices = 36;
 const int array_size = 972;
 
 
@@ -79,6 +82,7 @@ void balloon::drawBalloon() {
 	an arc or a cosine curve). After the proper radius is computed, rotate around
 	the y-axis and store each point in the vertex array. 
 	*/
+	if (balVert.size() == 0) {
 	for (float curY = 1.0; curY >= -1.65; curY -= float(2.65/stacks)) {
 		assert(index < array_size);
 		
@@ -90,17 +94,11 @@ void balloon::drawBalloon() {
 		}
 
 		//store initial point at current y, radius, and z=0
-		PositionData[index].y = curY;
-		PositionData[index].x = r;
-		PositionData[index].z = 0;
-		index++;
+		balVert.push_back(glm::vec3(r, curY, 0));
 		for (float rotAng = 10.0f; rotAng < 360.0f; rotAng += 360/slices) {
 			float deltaX = cos(radians(rotAng));
 			float deltaZ = sin(radians(rotAng));
-			PositionData[index].x = r * deltaX;
-			PositionData[index].y = curY;
-			PositionData[index].z = r * deltaZ;
-			index++;
+			balVert.push_back(glm::vec3(r*deltaX, curY, r*deltaZ));
 		}
 
 	}
@@ -111,42 +109,67 @@ void balloon::drawBalloon() {
 	triangle choose one to the right (i+1), one below (i+36), and one below and 
 	to the right (i+37).  
 	*/
-	for (int i = 0; i < array_size; i++) {			
-			IndexData[3*i] = i;
-			IndexData[(3*i)+1] = i+1;
-			IndexData[(3*i)+2] = i+36;
+
+	
+	for (int i = 0; i < balVert.size() - slices; i++) {
+		if (i == 0) {
+			balIndex.push_back(0);
+			balIndex.push_back(0);
+			balIndex.push_back(0);
 		
 
-			IndexData2[3*i] = i+1;
-			IndexData2[(3*i)+1] = i+36;
-			IndexData2[(3*i)+2] = i+37;
+			balIndex2.push_back(0);
+			balIndex2.push_back(0);
+			balIndex2.push_back(0);
+		/*} else if (i % 35 == 0) {
+			balIndex.push_back(i);
+			balIndex.push_back(i);
+			balIndex.push_back(i);
+		
+
+			balIndex2.push_back(i);
+			balIndex2.push_back(i);
+			balIndex2.push_back(i);
+		*/	
+		} else {
+			balIndex.push_back(i);
+			balIndex.push_back(i + 1);
+			balIndex.push_back(i + slices);
+		
+
+			balIndex2.push_back(i + slices + 1);
+			balIndex2.push_back(i + 1);
+			balIndex2.push_back(i + slices);
+		}
 		
 		
-		if(i > 36) {
-			glm::vec3 temp1 = glm::normalize(glm::cross(PositionData[i-1], PositionData[i-37]));
-			glm::vec3 temp2 = glm::normalize(glm::cross(PositionData[i-37], PositionData[i-36]));
-			glm::vec3 temp3 = glm::normalize(glm::cross(PositionData[i-36], PositionData[i+1]));
-			glm::vec3 temp4 = glm::normalize(glm::cross(PositionData[i+1], PositionData[i+37]));
-			glm::vec3 temp5 = glm::normalize(glm::cross(PositionData[i+37], PositionData[i+36]));
-			glm::vec3 temp6 = glm::normalize(glm::cross(PositionData[i+36], PositionData[i-1]));
+		if(i > 36 && i < balVert.size()-37) {
+			glm::vec3 temp1 = glm::normalize(glm::cross(balVert[i-1], balVert[i-37]));
+			glm::vec3 temp2 = glm::normalize(glm::cross(balVert[i-37], balVert[i-36]));
+			glm::vec3 temp3 = glm::normalize(glm::cross(balVert[i-36], balVert[i+1]));
+			glm::vec3 temp4 = glm::normalize(glm::cross(balVert[i+1], balVert[i+37]));
+			glm::vec3 temp5 = glm::normalize(glm::cross(balVert[i+37], balVert[i+36]));
+			glm::vec3 temp6 = glm::normalize(glm::cross(balVert[i+36], balVert[i-1]));
 
 			NormalArray[i] = glm::normalize((temp1+temp2+temp3+temp4+temp5+temp6));
 		}
+		
+	}
 	}
 
 
 
 	glColor3d(1, 0, 0);
-	glVertexPointer(3, GL_FLOAT, 0, PositionData);
+	glVertexPointer(3, GL_FLOAT, 0, &(balVert[0]));
 
 	glEnableClientState(GL_VERTEX_ARRAY);	
-	glEnableClientState(GL_NORMAL_ARRAY);	
+	//glEnableClientState(GL_NORMAL_ARRAY);	
 
-	glNormalPointer(GL_FLOAT, 0, NormalArray);
-	glDrawElements(GL_TRIANGLES, 2808, GL_UNSIGNED_INT, IndexData);
-	glDrawElements(GL_TRIANGLES, 2807, GL_UNSIGNED_INT, IndexData2);
+	//glNormalPointer(GL_FLOAT, 0, NormalArray);
+	glDrawElements(GL_TRIANGLES, balIndex.size(), GL_UNSIGNED_INT, &balIndex[0]);
+	glDrawElements(GL_TRIANGLES, balIndex2.size()-1, GL_UNSIGNED_INT, &balIndex2[0]);
 
-	glDisableClientState(GL_NORMAL_ARRAY);
+	//glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glTranslated(0, -1.6, 0);
