@@ -59,7 +59,7 @@ void game::updateGame(float inTime) {
 srand(unsigned int(time(NULL)));
 
 if(missed >= 3) {
-	this->ENDGAME = true; 
+	this->ENDGAME = true;
 } else {
 	if(!shot) {
 		this->myDuck->updatePos(this->myGun->getChamber(), glm::vec3(this->myGun->getRot().y, this->myGun->getRot().x + 90, 0));
@@ -127,6 +127,11 @@ bool game::getShot() {
 }
 
 void game::resetDuck() {
+	this->missed++;
 	this->shot = false;
 	this->myGun->setMove(true);
+}
+
+bool game::gameOver() {
+	return this->ENDGAME;
 }

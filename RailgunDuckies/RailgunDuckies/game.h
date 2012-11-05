@@ -44,4 +44,5 @@ public:
 	ducky * getDuck();
 	bool getShot();
 	void resetDuck();
+	bool gameOver();
 };

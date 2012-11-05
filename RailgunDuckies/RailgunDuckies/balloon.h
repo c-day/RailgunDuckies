@@ -16,7 +16,7 @@ class balloon {
 		int points;
 		static std::vector<glm::vec3> balVert;
 		static std::vector<GLuint> balIndex;
-		static std::vector<GLuint> balIndex2;
+		static std::vector<glm::vec3> normVert;
 
 		
 	public:
