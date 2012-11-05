@@ -99,7 +99,7 @@ void DisplayTime(char * s)
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(10, 10, -5.5f);
+	glTranslatef(10, 10, -2.5f);
 	glScalef(0.25f, 0.25f, 1.0f);
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
@@ -116,7 +116,7 @@ void DisplayMissed(char * s)
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(10, 80, -5.5f);
+	glTranslatef(10, 80, -2.5f);
 	glScalef(0.25f, 0.25f, 1.0f);
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
@@ -133,7 +133,7 @@ void DisplayVel(char * s)
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(float(window_width/2) - 90, 10, -5.5f);
+	glTranslatef(float(window_width/2) - 90, 10, -2.5f);
 	glScalef(0.25f, 0.25f, 1.0f);
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
@@ -150,7 +150,7 @@ void DisplayLast(char * s)
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(float(window_width) - 320, 10, -5.5f);
+	glTranslatef(float(window_width) - 320, 10, -2.5f);
 	glScalef(0.25f, 0.25f, 1.0f);
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
@@ -208,8 +208,8 @@ void DisplayFunc()
 					break;
 				case 3:
 					if (!myGame->getShot()) {
-						gluLookAt(myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-1, 
-							myGame->getGun()->getChamber().x, myGame->getGun()->getChamber().y+1, myGame->getGun()->getChamber().z+5, 0, 1, 0);
+						gluLookAt(myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z, 
+							myGame->getGun()->getBvec().x, myGame->getGun()->getBvec().y + 1, myGame->getGun()->getBvec().z, 0, 1, 0);
 					} else {
 						gluLookAt(myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-1, 
 						myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-2, 0, 1, 0);
@@ -433,8 +433,7 @@ void KeyboardFunc(unsigned char c, int x, int y)
 		}
 if(myGame->gameOver()){
 	case 'y':
-		myGame(new game());
-		glutPostRedisplay();
+		myGame->resetGame();
 		return;
 	case 'n':
 		glutLeaveMainLoop();
@@ -576,7 +575,7 @@ int main(int argc, char * argv[])
 	glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHT0);
-
+	glEnable(GL_LIGHT1);
 	
 
 

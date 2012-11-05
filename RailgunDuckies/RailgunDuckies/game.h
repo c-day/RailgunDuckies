@@ -20,7 +20,6 @@ private:
 	bool fired;
 	bool stop;
 	bool ENDGAME;
-	std::vector<ducky> ducks;
 	std::vector<balloon> balloons;
 	railGun * myGun;
 	int zclose, zfar;
@@ -45,4 +44,5 @@ public:
 	bool getShot();
 	void resetDuck();
 	bool gameOver();
+	void resetGame();
 };

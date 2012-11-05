@@ -34,6 +34,25 @@ void game::drawScene(int width, int height) {
 	glPushMatrix();
 	glTranslatef(0, 0, -40);
 	glutSolidCube(100);
+	glRotatef(-90, 1, 0, 0);
+	glColor3d(0, 0.4, 0);
+	glBegin(GL_QUADS);
+	glVertex3f(-50, 100, -20);
+	glVertex3f(50, 100, -20);
+	glVertex3f(50, -40, -20);
+	glVertex3f(-50, -40, -20);
+	glEnd();
+	glRotatef(90, 1, 0, 0);
+	glTranslatef(0, 0, -49);
+	
+	glColor3d(0, .5, 1.0);
+	glBegin(GL_QUADS);
+	glVertex3f(-50, -20, 0);
+	glVertex3f(-50, 50, 0);
+	glVertex3f(50, 50, 0);
+	glVertex3f(50, -20, 0);
+	glEnd();
+
 	glPopMatrix();
 	glEnable(GL_LIGHTING);
 	glGetFloatv(GL_MODELVIEW_MATRIX, this->currentMat);
@@ -134,4 +153,20 @@ void game::resetDuck() {
 
 bool game::gameOver() {
 	return this->ENDGAME;
+}
+
+void game::resetGame() {
+	this->won = false;
+	this->myGun = new railGun();
+	this->zclose = 25;
+	this->zfar = 75;
+	this->playerScore = 0;
+	this->missed = 0;
+	this->myDuck = new ducky();
+	this->shot = false;
+	this->hit = false;
+	this->shootTime = 0; 
+	this->stop = false;
+	this->ENDGAME = false;
+	this->balloons.clear();
 }
