@@ -198,51 +198,81 @@ void DisplayFunc()
 	case 4:
 		{
 		//Game
-		switch (camMode) {
-			case 1:
-				gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
-				break;
-			case 2:
-				gluLookAt(0, 2, 8, myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y+1, myGame->getDuck()->getDuckPos().z, 0, 1, 0);				
-				break;
-			case 3:
-				if (!myGame->getShot()) {
-					gluLookAt(myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-1, 
-						myGame->getGun()->getChamber().x, myGame->getGun()->getChamber().y+1, myGame->getGun()->getChamber().z+5, 0, 1, 0);
-				} else {
-					gluLookAt(myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-1, 
-					myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-2, 0, 1, 0);
-				}
-				break;
+		if(!myGame->gameOver()) {
+			switch (camMode) {
+				case 1:
+					gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
+					break;
+				case 2:
+					gluLookAt(0, 2, 8, myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y+1, myGame->getDuck()->getDuckPos().z, 0, 1, 0);				
+					break;
+				case 3:
+					if (!myGame->getShot()) {
+						gluLookAt(myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-1, 
+							myGame->getGun()->getChamber().x, myGame->getGun()->getChamber().y+1, myGame->getGun()->getChamber().z+5, 0, 1, 0);
+					} else {
+						gluLookAt(myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-1, 
+						myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-2, 0, 1, 0);
+					}
+					break;
+			}
+			myGame->drawScene(window_width, window_height);
+			char score_string[16];
+			char time_string[16];
+			char miss_string[16];
+			char vel_string[16];
+			char last_vel[16];
+			char disp_score[16] = "Score: ";
+			char disp_miss[16] = "Missed: ";
+			char disp_time[32] = "Time: ";
+			char disp_vel[32] = "Velocity: ";
+			char disp_last[32] = "Last Velocity: ";
+			sprintf_s(score_string, "%d", myGame->getScore());
+			sprintf_s(time_string, "%.1f", (gameTime/1000));
+			sprintf_s(miss_string, "%d", myGame->missed);
+			sprintf_s(vel_string, "%.1f", launchVelocity);
+			sprintf_s(last_vel, "%.1f", lastVel);
+			strcat_s(disp_score, score_string);
+			strcat_s(disp_time, time_string);
+			strcat_s(disp_miss, miss_string);
+			strcat_s(disp_vel, vel_string);
+			strcat_s(disp_vel, "%");
+			strcat_s(disp_last, last_vel);
+			strcat_s(disp_last, "%");
+			DisplayMode(disp_score);
+			DisplayTime(disp_time);
+			DisplayMissed(disp_miss);
+			DisplayVel(disp_vel);
+			DisplayLast(disp_last);
+		} else {
+			glClearColor(0, 0, 0, 0);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(0, window_width, 0, window_height, 1, 10);
+			glViewport(0, 0, window_width, window_height);
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+			glPushMatrix();
+			glTranslatef(float(window_width/2 - 200), float(window_height - 200), -5.5f);
+			glScalef(0.5f, 0.5f, 1.0f);
+			glDisable(GL_LIGHTING);
+			glColor3f(1, 1, 1);
+			glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "GAME OVER");
+			glPopMatrix();
+			glPushMatrix();
+			glTranslatef(float(window_width/2 - 175), float(window_height/2), -5.5f);
+			glScalef(0.5f, 0.5f, 1.0f);
+			glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "Play Again?");
+			glPopMatrix();
+			glPushMatrix();
+			glTranslatef(float(window_width/2 - 275), float(window_height/2 - 200), -5.5f);
+			glScalef(0.5f, 0.5f, 1.0f);
+			glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "y/n (hit the key)");
+			glPopMatrix();
+			glEnable(GL_LIGHTING);
 		}
-		myGame->drawScene(window_width, window_height);
-		char score_string[16];
-		char time_string[16];
-		char miss_string[16];
-		char vel_string[16];
-		char last_vel[16];
-		char disp_score[16] = "Score: ";
-		char disp_miss[16] = "Missed: ";
-		char disp_time[32] = "Time: ";
-		char disp_vel[32] = "Velocity: ";
-		char disp_last[32] = "Last Velocity: ";
-		sprintf_s(score_string, "%d", myGame->getScore());
-		sprintf_s(time_string, "%.1f", (gameTime/1000));
-		sprintf_s(miss_string, "%d", myGame->missed);
-		sprintf_s(vel_string, "%.1f", launchVelocity);
-		sprintf_s(last_vel, "%.1f", lastVel);
-		strcat_s(disp_score, score_string);
-		strcat_s(disp_time, time_string);
-		strcat_s(disp_miss, miss_string);
-		strcat_s(disp_vel, vel_string);
-		strcat_s(disp_vel, "%");
-		strcat_s(disp_last, last_vel);
-		strcat_s(disp_last, "%");
-		DisplayMode(disp_score);
-		DisplayTime(disp_time);
-		DisplayMissed(disp_miss);
-		DisplayVel(disp_vel);
-		DisplayLast(disp_last);
 		break;
 		}
 	case 1:
@@ -401,6 +431,15 @@ void KeyboardFunc(unsigned char c, int x, int y)
 			gameMode = 1;
 			break;
 		}
+if(myGame->gameOver()){
+	case 'y':
+		myGame(new game());
+		glutPostRedisplay();
+		return;
+	case 'n':
+		glutLeaveMainLoop();
+		return;
+}
 	}
 	glutPostRedisplay();
 }

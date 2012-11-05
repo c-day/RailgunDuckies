@@ -6,18 +6,18 @@ bool done;
 int points[] = { 10, 20, 30, 40, 50 };
 
 game::game() {
-	won = false;
-	myGun = new railGun();
-	zclose = 25;
-	zfar = 75;
-	playerScore = 0;
-	missed = 0;
-	myDuck = new ducky();
-	shot = false;
-	hit = false;
-	shootTime = 0; 
-	stop = false;
-	ENDGAME = false;
+	this->won = false;
+	this->myGun = new railGun();
+	this->zclose = 25;
+	this->zfar = 75;
+	this->playerScore = 0;
+	this->missed = 0;
+	this->myDuck = new ducky();
+	this->shot = false;
+	this->hit = false;
+	this->shootTime = 0; 
+	this->stop = false;
+	this->ENDGAME = false;
 	
 }
 
@@ -39,7 +39,7 @@ void game::drawScene(int width, int height) {
 	glGetFloatv(GL_MODELVIEW_MATRIX, this->currentMat);
 	
 	//Draws All Balloons
-	for(vector<balloon>::iterator iter = balloons.begin(); iter < balloons.end(); ++iter) {
+	for(vector<balloon>::iterator iter = this->balloons.begin(); iter < this->balloons.end(); ++iter) {
 		iter->drawBalloon();
 	}
 
@@ -49,7 +49,7 @@ void game::drawScene(int width, int height) {
 	glPopMatrix();
 
 	//Draws Gun
-	myGun->drawGun();
+	this->myGun->drawGun();
 	
 
 }
@@ -58,7 +58,7 @@ void game::updateGame(float inTime) {
 //Create Balloons
 srand(unsigned int(time(NULL)));
 
-if(missed >= 3) {
+if(this->missed >= 3) {
 	this->ENDGAME = true;
 } else {
 	if(!shot) {
@@ -96,25 +96,25 @@ if(missed >= 3) {
 		x = float(rand()%((int)(tan(.479966)*z)*2) - (int)(tan(.479966)*z));
 		y = float(rand()%((int)(tan(.479966)*z)));
 		p = rand()%5;
-		balloons.push_back(balloon(x, y, -z, points[p]));
+		this->balloons.push_back(balloon(x, y, -z, points[p]));
 	}
 
 
 }
 
 railGun* game::getGun() {
-	return myGun;
+	return this->myGun;
 }
 
 int game::getScore() {
-	return playerScore;
+	return this->playerScore;
 }
 
 
 void game::shootDuck(float launchVelocity) {
 	this->myDuck->setTraj(launchVelocity * glm::normalize(this->myGun->getBvec()));
-	this->stop == false;
-	shot = true;
+	this->stop = false;
+	this->shot = true;
 	this->myGun->setMove(false);
 }
 
