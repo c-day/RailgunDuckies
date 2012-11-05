@@ -7,11 +7,32 @@ std::vector<GLuint> balloon::balIndex;
 std::vector<GLuint> balloon::balIndex2;
 static const GLsizei VertexCount = 6; 
 static const GLsizei VertexSize = 4;
-const int stacks = 26;
-const int slices = 36;
-const int array_size = 972;
+const int stacks = 3;
+const int slices = 3;
 
+	inline int right(int c ) {
+		if ( c != slices - 1 ) {
+			return c + 1;
+		} else {
+			return c - slices + 2;
+		}
+	}
 
+	inline int up(int r) {
+		if (r != 0) {
+			return r - slices;
+		} else {
+			return r;
+		}
+	}
+
+	inline int down(int r) {
+		if (r != stacks) {
+			return r + slices;
+		} else {
+			return r;
+		}
+	}
 
 //Constuctor that puts the balloon at the origin. 
 balloon::balloon() {
@@ -72,93 +93,142 @@ void balloon::drawBalloon() {
 	int index = 0;
 	float r = 0;
 
-	glm::vec3 PositionData[array_size];
-	glm::vec3 NormalArray[array_size];
-	GLuint IndexData[3*array_size];
-	GLuint IndexData2[3*array_size];
+	glm::vec3 PositionData[slices*stacks];
+	glm::vec3 NormalArray[slices*stacks];
+	GLuint IndexData[3*slices*stacks];
+	GLuint IndexData2[3*slices*stacks];
 	/*
 	To draw the balloon, navigate from the top to the bottom along the y-axis.  
 	at each height, compute the radius according to the proper function(either 
 	an arc or a cosine curve). After the proper radius is computed, rotate around
 	the y-axis and store each point in the vertex array. 
 	*/
-	if (balVert.size() == 0) {
-	for (float curY = 1.0; curY >= -1.65; curY -= float(2.65/stacks)) {
-		assert(index < array_size);
-		
-		//Check Y position and determine function to control balloon radius
-		if (curY >= 0) {
-			r = sqrt(1 - pow(curY, 2));
-		} else {
-			r = cos(curY);
-		}
 
-		//store initial point at current y, radius, and z=0
-		balVert.push_back(glm::vec3(r, curY, 0));
-		for (float rotAng = 10.0f; rotAng < 360.0f; rotAng += 360/slices) {
-			float deltaX = cos(radians(rotAng));
-			float deltaZ = sin(radians(rotAng));
-			balVert.push_back(glm::vec3(r*deltaX, curY, r*deltaZ));
-		}
 
+
+	for (int stack = 0; stack < stacks; ++stack) {
+		for (int slice = 0; slice < slices; ++slice) {
+			balVert.push_back(glm::vec3(stack, slice, 0));
+		}
 	}
 
-	/*
-	To calculate the index arrays, choose the vertex at the index, move one to
-	the right (i+1) and then move one below that(i+36).  Then for the other 
-	triangle choose one to the right (i+1), one below (i+36), and one below and 
-	to the right (i+37).  
-	*/
+	balIndex.resize(6);
 
-	
-	for (int i = 0; i < balVert.size() - slices; i++) {
-		if (i == 0) {
-			balIndex.push_back(0);
-			balIndex.push_back(0);
-			balIndex.push_back(0);
+	balIndex[0] = 0;
+	balIndex[1] = right(0); 
+	balIndex[2] = down(0); 
+
+	balIndex[3] = right(0);
+	balIndex[4] = down(right(0));
+	balIndex[5] = down(0);
+
+
+
+/********************************
+	if (balVert.size() == 0) {
+		balVert.resize(stacks*slices);
+
+		for (int stack = 0; stack < stacks; ++stack) {
+			float curY = 1-(2.5/((float)stacks))*stack;
+			assert(index < array_size);
 		
+			//Check Y position and determine function to control balloon radius
+			if (curY >= 0) {
+				r = sqrt(1 - pow(curY, 2));
+			} else {
+				r = cos(curY);
+			}
 
-			balIndex2.push_back(0);
-			balIndex2.push_back(0);
-			balIndex2.push_back(0);
-		/*} else if (i % 35 == 0) {
-			balIndex.push_back(i);
-			balIndex.push_back(i);
-			balIndex.push_back(i);
-		
+			//store initial point at current y, radius, and z=0
+			for (int slice = 0; slice < slices; ++slice) {
+				float rotAng = 360/((float)slices)*slice;
+				float deltaX = cos(radians(rotAng));
+				float deltaZ = sin(radians(rotAng));
+				balVert[stack*slices + slice] = (glm::vec3(r*deltaX, curY, r*deltaZ));
+				++index;
+			}
 
-			balIndex2.push_back(i);
-			balIndex2.push_back(i);
-			balIndex2.push_back(i);
-		*/	
-		} else {
+		}
+		assert(balVert.size() == (slices)*stacks);
+
+
+		//To calculate the index arrays, choose the vertex at the index, move one to
+		//the right (i+1) and then move one below that(i+36).  Then for the other 
+		//triangle choose one to the right (i+1), one below (i+36), and one below and 
+		//to the right (i+37).  
+
+
+
+
+		for (int i = 0; i < balVert.size() - slices; i++) {
 			balIndex.push_back(i);
 			balIndex.push_back(i + 1);
 			balIndex.push_back(i + slices);
 		
-
-			balIndex2.push_back(i + slices + 1);
-			balIndex2.push_back(i + 1);
-			balIndex2.push_back(i + slices);
+			balIndex.push_back(i + 1);
+			balIndex.push_back(i + slices + 1);				
+			balIndex.push_back(i + slices);
 		}
-		
-		
-		if(i > 36 && i < balVert.size()-37) {
-			glm::vec3 temp1 = glm::normalize(glm::cross(balVert[i-1], balVert[i-37]));
-			glm::vec3 temp2 = glm::normalize(glm::cross(balVert[i-37], balVert[i-36]));
-			glm::vec3 temp3 = glm::normalize(glm::cross(balVert[i-36], balVert[i+1]));
-			glm::vec3 temp4 = glm::normalize(glm::cross(balVert[i+1], balVert[i+37]));
-			glm::vec3 temp5 = glm::normalize(glm::cross(balVert[i+37], balVert[i+36]));
-			glm::vec3 temp6 = glm::normalize(glm::cross(balVert[i+36], balVert[i-1]));
 
-			NormalArray[i] = glm::normalize((temp1+temp2+temp3+temp4+temp5+temp6));
+
+
+
+
+		for (int i = 0; i < balVert.size() - slices; i++) {
+			
+			if (i == 0) {
+				balIndex.push_back(0);
+				balIndex.push_back(0);
+				balIndex.push_back(0);
+		
+
+				balIndex2.push_back(0);
+				balIndex2.push_back(0);
+				balIndex2.push_back(0);
+			if (i % slices-1 == 0) {
+				balIndex.push_back(i);
+				balIndex.push_back(i);
+				balIndex.push_back(i);
+		
+
+				balIndex2.push_back(i);
+				balIndex2.push_back(i);
+				balIndex2.push_back(i);
+			
+		} else {
+		
+			// Check for wrap-around
+			if (i % (slices - 2) == 0 || i % (slices-1) == 0) {
+			} else {
+				balIndex.push_back(i);
+				balIndex.push_back(i + 1);
+				balIndex.push_back(i + slices);
+		
+				balIndex.push_back(i + 1);
+				balIndex.push_back(i + slices + 1);				
+				balIndex.push_back(i + slices);
+			}
 		}
+	}
+****************************************************/
+/********************************************		
+			if(i > 36 && i < balVert.size()-37) {
+				glm::vec3 temp1 = glm::normalize(glm::cross(balVert[i-1], balVert[i-37]));
+				glm::vec3 temp2 = glm::normalize(glm::cross(balVert[i-37], balVert[i-36]));
+				glm::vec3 temp3 = glm::normalize(glm::cross(balVert[i-36], balVert[i+1]));
+				glm::vec3 temp4 = glm::normalize(glm::cross(balVert[i+1], balVert[i+37]));
+				glm::vec3 temp5 = glm::normalize(glm::cross(balVert[i+37], balVert[i+36]));
+				glm::vec3 temp6 = glm::normalize(glm::cross(balVert[i+36], balVert[i-1]));
+
+				NormalArray[i] = glm::normalize((temp1+temp2+temp3+temp4+temp5+temp6));
+				
+			}
 		
+		}
 	}
-	}
 
 
-
+*****************************************************/
 	glColor3d(1, 0, 0);
 	glVertexPointer(3, GL_FLOAT, 0, &(balVert[0]));
 
@@ -167,7 +237,6 @@ void balloon::drawBalloon() {
 
 	//glNormalPointer(GL_FLOAT, 0, NormalArray);
 	glDrawElements(GL_TRIANGLES, balIndex.size(), GL_UNSIGNED_INT, &balIndex[0]);
-	glDrawElements(GL_TRIANGLES, balIndex2.size()-1, GL_UNSIGNED_INT, &balIndex2[0]);
 
 	//glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -201,7 +270,7 @@ time which is used to control the rotation of the balloon.
 void balloon::drawBBalloon(double time) {
 	glPushMatrix();
 	glTranslated(0, 0, -5);
-	glRotated((time/1000) * 45.0, 0.1, 1, 0.1);
+//	glRotated((time/1000) * 45.0, 0.1, 1, 0.1);
 	this->drawBalloon();
 	glPopMatrix();
 }
