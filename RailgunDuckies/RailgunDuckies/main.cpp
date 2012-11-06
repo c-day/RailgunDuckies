@@ -585,8 +585,8 @@ void TimerFunc(int value)
 				float z = (myAutoGame->getBalloons()[targetBalloon].getBalPos().z);
 				float autoVel = float((rand() % 86) + 15);
 
-				myAutoGame->getGun()->updateGunX((rand() % 56) - 22.5);
-				myAutoGame->getGun()->updateGunY((rand() % 31));
+				myAutoGame->getGun()->updateGunX(float((rand() % 56) - 22.5));
+				myAutoGame->getGun()->updateGunY(float((rand() % 31)));
 				myAutoGame->shootDuck(autoVel);
 				lastVel = autoVel;
 				launchVelocity = 0.0f;

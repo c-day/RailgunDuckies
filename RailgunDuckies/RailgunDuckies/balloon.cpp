@@ -125,12 +125,8 @@ void balloon::drawBalloon() {
 	glPopMatrix();
 
 
-	int index = 0;
 	float r = 0;
 
-	glm::vec3 PositionData[slices*stacks];
-	glm::vec3 NormalArray[slices*stacks];
-	GLuint IndexData[3*slices*stacks];
 	/*
 	To draw the balloon, navigate from the top to the bottom along the y-axis.  
 	at each height, compute the radius according to the proper function(either 
@@ -169,7 +165,7 @@ void balloon::drawBalloon() {
 		//to the right (i+37).  
 
 
-		for (int i = 0; i < balVert.size() - slices; i++) {
+		for (int i = 0; i < int(balVert.size() - slices); i++) {
 			
 
 			balIndex.push_back(i);

@@ -89,7 +89,7 @@ void game::updateGame() {
 	//Create Balloons
 	srand(unsigned int(time(NULL)));
 	
-	while (balloons.size() < numBalloons) {
+	while (int(balloons.size()) < numBalloons) {
 		float x, y, z;
 		int p;
 		z = (float) (this->zclose + (rand()%(this->zfar-this->zclose)));
