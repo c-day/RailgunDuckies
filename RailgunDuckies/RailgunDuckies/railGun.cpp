@@ -143,16 +143,26 @@ void railGun::drawCube(float d) {
 	points[7] = (glm::vec3(-r, -r, -r));
 
 	GLuint IndexData [24] = {0, 1, 2, 3, 3, 2, 6, 7, 7, 3, 0, 4, 4, 0, 1, 5, 5, 1, 2, 6, 6, 7, 4, 5};
+	std::vector<glm::vec3> NormalArray;
+
+	NormalArray.resize(6);
+
+	NormalArray[0] = glm::vec3(-1, 0, 0);
+	NormalArray[1] = glm::vec3(1, 0, 0);
+	NormalArray[2] = glm::vec3(0, -1, 0);
+	NormalArray[3] = glm::vec3(0, 1, 0);
+	NormalArray[4] = glm::vec3(0, 0, -1);
+	NormalArray[5] = glm::vec3(0, 0, 1);
 
 	glVertexPointer(3, GL_FLOAT, 0, points);
 
 	glEnableClientState(GL_VERTEX_ARRAY);	
-	//glEnableClientState(GL_NORMAL_ARRAY);	
+	glEnableClientState(GL_NORMAL_ARRAY);	
 
-	//glNormalPointer(GL_FLOAT, 0, NormalArray);
+	glNormalPointer(GL_FLOAT, 0, &NormalArray[0]);
 	glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, IndexData);
 
-	//glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 

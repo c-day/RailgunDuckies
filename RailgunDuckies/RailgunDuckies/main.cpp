@@ -53,6 +53,7 @@ const int period = 1000 / 60;
 std::unique_ptr<ducky> myDuck(new ducky());
 std::unique_ptr<railGun> myGun(new railGun());
 std::unique_ptr<game> myGame(new game());
+std::unique_ptr<game> myAutoGame(new game());
 balloon myBalloon;
 glm::vec3 camera;
 
@@ -75,7 +76,7 @@ Set up function to draw text on screen
 
 void DisplayMode(char * s)
 {
-	
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, window_width, 0, window_height, 1, 10);
@@ -92,7 +93,7 @@ void DisplayMode(char * s)
 
 void DisplayTime(char * s)
 {
-	
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, window_width, 0, window_height, 1, 10);
@@ -109,7 +110,7 @@ void DisplayTime(char * s)
 
 void DisplayMissed(char * s)
 {
-	
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, window_width, 0, window_height, 1, 10);
@@ -126,7 +127,7 @@ void DisplayMissed(char * s)
 
 void DisplayVel(char * s)
 {
-	
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, window_width, 0, window_height, 1, 10);
@@ -143,7 +144,7 @@ void DisplayVel(char * s)
 
 void DisplayLast(char * s)
 {
-	
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, window_width, 0, window_height, 1, 10);
@@ -192,14 +193,14 @@ void DisplayFunc()
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	
-	
+
+
 	switch (gameMode) {
 	case 4:
 		{
-		//Game
-		if(!myGame->gameOver()) {
-			switch (camMode) {
+			//Game
+			if(!myGame->gameOver()) {
+				switch (camMode) {
 				case 1:
 					gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
 					break;
@@ -212,11 +213,113 @@ void DisplayFunc()
 							myGame->getGun()->getBvec().x, myGame->getGun()->getBvec().y + 1, myGame->getGun()->getBvec().z, 0, 1, 0);
 					} else {
 						gluLookAt(myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-1, 
-						myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-2, 0, 1, 0);
+							myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y, myGame->getDuck()->getDuckPos().z-2, 0, 1, 0);
 					}
 					break;
+				}
+				myGame->drawScene(window_width, window_height);
+				char score_string[16];
+				char time_string[16];
+				char miss_string[16];
+				char vel_string[16];
+				char last_vel[16];
+				char disp_score[16] = "Score: ";
+				char disp_miss[16] = "Missed: ";
+				char disp_time[32] = "Time: ";
+				char disp_vel[32] = "Velocity: ";
+				char disp_last[32] = "Last Velocity: ";
+				sprintf_s(score_string, "%d", myGame->getScore());
+				sprintf_s(time_string, "%.1f", (gameTime/1000));
+				sprintf_s(miss_string, "%d", myGame->missed);
+				sprintf_s(vel_string, "%.1f", launchVelocity);
+				sprintf_s(last_vel, "%.1f", lastVel);
+				strcat_s(disp_score, score_string);
+				strcat_s(disp_time, time_string);
+				strcat_s(disp_miss, miss_string);
+				strcat_s(disp_vel, vel_string);
+				strcat_s(disp_vel, "%");
+				strcat_s(disp_last, last_vel);
+				strcat_s(disp_last, "%");
+				DisplayMode(disp_score);
+				DisplayTime(disp_time);
+				DisplayMissed(disp_miss);
+				DisplayVel(disp_vel);
+				DisplayLast(disp_last);
+			} else {
+				lastVel = 0;
+				glClearColor(0, 0, 0, 0);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				glOrtho(0, window_width, 0, window_height, 1, 10);
+				glViewport(0, 0, window_width, window_height);
+				glMatrixMode(GL_MODELVIEW);
+				glLoadIdentity();
+				glPushMatrix();
+				glTranslatef(float(window_width/2 - 200), float(window_height - 200), -5.5f);
+				glScalef(0.5f, 0.5f, 1.0f);
+				glDisable(GL_LIGHTING);
+				glColor3f(1, 1, 1);
+				glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "GAME OVER");
+				glPopMatrix();
+				glPushMatrix();
+				glTranslatef(float(window_width/2 - 175), float(window_height/2), -5.5f);
+				glScalef(0.5f, 0.5f, 1.0f);
+				glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "Play Again?");
+				glPopMatrix();
+				glPushMatrix();
+				glTranslatef(float(window_width/2 - 275), float(window_height/2 - 200), -5.5f);
+				glScalef(0.5f, 0.5f, 1.0f);
+				glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "y/n (hit the key)");
+				glPopMatrix();
+				glEnable(GL_LIGHTING);
 			}
-			myGame->drawScene(window_width, window_height);
+			break;
+		}
+	case 1:
+		{
+			//fancy duck
+			myDuck->drawBDuck(gameTime);
+			DisplayMode("Duckie Beauty Mode");
+			break;
+		}
+	case 2:
+		{
+			//fancy gun
+			myGun->drawBGun(gameTime);
+			DisplayMode("Rail Gun Beauty Mode");
+			break;
+		}
+	case 3: 
+		{
+			//fancy balloon
+			myBalloon.drawBBalloon(gameTime);
+			DisplayMode("Balloon Beauty Mode");
+			break;
+		}
+	case 5:
+		{
+			//lazy man's game
+			myAutoGame->setAuto(true);
+			switch (camMode) {
+			case 1:
+				gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
+				break;
+			case 2:
+				gluLookAt(0, 2, 8, myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y+1, myGame->getDuck()->getDuckPos().z, 0, 1, 0);				
+				break;
+			case 3:
+				if (!myAutoGame->getShot()) {
+					gluLookAt(myAutoGame->getDuck()->getDuckPos().x, myAutoGame->getDuck()->getDuckPos().y, myAutoGame->getDuck()->getDuckPos().z, 
+						myAutoGame->getGun()->getBvec().x, myAutoGame->getGun()->getBvec().y + 1, myAutoGame->getGun()->getBvec().z, 0, 1, 0);
+				} else {
+					gluLookAt(myAutoGame->getDuck()->getDuckPos().x, myAutoGame->getDuck()->getDuckPos().y, myAutoGame->getDuck()->getDuckPos().z-1, 
+						myAutoGame->getDuck()->getDuckPos().x, myAutoGame->getDuck()->getDuckPos().y, myAutoGame->getDuck()->getDuckPos().z-2, 0, 1, 0);
+				}
+				break;
+			}
+			myAutoGame->drawScene(window_width, window_height);
 			char score_string[16];
 			char time_string[16];
 			char miss_string[16];
@@ -227,9 +330,9 @@ void DisplayFunc()
 			char disp_time[32] = "Time: ";
 			char disp_vel[32] = "Velocity: ";
 			char disp_last[32] = "Last Velocity: ";
-			sprintf_s(score_string, "%d", myGame->getScore());
+			sprintf_s(score_string, "%d", myAutoGame->getScore());
 			sprintf_s(time_string, "%.1f", (gameTime/1000));
-			sprintf_s(miss_string, "%d", myGame->missed);
+			sprintf_s(miss_string, "%d", myAutoGame->missed);
 			sprintf_s(vel_string, "%.1f", launchVelocity);
 			sprintf_s(last_vel, "%.1f", lastVel);
 			strcat_s(disp_score, score_string);
@@ -244,106 +347,10 @@ void DisplayFunc()
 			DisplayMissed(disp_miss);
 			DisplayVel(disp_vel);
 			DisplayLast(disp_last);
-		} else {
-			glClearColor(0, 0, 0, 0);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glOrtho(0, window_width, 0, window_height, 1, 10);
-			glViewport(0, 0, window_width, window_height);
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-			glPushMatrix();
-			glTranslatef(float(window_width/2 - 200), float(window_height - 200), -5.5f);
-			glScalef(0.5f, 0.5f, 1.0f);
-			glDisable(GL_LIGHTING);
-			glColor3f(1, 1, 1);
-			glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "GAME OVER");
-			glPopMatrix();
-			glPushMatrix();
-			glTranslatef(float(window_width/2 - 175), float(window_height/2), -5.5f);
-			glScalef(0.5f, 0.5f, 1.0f);
-			glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "Play Again?");
-			glPopMatrix();
-			glPushMatrix();
-			glTranslatef(float(window_width/2 - 275), float(window_height/2 - 200), -5.5f);
-			glScalef(0.5f, 0.5f, 1.0f);
-			glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "y/n (hit the key)");
-			glPopMatrix();
-			glEnable(GL_LIGHTING);
-		}
-		break;
-		}
-	case 1:
-		{
-		//fancy duck
-		myDuck->drawBDuck(gameTime);
-		DisplayMode("Duckie Beauty Mode");
-		break;
-		}
-	case 2:
-		{
-		//fancy gun
-		myGun->drawBGun(gameTime);
-		DisplayMode("Rail Gun Beauty Mode");
-		break;
-		}
-	case 3: 
-		{
-		//fancy balloon
-		myBalloon.drawBBalloon(gameTime);
-		DisplayMode("Balloon Beauty Mode");
-		break;
-		}
-	case 5:
-		{
-		//lazy man's game
-		myGame->drawScene(window_width, window_height);
-		char score_string[16];
-		char time_string[16];
-		char miss_string[16];
-		char vel_string[16];
-		char last_vel[16];
-		char disp_score[16] = "Score: ";
-		char disp_miss[16] = "Missed: ";
-		char disp_time[32] = "Time: ";
-		char disp_vel[32] = "Velocity: ";
-		char disp_last[32] = "Last Velocity: ";
-		sprintf_s(score_string, "%d", myGame->getScore());
-		sprintf_s(time_string, "%.1f", (gameTime/1000));
-		sprintf_s(miss_string, "%d", myGame->missed);
-		sprintf_s(vel_string, "%.1f", launchVelocity);
-		sprintf_s(last_vel, "%.1f", lastVel);
-		strcat_s(disp_score, score_string);
-		strcat_s(disp_time, time_string);
-		strcat_s(disp_miss, miss_string);
-		strcat_s(disp_vel, vel_string);
-		strcat_s(disp_vel, "%");
-		strcat_s(disp_last, last_vel);
-		strcat_s(disp_last, "%");
-		DisplayMode(disp_score);
-		DisplayTime(disp_time);
-		DisplayMissed(disp_miss);
-		DisplayVel(disp_vel);
-		DisplayLast(disp_last);
-
-		while(!myGame->gameOver()){
-			float x = float(rand()%((int)(tan(.479966)*100)*2) - (int)(tan(.479966)*100));
-			float y = float(rand()%((int)(tan(.479966)*100)));
-
-			if(!myGame->getShot()) {
-				myGame->shootDuck(100*(launchVelocity/100));
-				lastVel = launchVelocity;
-				launchVelocity = 0.0f;
-			} else {
-				myGame->resetDuck();
-			}
-		}
-		break;
+			break;
 		}
 	}
-	
+
 	glFlush();
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -403,8 +410,8 @@ void KeyboardFunc(unsigned char c, int x, int y)
 			}
 		}
 		break;
-	// Hitting lower case x or the escape key will  exit the
-	// glut event loop.
+		// Hitting lower case x or the escape key will  exit the
+		// glut event loop.
 	case 'x':
 	case 27:
 		glutLeaveMainLoop();
@@ -431,14 +438,14 @@ void KeyboardFunc(unsigned char c, int x, int y)
 			gameMode = 1;
 			break;
 		}
-if(myGame->gameOver()){
-	case 'y':
-		myGame->resetGame();
-		return;
-	case 'n':
-		glutLeaveMainLoop();
-		return;
-}
+		if(myGame->gameOver()){
+		case 'y':
+			myGame->resetGame();
+			return;
+		case 'n':
+			glutLeaveMainLoop();
+			return;
+		}
 	}
 	glutPostRedisplay();
 }
@@ -504,7 +511,7 @@ void SpecialKeyFunc(int key, int x, int y) {
 }
 
 void MouseFunc(int x, int y) {
-	if(!paused && myGame->getGun()->getMove()){
+	if(!paused && myGame->getGun()->getMove() && !myGame->getAuto()){
 		float ycenter = ((float)window_height)/2;
 		float xcenter = ((float)window_width)/2;
 		float ydegp = ycenter/25;
@@ -535,7 +542,43 @@ void TimerFunc(int value)
 	if(!paused) {
 		gameTime = now - pausedTime;
 		if(gameMode == 4) {
-			myGame->updateGame(gameTime);
+			myGame->updateGame();
+		} else if (gameMode == 5) {
+			
+			srand(unsigned int(time(NULL)));
+			myAutoGame->updateGame();
+			if (!myAutoGame->getShot()) {
+				float x = float(rand() % window_width);
+				float y = float(rand() % window_height);
+				float autoVel = float((rand() % 100) + 1);
+
+				float ycenter = ((float)window_height)/2;
+				float xcenter = ((float)window_width)/2;
+				float ydegp = ycenter/25;
+				float ydegn = ycenter/25;
+				float xdeg = xcenter/55;
+				float yr, xr;
+				if(y < ycenter) {
+					yr = ((ycenter-y)/ydegp);
+					myAutoGame->getGun()->updateGunY(yr+25);
+				} else {
+					yr = ((y-ycenter)/ydegn);
+					myAutoGame->getGun()->updateGunY(25-yr);
+				}
+				if(x < xcenter) {
+					xr = ((xcenter-x)/xdeg);
+					myAutoGame->getGun()->updateGunX(xr);
+				} else {
+					xr = -((x-xcenter)/xdeg);
+					myAutoGame->getGun()->updateGunX(xr);
+				}
+
+				myAutoGame->getDuck()->updatePos(myAutoGame->getGun()->getChamber(), glm::vec3(myAutoGame->getGun()->getRot().y, myAutoGame->getGun()->getRot().x + 90, 0));
+				myAutoGame->shootDuck(autoVel);
+				lastVel = autoVel;
+				launchVelocity = 0.0f;
+			}
+			
 		}
 	} 
 
@@ -544,7 +587,7 @@ void TimerFunc(int value)
 	}
 	lastFrameTime = now;
 
-	
+
 
 	glutTimerFunc(period, TimerFunc, value);
 	glutPostRedisplay();
@@ -576,7 +619,7 @@ int main(int argc, char * argv[])
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
-	
+
 
 
 	glutReshapeFunc(ReshapeFunc);

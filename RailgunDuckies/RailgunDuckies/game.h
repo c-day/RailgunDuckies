@@ -10,8 +10,6 @@
 #include "ducky.h"
 #include "balloon.h"
 
-
-
 class game {
 private:
 	bool won;
@@ -20,29 +18,38 @@ private:
 	bool fired;
 	bool stop;
 	bool ENDGAME;
-	std::vector<balloon> balloons;
-	railGun * myGun;
+	bool automated;
+
+	int totalHit;
 	int zclose, zfar;
 	int playerScore;
-	GLfloat currentMat[16];
-	GLfloat trajectoryMat[16];
-	float shootTime;
-	ducky * myDuck;
-
+	int numBalloons;
 	
+	float shootTime;
+	
+	std::vector<balloon> balloons;
+	railGun * myGun;
+	ducky * myDuck;
 
 public:
 	game();
-	void updateGame(float time);
+
+	void updateGame();
 	void drawScene(int width, int height);
-	bool hasWon();
-	railGun* getGun();
-	int getScore();
-	void shootDuck(float launchVelocity);
-	int missed;
-	ducky * getDuck();
-	bool getShot();
-	void resetDuck();
-	bool gameOver();
 	void resetGame();
+	void setAuto(bool in);	
+	void shootDuck(float launchVelocity);
+	void resetDuck();
+	void autoGame();
+
+	bool getShot();
+	bool gameOver();
+	bool getAuto();	
+	bool hasWon();
+	
+	int getScore();
+	int missed;	
+
+	railGun* getGun();
+	ducky * getDuck();
 };
