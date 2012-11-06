@@ -241,3 +241,7 @@ void game::setAuto(bool in) {
 bool game::getAuto() {
 	return this->automated;
 }
+
+std::vector<balloon> game::getBalloons() {
+	return this->balloons;
+}

@@ -347,7 +347,7 @@ void DisplayFunc()
 				gluLookAt(0, 2, 8, 0, 2, 0, 0, 1, 0);
 				break;
 			case 2:
-				gluLookAt(0, 2, 8, myGame->getDuck()->getDuckPos().x, myGame->getDuck()->getDuckPos().y+1, myGame->getDuck()->getDuckPos().z, 0, 1, 0);				
+				gluLookAt(0, 2, 8, myAutoGame->getDuck()->getDuckPos().x, myAutoGame->getDuck()->getDuckPos().y+1, myAutoGame->getDuck()->getDuckPos().z, 0, 1, 0);				
 				break;
 			case 3:
 				if (!myAutoGame->getShot()) {
@@ -434,7 +434,7 @@ if(!myGame->gameOver() && gameMode == 4) {
 	{
 	case 'c':
 		//switch camera modes
-		if(gameMode == 4) {
+		if(gameMode == 4 || gameMode == 5) {
 			switch (camMode)
 			{
 			case 1: 
@@ -573,34 +573,20 @@ void TimerFunc(int value)
 		} else if (gameMode == 5) { //If in Auto Game Mode, automatically and randomly shoots
 
 			srand(unsigned int(time(NULL)));
+
+			
+
 			myAutoGame->updateGame();
 			if (!myAutoGame->getShot()) {
-				float x = float(rand() % window_width);
-				float y = float(rand() % window_height);
-				float autoVel = float((rand() % 100) + 1);
+				int targetBalloon = rand() % myAutoGame->getBalloons().size();
 
-				float ycenter = ((float)window_height)/2;
-				float xcenter = ((float)window_width)/2;
-				float ydegp = ycenter/25;
-				float ydegn = ycenter/25;
-				float xdeg = xcenter/55;
-				float yr, xr;
-				if(y < ycenter) {
-					yr = ((ycenter-y)/ydegp);
-					myAutoGame->getGun()->updateGunY(yr+25);
-				} else {
-					yr = ((y-ycenter)/ydegn);
-					myAutoGame->getGun()->updateGunY(25-yr);
-				}
-				if(x < xcenter) {
-					xr = ((xcenter-x)/xdeg);
-					myAutoGame->getGun()->updateGunX(xr);
-				} else {
-					xr = -((x-xcenter)/xdeg);
-					myAutoGame->getGun()->updateGunX(xr);
-				}
+				float x = (myAutoGame->getBalloons()[targetBalloon].getBalPos().x);
+				float y = (myAutoGame->getBalloons()[targetBalloon].getBalPos().y);
+				float z = (myAutoGame->getBalloons()[targetBalloon].getBalPos().z);
+				float autoVel = float((rand() % 86) + 15);
 
-				myAutoGame->getDuck()->updatePos(myAutoGame->getGun()->getChamber(), glm::vec3(myAutoGame->getGun()->getRot().y, myAutoGame->getGun()->getRot().x + 90, 0));
+				myAutoGame->getGun()->updateGunX((rand() % 56) - 22.5);
+				myAutoGame->getGun()->updateGunY((rand() % 31));
 				myAutoGame->shootDuck(autoVel);
 				lastVel = autoVel;
 				launchVelocity = 0.0f;

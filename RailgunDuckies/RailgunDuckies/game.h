@@ -45,6 +45,7 @@ public:
 	int getScore();
 	int missed;	
 
-	railGun* getGun();
+	railGun * getGun();
 	ducky * getDuck();
+	std::vector<balloon> getBalloons();
 };
