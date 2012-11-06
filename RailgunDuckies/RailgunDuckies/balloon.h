@@ -11,23 +11,29 @@
 #include <cmath>
 
 class balloon {
-	private:
-		glm::vec3 position;
-		int points;
-		static std::vector<glm::vec3> balVert;
-		static std::vector<GLuint> balIndex;
-		static std::vector<glm::vec3> normVert;
-		static std::vector<glm::vec3> colVert;
+private:
+	glm::vec3 position;
 
-		
-	public:
-		balloon();
-		balloon(float x, float y, float z, int p);
-		void drawBalloon();
-		void updateBalloon(float x, float y, float z);
-		void drawBBalloon(double time);
-		void setPoints(int p);
-		int getPoints();
-		glm::vec3 getBalPos();
-		void destroy();
+	int points;
+
+	static std::vector<glm::vec3> balVert;
+	static std::vector<GLuint> balIndex;
+	static std::vector<glm::vec3> normVert;
+	static std::vector<glm::vec3> colVert;
+
+
+public:
+	balloon();
+	balloon(float x, float y, float z, int p);
+
+	void drawBalloon();
+	void updateBalloon(float x, float y, float z);
+	void drawBBalloon(double time);
+	void setPoints(int p);
+	void destroy();
+
+	int getPoints();
+
+	glm::vec3 getBalPos();
+	
 };

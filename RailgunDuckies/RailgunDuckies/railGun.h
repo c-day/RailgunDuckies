@@ -10,11 +10,13 @@ private:
 	glm::vec3 pos;
 	glm::vec3 rot;
 	GLfloat barrellMat[16];
-	void drawCube(float d);
-	void drawFace(float d);
+	void drawCube();
 	glm::vec3 chamber;
 	glm::vec3 barrellVec;
 	bool moveable;
+	static std::vector<glm::vec3> gunVert;
+	static GLuint gunIndex[24];
+	static std::vector<glm::vec3> gunNorm;
 
 public:
 	railGun();

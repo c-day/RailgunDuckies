@@ -1,6 +1,13 @@
 #include "railGun.h"
 
-
+/*
+Set up the railgun to be drawn with a vertex array and vertex buffer. The
+gun is a specified size and contains few elements so the index array can be
+easily filled by hand.  
+*/
+std::vector<glm::vec3> railGun::gunVert;
+GLuint railGun::gunIndex[] = {0, 1, 2, 3, 3, 2, 6, 7, 7, 3, 0, 4, 4, 0, 1, 5, 5, 1, 2, 6, 6, 7, 4, 5};
+std::vector<glm::vec3> railGun::gunNorm;
 		
 //Constructor
 railGun::railGun() {
@@ -12,6 +19,9 @@ railGun::railGun() {
 }
 
 /*
+Draws the gun based on project spec.  The barrel has a length of 6 and
+width and height of 1.  The pivot point of the gun is at the bottom of the 
+barrel and 2 from the back.  At the pivot point we draw a base. 
 */
 void railGun::drawGun() {
 
@@ -22,7 +32,7 @@ glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 
 glPushMatrix();
 
-
+	//move to the pivot point of the gun
 	glTranslated(this->pos.x, this->pos.y, this->pos.z);
 	glColor3d(0.5, 0.5, 0.5);
 
@@ -38,6 +48,12 @@ glPushMatrix();
 	glRotatef(this->rot.x, 0, 1, 0);
 	glRotatef(this->rot.y, 1, 0, 0);
 
+	/*
+	store two vectors related to the barrel of the gun.  These will be used
+	when the duck is fired and for the "first person" camera mode.  These 
+	vectors go in the direction of the barrel and allow us to track its 
+	position.  
+	*/
 	this->barrellVec = glm::rotateY(glm::vec3(0, 0, -6), this->rot.x);
 	this->barrellVec = glm::rotateX(this->barrellVec, this->rot.y);
 	this->chamber = glm::rotateY(glm::vec3(0, 1.1, 1.35), this->rot.x);
@@ -52,51 +68,56 @@ glPushMatrix();
 
 	glPushMatrix();
 	glTranslated(0, 0.125, 0);
-	glScaled(2, 1, 1);
-	drawCube(0.25);
+	glScaled(0.5, 0.249, 0.249);
+	drawCube();
 	glPopMatrix();
 
 	glTranslated(0, .5, 0);
 
 	glPushMatrix();
 	glTranslatef(.375f, .375f, -1.0f);
-	glScalef(.25f, .25f, 6.0f);
-	drawCube(0.9167f);
+	glScaled(.249, .249, 5.99);
+	drawCube();
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(.375, -.375, -1);
-	glScaled(.25, .25, 6);
-	drawCube(0.9167f);
+	glScaled(.249, .249, 5.99);
+	drawCube();
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(-.375, -.375, -1);
-	glScaled(.25, .25, 6);
-	drawCube(0.9167f);
+	glScaled(.249, .249, 5.99);
+	drawCube();
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(-.375, .375, -1);
-	glScaled(.25, .25, 6);
-	drawCube(0.9167f);
+	glScaled(.249, .249, 5.99);
+	drawCube();
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(0, 0, 1.875);
 	glScaled(1, 1,.25);
-	drawCube(1);
+	drawCube();
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(0, 0, -3.875);
 	glScaled(1, 1, .25);
-	drawCube(1);
+	drawCube();
 	glPopMatrix();
 
 glPopMatrix();
 }
 
+/*
+Special draw function for beauty mode.  This moves the gun to the center of 
+the screen and to a nice distance away.  This will call drawGun and rotate 
+the gun with the run time of the game to allow all sides to be visible. 
+*/
 void railGun::drawBGun(float time) {
 	glPushMatrix();
 	glTranslated(0, 0, -8);
@@ -105,62 +126,69 @@ void railGun::drawBGun(float time) {
 	glPopMatrix();
 }
 
+/*
+Update the rotation angle about the x axis given a new angle. 
+*/
 void railGun::updateGunX(float rx) {
 	this->rot.x = rx;
 }
+
+/*
+Update the rotation angle about the y axis given a new angle.
+*/
 void railGun::updateGunY(float ry) {
 	this->rot.y = ry;
 }
 
-
+//returns guns current rotation
 glm::vec3 railGun::getRot() {
 	return this->rot;
 }
 
-GLfloat * railGun::getMat() {
-	return barrellMat;
-}
-
+//return the barrel vector of the gun
 glm::vec3 railGun::getBvec() {
 	return this->barrellVec;
 }
 
+//return a vector along the chamber of the gun
 glm::vec3 railGun::getChamber() {
 	return this->chamber;
 }
 
-void railGun::drawCube(float d) {
-	float r = d/2;
-	glm::vec3 points[8];
-	points[0] = (glm::vec3(-r, r, r));
-	points[1] = (glm::vec3(r, r, r));
-	points[2] = (glm::vec3(r, r, -r));
-	points[3] = (glm::vec3(-r, r, -r));
+/*
+The main draw function of the gun.  This draws each part of the gun barrel
+as a 1x1x1 cube using a vertex array and buffer and then the returned cube
+can be scaled to desired dimensions. 
+*/
+void railGun::drawCube() {
 
-	points[4] = (glm::vec3(-r, -r, r));
-	points[5] = (glm::vec3(r, -r, r));
-	points[6] = (glm::vec3(r, -r, -r));
-	points[7] = (glm::vec3(-r, -r, -r));
+	if (gunVert.size() == 0) {
+		float r = 0.5 ;
 
-	GLuint IndexData [24] = {0, 1, 2, 3, 3, 2, 6, 7, 7, 3, 0, 4, 4, 0, 1, 5, 5, 1, 2, 6, 6, 7, 4, 5};
-	std::vector<glm::vec3> NormalArray;
+		gunVert.push_back(glm::vec3(-r, r, r));
+		gunVert.push_back(glm::vec3(r, r, r));
+		gunVert.push_back(glm::vec3(r, r, -r));
+		gunVert.push_back(glm::vec3(-r, r, -r));
 
-	NormalArray.resize(6);
+		gunVert.push_back(glm::vec3(-r, -r, r));
+		gunVert.push_back(glm::vec3(r, -r, r));
+		gunVert.push_back(glm::vec3(r, -r, -r));
+		gunVert.push_back(glm::vec3(-r, -r, -r));
 
-	NormalArray[0] = glm::vec3(-1, 0, 0);
-	NormalArray[1] = glm::vec3(1, 0, 0);
-	NormalArray[2] = glm::vec3(0, -1, 0);
-	NormalArray[3] = glm::vec3(0, 1, 0);
-	NormalArray[4] = glm::vec3(0, 0, -1);
-	NormalArray[5] = glm::vec3(0, 0, 1);
-
-	glVertexPointer(3, GL_FLOAT, 0, points);
+		gunNorm.push_back(glm::vec3(-1, 0, 0));
+		gunNorm.push_back(glm::vec3(1, 0, 0));
+		gunNorm.push_back(glm::vec3(0, -1, 0));
+		gunNorm.push_back(glm::vec3(0, 1, 0));
+		gunNorm.push_back(glm::vec3(0, 0, -1));
+		gunNorm.push_back(glm::vec3(0, 0, 1));
+	}
+	glVertexPointer(3, GL_FLOAT, 0, &gunVert[0]);
 
 	glEnableClientState(GL_VERTEX_ARRAY);	
 	glEnableClientState(GL_NORMAL_ARRAY);	
 
-	glNormalPointer(GL_FLOAT, 0, &NormalArray[0]);
-	glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, IndexData);
+	glNormalPointer(GL_FLOAT, 0, &gunNorm[0]);
+	glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, gunIndex);
 
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -168,21 +196,12 @@ void railGun::drawCube(float d) {
 
 }
 
-void railGun::drawFace(float d) {
-	float r = d/2;
-
-	glBegin(GL_POLYGON);
-	glVertex3f(-r, r, -r);
-	glVertex3f(r, r, -r);
-	glVertex3f(r, -r, -r);
-	glVertex3f(-r, -r, -r);
-	glEnd();
-}
-
+//set the guns ability to move.  
 void railGun::setMove(bool in) {
 	this->moveable = in;
 }
 
+//return the guns ability to move. 
 bool railGun::getMove() {
 	return this->moveable;
 }

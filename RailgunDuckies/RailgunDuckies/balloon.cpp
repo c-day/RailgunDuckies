@@ -11,36 +11,60 @@ static const GLsizei VertexSize = 4;
 const int stacks = 20;
 const int slices = 36;
 
-//Define directional function for computing the vertex array. 
+//Define directional functions for computing the vertex array. 
+
+/*
+To compute the vertex to the left in our mesh, we need to honor one special
+case, we are at the left edge.  If not at the left edge, the vertex to the left
+is simply where we are minus 1.  If at the left edge, the vertex to the left is 
+effectively the right edge when the mesh is flat.  To get there, move to the 
+right by number of slices-1.  
+*/
 inline int left(int c) {
 	if ( c != 0 ) {
 		return c - 1;
 	} else {
-		return c + (slices - 1);
+		return (slices);
 	}
 }
 
+/*
+To compute the vertex down one in our mesh, the special case of being at the 
+bottom of the mesh must be watched for.  If not at the bottom, one vertex down
+would be moving right by the number of vertices in our mesh(slices).  When at
+the bottom, we want to go to the top so return 0.  
+*/
 inline int down(int r) {
 	if (r != slices - 1) {
 		return r + slices;
 	} else {
-		return r;
+		return 1;
 	}
 }
 
+/*
+To move one to the right the special case of being at the right edge must be 
+detected.  If not at the right edge, to the right is just +1 of our current 
+vertex.  If at the right, return 0. 
+*/
 inline int right(int c ) {
 	if ( c != slices - 1) {
 		return c + 1;
 	} else {
-		return c - (slices - 2);
+		return 0;
 	}
 }
 
+/*
+To move up the special case of being at the top should be watched.  If not at
+the top, up is just where we are minus the width of our mesh.  If at the top,
+we want to go to the bottom of our mesh.  
+*/
 inline int up(int r) {
 	if (r != 0) {
 		return r - slices;
 	} else {
-		return r;
+		return stacks - 1;
 	}
 }
 
@@ -171,13 +195,10 @@ void balloon::drawBalloon() {
 
 	glEnableClientState(GL_VERTEX_ARRAY);	
     glEnableClientState(GL_NORMAL_ARRAY);	
-//	glEnableClientState(GL_COLOR_ARRAY);
-
+	
 	glNormalPointer(GL_FLOAT, 0, &(normVert[0]));
-//	glColorPointer(3, GL_FLOAT, 0, &(balVert[0]));
 	glDrawElements(GL_QUADS, balIndex.size(), GL_UNSIGNED_INT, &balIndex[0]);
 
-//	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 

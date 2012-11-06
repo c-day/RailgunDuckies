@@ -48,6 +48,15 @@ glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glTranslated(0.3, 0.7*0.4, 0);
 	glScaled(1, 0.9, 0.9);
 	glutSolidSphere(0.15, 20, 20);
+	glColor3d(0, 0, 0);
+	glPushMatrix();
+	glTranslated(0.1, 0.09, 0.07);
+	glutSolidSphere(0.02, 5, 5);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(0.1, 0.09, -0.07);
+	glutSolidSphere(0.02, 5, 5);
+	glPopMatrix();
 	glPopMatrix();
 
 	//Draw Left Wing
@@ -128,22 +137,7 @@ void ducky::drawBDuck(float time) {
 	this->drawDuck();
 	glPopMatrix();
 }
-/*
-Detects if this duck has collided with a balloon, will destroy duck and balloon
-on a yes.
-*/
-void collision() {
 
-}
-
-/*
-Called when duck hits or misses a balloon. Will include a draw animation and 
-finish with the deletion of the instance. NOTE: Smart Pointers may make this 
-unnecessary. 
-*/
-void destroyDuck() {
-
-}
 
 /*
 Set the trajectory of the duck based on the input vector.  This input vector

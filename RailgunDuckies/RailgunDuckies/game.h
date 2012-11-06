@@ -12,11 +12,8 @@
 
 class game {
 private:
-	bool won;
 	bool shot;
 	bool hit;
-	bool fired;
-	bool stop;
 	bool ENDGAME;
 	bool automated;
 
@@ -40,12 +37,10 @@ public:
 	void setAuto(bool in);	
 	void shootDuck(float launchVelocity);
 	void resetDuck();
-	void autoGame();
 
 	bool getShot();
 	bool gameOver();
 	bool getAuto();	
-	bool hasWon();
 	
 	int getScore();
 	int missed;	

@@ -57,10 +57,6 @@ std::unique_ptr<game> myAutoGame(new game());
 balloon myBalloon;
 glm::vec3 camera;
 
-
-//std::unique_ptr<balloon> myBalloon(new balloon());
-
-
 /* Set up game modes
 gameMode = 1 --> balloon beauty mode
 gameMode = 2 --> duckie beauty mode
@@ -71,9 +67,9 @@ gameMode = 5 --> automated play
 int gameMode = 1;
 
 /* 
-Set up function to draw text on screen
+Set up functions to draw text on screen
 */
-
+//Display the current mode we are in (except when in game).
 void DisplayMode(char * s)
 {
 
@@ -91,6 +87,7 @@ void DisplayMode(char * s)
 	glEnable(GL_LIGHTING);
 }
 
+//Display the game runtime on the screen when in game.
 void DisplayTime(char * s)
 {
 
@@ -108,6 +105,7 @@ void DisplayTime(char * s)
 	glEnable(GL_LIGHTING);
 }
 
+//Display the number of balloons missed when in game. 
 void DisplayMissed(char * s)
 {
 
@@ -125,6 +123,7 @@ void DisplayMissed(char * s)
 	glEnable(GL_LIGHTING);
 }
 
+//Display the velocity of the to-be-launced duck. 
 void DisplayVel(char * s)
 {
 
@@ -142,6 +141,7 @@ void DisplayVel(char * s)
 	glEnable(GL_LIGHTING);
 }
 
+//Display the launch velocity of the previous duck. 
 void DisplayLast(char * s)
 {
 
@@ -159,6 +159,7 @@ void DisplayLast(char * s)
 	glEnable(GL_LIGHTING);
 }
 
+//Check and display GL error on console window for debugging
 bool CheckGLErrors(string location) {
 	bool error_found = false;
 	GLenum  error;
@@ -174,6 +175,7 @@ bool CheckGLErrors(string location) {
 	return error_found;
 }
 
+//Display function called in glutMainLoop
 void DisplayFunc()
 {	
 	CheckGLErrors("Beginning of DisplayFunc");
@@ -182,7 +184,8 @@ void DisplayFunc()
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	GLfloat light_position[] = { 0.5, 1.0, 1.0, 0.0 };
+	//put a light in the world above the gun. 
+	GLfloat light_position[] = { 0, 50, 10.0, 0.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glShadeModel (GL_SMOOTH);
 
@@ -194,7 +197,11 @@ void DisplayFunc()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-
+	/*
+	Switch on the game mode.  When in the play game mode, allow the user to
+	switch camera modes.  Updates the game status text display with current
+	values. 
+	*/
 	switch (gameMode) {
 	case 4:
 		{
@@ -219,13 +226,13 @@ void DisplayFunc()
 				}
 				myGame->drawScene(window_width, window_height);
 				char score_string[16];
-				char time_string[16];
+				char time_string[64];
 				char miss_string[16];
 				char vel_string[16];
 				char last_vel[16];
 				char disp_score[16] = "Score: ";
 				char disp_miss[16] = "Missed: ";
-				char disp_time[32] = "Time: ";
+				char disp_time[64] = "Time: ";
 				char disp_vel[32] = "Velocity: ";
 				char disp_last[32] = "Last Velocity: ";
 				sprintf_s(score_string, "%d", myGame->getScore());
@@ -245,7 +252,7 @@ void DisplayFunc()
 				DisplayMissed(disp_miss);
 				DisplayVel(disp_vel);
 				DisplayLast(disp_last);
-			} else {
+			} else {  //The user has lost the game, put the replay prompt on screen. 
 				lastVel = 0;
 				glClearColor(0, 0, 0, 0);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -256,18 +263,51 @@ void DisplayFunc()
 				glViewport(0, 0, window_width, window_height);
 				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();
+				//Push to display first line
 				glPushMatrix();
-				glTranslatef(float(window_width/2 - 200), float(window_height - 200), -5.5f);
+				glTranslatef(float(window_width/2 - 200), float(window_height/2 + 200), -5.5f);
 				glScalef(0.5f, 0.5f, 1.0f);
 				glDisable(GL_LIGHTING);
-				glColor3f(1, 1, 1);
+				glColor3f(1, 0, 0);
 				glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "GAME OVER");
 				glPopMatrix();
+
+				glColor3d(1, 1, 1);
+
+				//Push to display second line
 				glPushMatrix();
-				glTranslatef(float(window_width/2 - 175), float(window_height/2), -5.5f);
+				glTranslatef(float(window_width/2 - 150), float(window_height/2 + 100), -5.5f);
+				glScalef(0.5f, 0.5f, 1.0f);
+				char score_string[16];
+				char disp_score[16] = "Score: ";
+				sprintf_s(score_string, "%d", myGame->getScore());
+				strcat_s(disp_score, score_string);
+				glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) disp_score);
+				glPopMatrix();
+
+				//Push to display responses
+				glPushMatrix();
+				glTranslatef(float(window_width/2 - 300), float(window_height/2), -5.5f);
+				glScalef(0.5f, 0.5f, 1.0f);
+				if (myGame->getScore() == 0) {
+					glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) " You are terrible ");
+				} else if (myGame->getScore() < 50) {
+					glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "     meh        ");
+				} else if (myGame->getScore() < 100) {
+					glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "     aight       ");
+				} else {
+					glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "Can u do it again?");
+				}
+				glPopMatrix();
+
+				//Push to display third line
+				glPushMatrix();
+				glTranslatef(float(window_width/2 - 175), float(window_height/2) - 100, -5.5f);
 				glScalef(0.5f, 0.5f, 1.0f);
 				glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *) "Play Again?");
 				glPopMatrix();
+
+				//Push to display last line
 				glPushMatrix();
 				glTranslatef(float(window_width/2 - 275), float(window_height/2 - 200), -5.5f);
 				glScalef(0.5f, 0.5f, 1.0f);
@@ -321,13 +361,13 @@ void DisplayFunc()
 			}
 			myAutoGame->drawScene(window_width, window_height);
 			char score_string[16];
-			char time_string[16];
+			char time_string[64];
 			char miss_string[16];
 			char vel_string[16];
 			char last_vel[16];
 			char disp_score[16] = "Score: ";
 			char disp_miss[16] = "Missed: ";
-			char disp_time[32] = "Time: ";
+			char disp_time[64] = "Time: ";
 			char disp_vel[32] = "Velocity: ";
 			char disp_last[32] = "Last Velocity: ";
 			sprintf_s(score_string, "%d", myAutoGame->getScore());
@@ -358,6 +398,7 @@ void DisplayFunc()
 	CheckGLErrors("End of DisplayFunc");
 }
 
+//Part of GLUT Main Loop. Called when window is resized
 void ReshapeFunc(int w, int h)
 {
 	window_height = h;
@@ -366,8 +407,29 @@ void ReshapeFunc(int w, int h)
 	glutPostRedisplay();
 }
 
+//Part of GLUT Main Loop. Called when a key is pressed.
 void KeyboardFunc(unsigned char c, int x, int y)
 {
+
+//Detects Restart Choice once Main Game Mode game ends
+if(myGame->gameOver()){
+	if (c == 'y'){
+		myGame->resetGame();
+		return;
+	} else if(c == 'n') {
+		glutLeaveMainLoop();
+		return;
+	}
+}
+
+//Resets game on press of 'r'
+if(!myGame->gameOver() && gameMode == 4) {
+	if (c == 'r') {
+		myGame->resetGame();
+	}
+}
+
+	//Standard key switches, not dependent on mode
 	switch (c)
 	{
 	case 'c':
@@ -391,12 +453,15 @@ void KeyboardFunc(unsigned char c, int x, int y)
 			camMode = 1;
 		}
 		break;
+	//Toggles pause
 	case 'p':
 		paused = !paused;
 		break;
+	//Toggles Wireframe Mode
 	case 'w':
 		wireframe = !wireframe;
 		break;
+	//Detects a space press to increment the Launch Velocity
 	case 32:
 		if(!paused && gameMode == 4) {
 			if(!myGame->getShot()){
@@ -416,40 +481,12 @@ void KeyboardFunc(unsigned char c, int x, int y)
 	case 27:
 		glutLeaveMainLoop();
 		return;
-	case 49:
-		switch (gameMode)
-		{
-		case 1: 
-			gameMode = 2;
-			break;
-		case 2:
-			gameMode = 3;
-			break;
-		case 3:
-			gameMode = 4;
-			break;
-		case 4:
-			gameMode = 5;
-			break;
-		case 5:
-			gameMode = 1;
-			break;
-		default:
-			gameMode = 1;
-			break;
-		}
-		if(myGame->gameOver()){
-		case 'y':
-			myGame->resetGame();
-			return;
-		case 'n':
-			glutLeaveMainLoop();
-			return;
-		}
+
 	}
 	glutPostRedisplay();
 }
 
+//Separate Key Function to detect when the space bar is released. Launches Duck
 void KeyUpFunc(unsigned char c, int x, int y)
 {
 	switch(c) {
@@ -467,6 +504,7 @@ void KeyUpFunc(unsigned char c, int x, int y)
 	}
 }
 
+//Key Function to detect 'F1'. Switches modes
 void SpecialKeyFunc(int key, int x, int y) {
 	switch (key)
 	{
@@ -493,23 +531,10 @@ void SpecialKeyFunc(int key, int x, int y) {
 			gameMode = 1;
 			break;
 		}
-	case GLUT_KEY_LEFT:
-		globalRotateX++;
-		//glRotatef(globalRotate, 0, 1, 0);
-		break;
-	case GLUT_KEY_RIGHT: 
-		globalRotateX--;
-		//glRotatef(globalRotate, 0, 1, 0);
-		break;
-	case GLUT_KEY_UP: 
-		globalRotateY++;
-		break;
-	case GLUT_KEY_DOWN:
-		globalRotateY--;
-		break;
 	}
 }
 
+//Handles passive mouse input and rotates Railgun inside of game
 void MouseFunc(int x, int y) {
 	if(!paused && myGame->getGun()->getMove() && !myGame->getAuto()){
 		float ycenter = ((float)window_height)/2;
@@ -535,6 +560,8 @@ void MouseFunc(int x, int y) {
 	}
 }
 
+//Part of GLUT main loop. Called on fixed period. Updates current game time as well as
+//	the game state based upon the time interval.
 void TimerFunc(int value)
 {
 	now += period;
@@ -543,8 +570,8 @@ void TimerFunc(int value)
 		gameTime = now - pausedTime;
 		if(gameMode == 4) {
 			myGame->updateGame();
-		} else if (gameMode == 5) {
-			
+		} else if (gameMode == 5) { //If in Auto Game Mode, automatically and randomly shoots
+
 			srand(unsigned int(time(NULL)));
 			myAutoGame->updateGame();
 			if (!myAutoGame->getShot()) {
@@ -578,7 +605,7 @@ void TimerFunc(int value)
 				lastVel = autoVel;
 				launchVelocity = 0.0f;
 			}
-			
+
 		}
 	} 
 
