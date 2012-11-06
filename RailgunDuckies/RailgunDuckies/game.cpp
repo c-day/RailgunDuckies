@@ -229,6 +229,7 @@ void game::resetGame() {
 	this->ENDGAME = false;
 	this->balloons.clear();
 	this->automated = false;
+	this->totalHit = 0;
 }
 
 //allow others to automate the game. 

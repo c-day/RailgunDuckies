@@ -189,8 +189,26 @@ void balloon::drawBalloon() {
 
 		}
 	}
-
-	glColor3d(1, 0, 0);
+	switch (this->points) {
+	case 10:
+		glColor3d(0, 0, 1);
+		break;
+	case 20:
+		glColor3d(0, 1, 0);
+		break;
+	case 30:
+		glColor3d(1, 0, 0);
+		break;
+	case 40:
+		glColor3d(1, 0, 1);
+		break;
+	case 50:
+		glColor3d(1, 1, 0);
+		break;
+	default:
+		glColor3d(1, 0, 0);
+		break;
+	}
 	glVertexPointer(3, GL_FLOAT, 0, &(balVert[0]));
 
 	glEnableClientState(GL_VERTEX_ARRAY);	

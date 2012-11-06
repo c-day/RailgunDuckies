@@ -605,7 +605,7 @@ void TimerFunc(int value)
 				lastVel = autoVel;
 				launchVelocity = 0.0f;
 			}
-
+			myAutoGame->updateGame();
 		}
 	} 
 
